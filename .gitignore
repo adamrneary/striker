@@ -15,3 +15,7 @@ examples/js/striker.js
 *.orig
 .tddium*
 .tddium
+
+*.log
+
+examples/public/js/
