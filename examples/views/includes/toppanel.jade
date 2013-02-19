@@ -5,13 +5,36 @@
         span.icon-bar
         span.icon-bar
         span.icon-bar
-      a.brand(href='http://www.activecell.com') Striker
+      .dropdown
+        a.dropdown-toggle.brand(href='#', data-toggle="dropdown" ) Striker.js
+        ul.dropdown-menu(role="menu", aria-labelledby="drop2")
+          li
+            a(tabindex="-1", href='launchpad.activecell.com/admin') Activecell admin (rails)
+          li
+            a(tabindex="-1", href='#') Porchetta admin (node/socket)
+          li.divider
+          li
+            a(tabindex="-1", href='shotgun-showcase.herokuapp.com') Shotgun.js
+          li
+            a(tabindex="-1", href='shotgun-showcase.herokuapp.com') Shotgun.js
+          li.disabled
+            a(tabindex="-1", href='striker-showcase.herokuapp.com') Striker.js
+          li
+            a(tabindex="-1", href='tactile-showcase.herokuapp.com') Tactile.js
+          li
+            a(tabindex="-1", href='tablestakes-showcase.herokuapp.com') Tablestakes.js
+          li
+            a(tabindex="-1", href='#') Trebuchet
       .nav-collapse
         ul.nav
           li(class="#{page == 'index'? 'active': ''}")
             a(href='/')
               i.icon-white.icon-home
               |  Home
+          li(class="#{page == 'performance'? 'active': ''}")
+            a(href='/#performance')
+              i.icon-white.icon-time
+              |  Performance
           li(class="#{page == 'documentation'? 'active': ''}")
             a(href='/documentation')
               i.icon-white.icon-list-alt
@@ -20,13 +43,12 @@
             a(href='/test')
               i.icon-white.icon-ok
               |  Tests
-          li(class="#{page == 'performance'? 'active': ''}")
-            a(href='/performance')
-              i.icon-white.icon-time
-              |  Performance
           li
             a(href='https://github.com/activecell/tablestakes')
               i.icon-white.icon-book
               |  Source
       //
         /.nav-collapse
+
+script(type='text/javascript')
+  $('.dropdown-toggle').dropdown()
