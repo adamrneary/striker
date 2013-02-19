@@ -1,7 +1,7 @@
 describe 'ToplineGrowth', ->
-  collection = admin.toplineGrowth
+  collection = app.toplineGrowth
 
-  AdminHelper.getAndPrint
+  appHelper.getAndPrint
     collection: collection
     getParams:
       9:  [323, 7]
@@ -11,7 +11,7 @@ describe 'ToplineGrowth', ->
       5: [54244,5,6,1,16,3,16,6,8,3,12,17,12,15,8,15,12,3,14,15,18,0,9,0,17,17,13,3,0,15,3,10,5,7,17,9,9]
 
   describe 'set', ->
-    AdminHelper.set 'for first month',
+    appHelper.set 'for first month',
       collection: collection
       attributes: [1000,5,1]
       results:
@@ -24,8 +24,8 @@ describe 'ToplineGrowth', ->
         customerForecast:
           1: [5,7,0,185,67,9,2,9,7,7,4,3,1,2,1,2,2,1,3,8,3,6,8,2,3,3,1,1,4,5,4,0,3,1,0,0,7,4]
 
-    AdminHelper.set 'for another month',
-      collection: admin.toplineGrowth
+    appHelper.set 'for another month',
+      collection: app.toplineGrowth
       attributes: [2000,2,2]
       results:
         conversionForecast:

@@ -1,7 +1,7 @@
 describe 'InitialVolume', ->
-  collection = admin.initialVolume
+  collection = app.initialVolume
 
-  AdminHelper.getAndPrint
+  appHelper.getAndPrint
     collection: collection
     getParams:
       12: [10292, 2, 6]
@@ -11,7 +11,7 @@ describe 'InitialVolume', ->
       22: [22394, 323, 7, 9]
 
   describe 'set', ->
-    AdminHelper.set 'for stage_id=22394 channelId=323 and segmentId=2',
+    appHelper.set 'for stage_id=22394 channelId=323 and segmentId=2',
       collection: collection
       attributes: [700,22394,323,6]
       results:
@@ -22,7 +22,7 @@ describe 'InitialVolume', ->
         customerForecast:
           8: [323,6,9,6,4,4,3,1,0,5,9,6,11,11,1,4,4,11,2,1,0,6,4,10,2,0,6,6,9,13,1,4,2,0,2,2,5,5]
 
-    AdminHelper.set 'for stage_id=32943 channelId=5 and segmentId=6',
+    appHelper.set 'for stage_id=32943 channelId=5 and segmentId=6',
       collection: collection
       attributes: [300,32943,2,6]
       results:

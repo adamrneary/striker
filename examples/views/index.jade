@@ -14,7 +14,7 @@ html
         .page-header
           h1 Backbone dimensions
 
-          firstTables = [{title: 'Revenue streams', fields: ['id', 'name'], klass: 'streams'},{title: 'Customer segments', fields: ['id', 'name'], klass: 'segments'},{title: 'Channels', fields: ['id', 'name'], klass: 'channels'},{title: 'Customer acq stages', fields: ['id', 'name', 'lag period', 'is_topline', 'is_customer'], klass: 'stages'},{title: 'Channel segment mix', fields: ['channelId', 'segmentId', 'value'], klass: 'channelSegmentMix', desc: 'use: admin.channelSegmentMix.set\(value, channelId, segmentId\), ex: admin.channelSegmentMix.set\(50, 5, 7\)'}]
+          firstTables = [{title: 'Revenue streams', fields: ['id', 'name'], klass: 'streams'},{title: 'Customer segments', fields: ['id', 'name'], klass: 'segments'},{title: 'Channels', fields: ['id', 'name'], klass: 'channels'},{title: 'Customer acq stages', fields: ['id', 'name', 'lag period', 'is_topline', 'is_customer'], klass: 'stages'},{title: 'Channel segment mix', fields: ['channelId', 'segmentId', 'value'], klass: 'channelSegmentMix', desc: 'use: app.channelSegmentMix.set\(value, channelId, segmentId\), ex: app.channelSegmentMix.set\(50, 5, 7\)'}]
           each table in firstTables
             include includes/table
 
@@ -22,10 +22,10 @@ html
         .page-header
           h1 Backbone fact table mirrors
 
-          table = {title: 'Initial volume', fields: ['stage id', 'channel id', 'segment id', 'value'],klass: 'initialVolume', desc: 'use: admin.initialVolume.set(value, stageId,  channelId, segmentId), ex: admininitialVolume.set(20, 10292, 5, 7)'}
+          table = {title: 'Initial volume', fields: ['stage id', 'channel id', 'segment id', 'value'],klass: 'initialVolume', desc: 'use: app.initialVolume.set(value, stageId,  channelId, segmentId), ex: appinitialVolume.set(20, 10292, 5, 7)'}
           include includes/table
 
-          secondTables = [{title: 'Topline growth', fields: ['channelId'], klass: 'toplineGrowth', desc: 'use: admin.toplineGrowth.set(value, channelId, monthId), ex: admin.toplineGrowth.set(100, 5, 1)'},{title: 'Conversion rates', fields: ['notFirstStageId', 'channelId'], klass: 'conversionRates', desc: 'use: admin.conversionRates.set(value, notFirstStageId, channelId, monthId), ex: admin.conversionRates.set(95, 22394, 5, 1)'},{title: 'Churn rates', fields: ['segmentId'], klass: 'churnRates', desc: 'use: admin.churnRates.set(value, segmentId, monthId), ex: admin.churnRates.set(0, 7, 1)'}]
+          secondTables = [{title: 'Topline growth', fields: ['channelId'], klass: 'toplineGrowth', desc: 'use: app.toplineGrowth.set(value, channelId, monthId), ex: app.toplineGrowth.set(100, 5, 1)'},{title: 'Conversion rates', fields: ['notFirstStageId', 'channelId'], klass: 'conversionRates', desc: 'use: app.conversionRates.set(value, notFirstStageId, channelId, monthId), ex: app.conversionRates.set(95, 22394, 5, 1)'},{title: 'Churn rates', fields: ['segmentId'], klass: 'churnRates', desc: 'use: app.churnRates.set(value, segmentId, monthId), ex: app.churnRates.set(0, 7, 1)'}]
           each table in secondTables
             include includes/month_table
 

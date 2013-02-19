@@ -1,7 +1,7 @@
 describe 'ConversionForecast', ->
-  collection = admin.conversionForecast
+  collection = app.conversionForecast
 
-  AdminHelper.getAndPrint
+  appHelper.getAndPrint
     collection: collection
     getParams:
       4: [10292, 5, 7, 1] # topline=true customer=true

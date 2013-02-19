@@ -12,12 +12,12 @@ module.exports = class ChurnForecast extends ForecastCollection
       @set(args.channelId, args.segmentId, 1) if args.stageId is 32943
 
     churnRates: (args) ->
-      @set(channel.id, args.segmentId, args.monthId) for channel in admin.channels.models
+      @set(channel.id, args.segmentId, args.monthId) for channel in app.channels.models
 
   calculate: (channelId, segmentId, monthId) ->
     # TODO: strange logic with stage.id, stub it to 32943
     if monthId is 1
-      admin.churnRates.get(segmentId, monthId) * admin.initialVolume.get(32943, channelId, segmentId)
+      app.churnRates.get(segmentId, monthId) * app.initialVolume.get(32943, channelId, segmentId)
     else
       previousMonth = monthId - 1
-      admin.customerForecast.get(channelId, segmentId, previousMonth) * admin.churnRates.get(segmentId, monthId)
+      app.customerForecast.get(channelId, segmentId, previousMonth) * app.churnRates.get(segmentId, monthId)

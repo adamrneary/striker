@@ -9,7 +9,7 @@ module.exports = class HighChart extends Backbone.View
       title:
         text: 'Forecasts'
       xAxis:
-        categories: admin.months.pluck('id')
+        categories: app.months.pluck('id')
       yAxis:
         title:
           text: 'Value'
@@ -25,13 +25,13 @@ module.exports = class HighChart extends Backbone.View
         borderWidth: 0
       series: [{
         name: 'Conversion forecast'
-        data: @average(admin.conversionForecast)
+        data: @average(app.conversionForecast)
       },{
         name: 'Churned customer forecast'
-        data: @average(admin.churnForecast)
+        data: @average(app.churnForecast)
       },{
         name: 'Customer volume forecast'
-        data: @average(admin.customerForecast)
+        data: @average(app.customerForecast)
       }]
 
   average: (collection) ->
@@ -39,7 +39,7 @@ module.exports = class HighChart extends Backbone.View
     print  = collection.print()
 
     for row in print
-      values = row.slice admin.conversionForecast.schema.length - 1
+      values = row.slice app.conversionForecast.schema.length - 1
       result[order] += value for value, order in values
 
     for sum, order in result

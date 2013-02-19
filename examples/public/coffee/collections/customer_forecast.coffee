@@ -14,11 +14,11 @@ module.exports = class CustomerForecast extends ForecastCollection
   calculate: (channelId, segmentId, monthId) ->
     # TODO: strange logic with stage.id, stub it to 32943
     if monthId is 1
-      admin.initialVolume.get(32943, channelId, segmentId) - \
-      admin.churnForecast.get(channelId, segmentId, monthId) + \
-      admin.conversionForecast.get(32943, channelId, segmentId, monthId)
+      app.initialVolume.get(32943, channelId, segmentId) - \
+      app.churnForecast.get(channelId, segmentId, monthId) + \
+      app.conversionForecast.get(32943, channelId, segmentId, monthId)
     else
       previousMonth = monthId - 1
       @get(channelId, segmentId, previousMonth) + \
-      admin.conversionForecast.get(32943, channelId, segmentId, monthId) - \
-      admin.churnForecast.get(channelId, segmentId, monthId)
+      app.conversionForecast.get(32943, channelId, segmentId, monthId) - \
+      app.churnForecast.get(channelId, segmentId, monthId)

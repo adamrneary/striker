@@ -1,7 +1,7 @@
 describe 'ChurnRates', ->
-  collection = admin.churnRates
+  collection = app.churnRates
 
-  AdminHelper.getAndPrint
+  appHelper.getAndPrint
     collection: collection
     getParams:
       '0.42': [7, 16]
@@ -12,7 +12,7 @@ describe 'ChurnRates', ->
       3: [2,71,38,95,0,84,58,47,70,48,33,100,35,58,40,53,42,74,18,49,81,94,84,82,44,22,17,24,55,32,32,89,83,46,79,71,46]
 
   describe 'set', ->
-    AdminHelper.set 'when segmentId=7 monthId=1',
+    appHelper.set 'when segmentId=7 monthId=1',
       collection: collection
       attributes: [0, 7, 1]
       results:
@@ -27,7 +27,7 @@ describe 'ChurnRates', ->
           4: [2,7,6,1,1,1,0,0,4,2,2,0,0,1,2,3,2,2,1,1,1,1,0,3,3,5,4,0,0,1,1,0,3,0,0,0,0,1]
           7: [323,7,5,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]
 
-  AdminHelper.set 'when segmentId=2 monthId=4',
+  appHelper.set 'when segmentId=2 monthId=4',
     collection: collection
     attributes: [100, 2, 4]
     results:

@@ -103,8 +103,8 @@
     multiplier: 1
 
     constructor: ->
-      @inputs      = admin.inputs[@name] || []
-      @collections = (admin.schemaMap(field) for field in @schema)
+      @inputs      = app.inputs[@name] || []
+      @collections = (app.schemaMap(field) for field in @schema)
       @values      = @initValues()
 
     # Recursive function which uses @inputs and @collections for builds @values
@@ -187,7 +187,7 @@
   # name        - Forecast name (required)
   # schema      - Schema for attributes (required)
   # triggers    - Object with functions which called when object was changed
-  #               use short versions of variables from admin
+  #               use short versions of variables from app
   #
   # Examples
   #
@@ -204,7 +204,7 @@
   #
   #   # Turns on all triggers
   #   conversionForecast.onTriggers()
-  #   admin.toplineGrowth.set(5, 1, 1)
+  #   app.toplineGrowth.set(5, 1, 1)
   #   # => 'toplineGrowth changed'
   ForecastCollection extends Collection
 
@@ -227,7 +227,7 @@
     # Turns On triggers based on @triggers. Name `this` uses for self triggers
     onTriggers: ->
       for collectionName, callback of @triggers
-        collection = if collectionName is 'this' then @ else admin[collectionName]
+        collection = if collectionName is 'this' then @ else app[collectionName]
         collection.on('change', @wrapCallback(callback), @)
 
     # Calculates new value based on params and saves to @values

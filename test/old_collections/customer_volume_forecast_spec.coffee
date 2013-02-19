@@ -1,7 +1,7 @@
 describe 'CustomerForecast', ->
-  collection = admin.customerForecast
+  collection = app.customerForecast
 
-  AdminHelper.getAndPrint
+  appHelper.getAndPrint
     collection: collection
     getParams:
       0: [5, 7, 1]

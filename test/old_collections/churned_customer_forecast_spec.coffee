@@ -1,7 +1,7 @@
 describe 'ChurnForecast', ->
-  collection = admin.churnForecast
+  collection = app.churnForecast
 
-  AdminHelper.getAndPrint
+  appHelper.getAndPrint
     collection: collection
     getParams:
       2: [5, 7, 1]

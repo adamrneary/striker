@@ -1,7 +1,7 @@
 describe 'ConversionRates', ->
-  collection = admin.conversionRates
+  collection = app.conversionRates
 
-  AdminHelper.getAndPrint
+  appHelper.getAndPrint
     collection: collection
     getParams:
       '0.63': [22394, 323, 11]
@@ -11,7 +11,7 @@ describe 'ConversionRates', ->
       10: [32943,54244,91,6,70,14,35,16,23,97,37,98,17,44,10,89,63,15,86,57,77,7,91,93,31,14,90,1,49,78,17,3,6,33,11,72,99,79]
 
   describe 'set', ->
-    AdminHelper.set 'when notFirstStageId=22394 and channelId=5 and monthId=1',
+    appHelper.set 'when notFirstStageId=22394 and channelId=5 and monthId=1',
       collection: collection
       attributes: [95, 22394, 5, 1]
       results:
@@ -24,7 +24,7 @@ describe 'ConversionRates', ->
         customerForecast:
           2: [5,6,5,3,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]
 
-    AdminHelper.set 'when notFirstStageId=32943 and channelId=2 and monthId=2',
+    appHelper.set 'when notFirstStageId=32943 and channelId=2 and monthId=2',
       collection: collection
       attributes: [98, 32943, 2, 2]
       results:

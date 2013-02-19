@@ -1,7 +1,7 @@
 describe 'ChannelSegmentMix', ->
-  collection = admin.channelSegmentMix
+  collection = app.channelSegmentMix
 
-  AdminHelper.getAndPrint
+  appHelper.getAndPrint
     collection: collection
     getParams:
       '0.0': [5, 2]
@@ -11,7 +11,7 @@ describe 'ChannelSegmentMix', ->
       5: [2, 6, 25]
 
   describe 'set', ->
-    AdminHelper.set 'for channelId=5 and segmentId=7',
+    appHelper.set 'for channelId=5 and segmentId=7',
       collection: collection
       attributes: [50,5,7]
       results:
@@ -24,7 +24,7 @@ describe 'ChannelSegmentMix', ->
         customerForecast:
           1: [5,7,0,0,0,0,0,4,4,4,2,1,1,1,1,2,2,1,2,4,2,2,4,1,1,2,1,1,3,4,2,0,1,0,0,0,4,2]
 
-    AdminHelper.set 'for channelId=5 and segmentId=7',
+    appHelper.set 'for channelId=5 and segmentId=7',
       collection: collection
       attributes: [100,54244,6]
       results:

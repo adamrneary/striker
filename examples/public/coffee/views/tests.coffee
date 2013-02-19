@@ -1,8 +1,8 @@
-BaseCollection = require('admin/collections/shared/base_collection')
+BaseCollection = require('app/collections/shared/base_collection')
 
 module.exports = class Tests extends Backbone.View
   el: '#container'
-  printTemplate: JST['admin/tests/print']
+  printTemplate: JST['app/tests/print']
 
   events:
     'submit'       : 'runRandomizeTest'
@@ -15,7 +15,7 @@ module.exports = class Tests extends Backbone.View
     event.preventDefault()
     id         = event.target.id
     count      = parseInt @$("##{id}Input").val()
-    collection = admin[id]
+    collection = app[id]
     startTime  = (new Date).getTime()
     eventsLog  = []
 
@@ -60,6 +60,6 @@ module.exports = class Tests extends Backbone.View
     baseCollection = BaseCollection
     baseCollection::oldGet = baseCollection::get unless baseCollection::oldGet
     baseCollection::oldSet = baseCollection::set unless baseCollection::oldSet
-    [admin.setCounter, admin.getCounter] = [0, 0]
-    baseCollection::set = (value, args...) -> admin.setCounter +=1; @oldSet(value, args...)
-    baseCollection::get = (args...) -> admin.getCounter +=1; @oldGet(args...)
+    [app.setCounter, app.getCounter] = [0, 0]
+    baseCollection::set = (value, args...) -> app.setCounter +=1; @oldSet(value, args...)
+    baseCollection::get = (args...) -> app.getCounter +=1; @oldGet(args...)

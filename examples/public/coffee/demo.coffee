@@ -134,7 +134,7 @@ window.App =
     @initForecasts()
     @initView()
 
-  # Initializes collections with raw of inputs and assigns them to admin
+  # Initializes collections with raw of inputs and assigns them to app
   initCollections: ->
     app.streams            = new Streams()
     app.segments           = new Segments()

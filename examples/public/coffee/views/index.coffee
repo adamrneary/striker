@@ -14,13 +14,13 @@ module.exports = class Index extends Backbone.View
     @
 
   renderInputs: ->
-    for input in [admin.streams, admin.segments, admin.channels, admin.stages, admin.channelSegmentMix,\
-                  admin.initialVolume, admin.toplineGrowth, admin.conversionRates, admin.churnRates]
+    for input in [app.streams, app.segments, app.channels, app.stages, app.channelSegmentMix,\
+                  app.initialVolume, app.toplineGrowth, app.conversionRates, app.churnRates]
       @renderCollection(input)
       @makeInteractive(input) if input.schema
 
   renderForecasts: ->
-    for forecast in [admin.conversionForecast, admin.churnForecast, admin.customerForecast]
+    for forecast in [app.conversionForecast, app.churnForecast, app.customerForecast]
       @renderCollection(forecast)
 
     new HighChart().render()

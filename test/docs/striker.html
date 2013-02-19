@@ -90,7 +90,7 @@ args  - Arguments split a comma and bases on schema
 <p>name        - Forecast name (required)
 schema      - Schema for attributes (required)
 triggers    - Object with functions which called when object was changed
-              use short versions of variables from admin</p>
+              use short versions of variables from app</p>
 
 <p>Examples</p>
 
@@ -107,7 +107,7 @@ triggers    - Object with functions which called when object was changed
 
 <p># Turns on all triggers
   conversionForecast.onTriggers()
-  admin.toplineGrowth.set(5, 1, 1)
+  app.toplineGrowth.set(5, 1, 1)
   # => 'toplineGrowth changed'</p>             </td>             <td class="code">               <div class="highlight"><pre>undefined</pre></div>             </td>           </tr>                               <tr id="section-21">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-21">&#182;</a>               </div>               <p>Raw method for calculating a forecast value. Extend this.</p>
 
 <p>args - One or more attributes from @schema</p>

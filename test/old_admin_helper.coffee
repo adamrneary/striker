@@ -1,4 +1,4 @@
-window.AdminHelper =
+window.appHelper =
   set: (description, options) ->
     {collection, attributes, results} = options
 
@@ -10,7 +10,7 @@ window.AdminHelper =
         describe "changes #{forecastName}", ->
           # beforeEach
           collection.set(attributes...)
-          result = admin[forecastName].print()
+          result = app[forecastName].print()
 
           for row, values of testResults
             spec = it "returns array for row=#{row}", ->

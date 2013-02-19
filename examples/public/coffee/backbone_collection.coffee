@@ -21,7 +21,7 @@ class BackboneCollection extends Backbone.Collection
 
   # Initializes data based on support/inputs.coffee
   initialize: ->
-    @reset admin.inputs[@name]
+    @reset app.inputs[@name]
 
   # Uses for display data in views.
   #
