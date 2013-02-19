@@ -1,0 +1,26 @@
+{
+    "name": "Striker",
+    "version": "0.0.1",
+    "private": true,
+    "scripts": {
+        "test": "./node_modules/mocha/bin/mocha test/server/run.js -G -R spec -s 20 --timeout 6000;",
+        "start": "node run"
+    },
+    "engines": {
+        "node": "0.8.x",
+        "npm": "1.1.x"
+    },
+    "dependencies": {
+        "express": "3.0.6",
+        "jade": "",
+        "coffee-script": "",
+        "node-sass": "",
+        "kss": "",
+        "mocha": "",
+        "request": "",
+        "coffeelint": "",
+        "coffeestand": "",
+        "docco":"",
+        "pygments":""
+    }
+}

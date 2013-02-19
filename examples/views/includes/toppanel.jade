@@ -1,0 +1,32 @@
+.navbar.navbar-inverse.navbar-fixed-top
+  .navbar-inner
+    .container-fluid
+      a.btn.btn-navbar(data-toggle='collapse', data-target='.nav-collapse')
+        span.icon-bar
+        span.icon-bar
+        span.icon-bar
+      a.brand(href='http://www.activecell.com') Striker
+      .nav-collapse
+        ul.nav
+          li(class="#{page == 'index'? 'active': ''}")
+            a(href='/')
+              i.icon-white.icon-home
+              |  Home
+          li(class="#{page == 'documentation'? 'active': ''}")
+            a(href='/documentation')
+              i.icon-white.icon-list-alt
+              |  Documentation
+          li(class="#{page == 'test'? 'active': ''}")
+            a(href='/test')
+              i.icon-white.icon-ok
+              |  Tests
+          li(class="#{page == 'performance'? 'active': ''}")
+            a(href='/performance')
+              i.icon-white.icon-time
+              |  Performance
+          li
+            a(href='https://github.com/activecell/tablestakes')
+              i.icon-white.icon-book
+              |  Source
+      //
+        /.nav-collapse

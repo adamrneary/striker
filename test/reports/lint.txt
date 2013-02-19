@@ -1,0 +1,59 @@
+
+  ✓ [1m[32m./examples/public/coffee/all.coffee[39m[22m
+  ✓ [1m[32m./examples/public/coffee/base.coffee[39m[22m
+  ✓ [1m[32m./examples/public/coffee/custom_classes.coffee[39m[22m
+  ✓ [1m[32m./examples/public/coffee/deleteable.coffee[39m[22m
+  ✓ [1m[32m./examples/public/coffee/editable.coffee[39m[22m
+  ✓ [1m[32m./examples/public/coffee/editors.coffee[39m[22m
+  ✓ [1m[32m./examples/public/coffee/examples.coffee[39m[22m
+  ✓ [1m[32m./examples/public/coffee/filterable.coffee[39m[22m
+  ✓ [1m[32m./examples/public/coffee/hierarchy_dragging.coffee[39m[22m
+  ✓ [1m[32m./examples/public/coffee/nested.coffee[39m[22m
+  ✓ [1m[32m./examples/public/coffee/nested_editable.coffee[39m[22m
+  ✓ [1m[32m./examples/public/coffee/reorder_dragging.coffee[39m[22m
+  ✓ [1m[32m./examples/public/coffee/resizable.coffee[39m[22m
+  ✓ [1m[32m./server/compiler.coffee[39m[22m
+  ✓ [1m[32m./server/config.coffee[39m[22m
+  ✓ [1m[32m./server/router.coffee[39m[22m
+  ✗ [1m[31m./server/server.coffee[39m[22m
+     ✗ [31m#48[39m: Line exceeds maximum allowed length.
+     ✗ [31m#54[39m: Line exceeds maximum allowed length.
+  ✓ [1m[32m./src/coffee/column.coffee[39m[22m
+  ✗ [1m[31m./src/coffee/events.coffee[39m[22m
+     ✗ [31m#101[39m: Line contains inconsistent indentation. Expected 2 got -2.
+     ✗ [31m#105[39m: Line contains inconsistent indentation. Expected 2 got 4.
+  ✗ [1m[31m./src/coffee/render.coffee[39m[22m
+     ✗ [31m#137[39m: Line exceeds maximum allowed length.
+     ✗ [31m#157[39m: Line exceeds maximum allowed length.
+     ✗ [31m#162[39m: Line exceeds maximum allowed length.
+     ✗ [31m#167[39m: Line exceeds maximum allowed length.
+     ✗ [31m#208[39m: Line contains inconsistent indentation. Expected 2 got -2.
+     ✗ [31m#210[39m: Line contains inconsistent indentation. Expected 2 got 4.
+     ✗ [31m#239[39m: Line exceeds maximum allowed length.
+  ✓ [1m[32m./src/coffee/tablestakes.coffee[39m[22m
+  ✓ [1m[32m./src/coffee/utils.coffee[39m[22m
+  ✗ [1m[31m./test/index.coffee[39m[22m
+     ✗ [31m#29[39m: Line contains inconsistent indentation. Expected 2 got 4.
+  ✓ [1m[32m./test/integration/base.coffee[39m[22m
+  ✓ [1m[32m./test/integration/custom_classes.coffee[39m[22m
+  ✓ [1m[32m./test/integration/custom_editor.coffee[39m[22m
+  ✓ [1m[32m./test/integration/deletable.coffee[39m[22m
+  ✓ [1m[32m./test/integration/editable.coffee[39m[22m
+  ✓ [1m[32m./test/integration/filterable.coffee[39m[22m
+  ✓ [1m[32m./test/integration/hierarchy_drag.coffee[39m[22m
+  ✓ [1m[32m./test/integration/index.coffee[39m[22m
+  ✓ [1m[32m./test/integration/nested.coffee[39m[22m
+  ✓ [1m[32m./test/integration/nested_editable.coffee[39m[22m
+  ✓ [1m[32m./test/integration/reorder_drag.coffee[39m[22m
+  ✓ [1m[32m./test/integration/resizable.coffee[39m[22m
+  ✓ [1m[32m./test/lint.coffee[39m[22m
+  ✓ [1m[32m./test/server/index.coffee[39m[22m
+  ✓ [1m[32m./test/unit/column_test.coffee[39m[22m
+  ✓ [1m[32m./test/unit/events_test.coffee[39m[22m
+  ✓ [1m[32m./test/unit/index.coffee[39m[22m
+  ✓ [1m[32m./test/unit/render_test.coffee[39m[22m
+  ✓ [1m[32m./test/unit/tablestakes_test.coffee[39m[22m
+  ✓ [1m[32m./test/unit/utils_test.coffee[39m[22m
+
+✗ [1m[31mLint![39m[22m » 12 errors and 0 warnings in 43 files
+
