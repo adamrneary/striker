@@ -195,7 +195,7 @@ class IndexView extends Backbone.View
 
   makeInteractive: (collection) ->
     collection.on('change', @changeRow)
-    dopSelector = if collection.isMonth() then ':not(:first)' else ''
+    dopSelector = if collection.isTimeSeries() then ':not(:first)' else ''
 
     $(".#{collection.name} tr:not(:first)#{dopSelector}").each ->
       [$tr, args, notPart] = [$(@), {}, '']
@@ -204,11 +204,11 @@ class IndexView extends Backbone.View
         notPart += ':not(:first)' if order > 0
         args[field] = $tr.find("td#{notPart}:first").html()
 
-      notPart += ':not(:first)' unless collection.isMonth()
+      notPart += ':not(:first)' unless collection.isTimeSeries()
       $tr.find("td#{notPart}").each (order) ->
         $td = $(@)
         $td.attr(key, value) for key, value of args
-        $td.attr('monthId', order + 1) if collection.isMonth()
+        $td.attr('monthId', order + 1) if collection.isTimeSeries()
 
   changeRow: (args, value, collection) =>
     selector = ''

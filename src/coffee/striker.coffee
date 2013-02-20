@@ -85,7 +85,7 @@
   #   # Set 75% for stageId = 3, channelId = 1 and monthId = 1
   #   conversionRates.set(75, 3, 1, 1)
   #
-  #   conversionRates.isMonth()
+  #   conversionRates.isTimeSeries()
   #   # => true
   class Striker.Collection
 
@@ -109,7 +109,7 @@
     # Check that collection has monthId attribute
     #
     # Returns true or false
-    isMonth: ->
+    isTimeSeries: ->
       _.last(@schema) is 'monthId'
 
     # Recursive function which uses @inputs and @collections for builds @values
@@ -210,9 +210,9 @@
     print: (result = [], args = [], level = 0) ->
       for item in @collections[level]
         args[level] = item.id
-        if level >= @schema.length - 2 and @isMonth()
+        if level >= @schema.length - 2 and @isTimeSeries()
           result.push args.concat _.values(@get(args...))
-        else if level >= @schema.length - 1 and !@isMonth()
+        else if level >= @schema.length - 1 and !@isTimeSeries()
           result.push args.concat @get(args...) * @multiplier
         else
           @print(result, args, level + 1)
