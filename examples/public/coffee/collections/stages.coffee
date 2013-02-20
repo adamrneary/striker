@@ -1,4 +1,2 @@
-class Stages extends BackboneCollection
+class Stages extends Backbone.Collection
   name: 'stages'
-  printAttributes: ['id', 'name', 'lag', 'is_topline', 'is_customer']
-

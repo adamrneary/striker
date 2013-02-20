@@ -1,7 +1,3 @@
-# require utils
-#require('utils')
-#require('backbone_collection')
-
 # require collections
 #Streams            = require('collections/streams')
 #Segments           = require('collections/segments')
@@ -136,11 +132,11 @@ window.App =
 
   # Initializes collections with raw of inputs and assigns them to app
   initCollections: ->
-    app.streams            = new Streams()
-    app.segments           = new Segments()
-    app.channels           = new Channels()
-    app.stages             = new Stages()
-    app.months             = new Months()
+    app.streams            = new Streams(app.inputs.streams)
+    app.segments           = new Segments(app.inputs.segments)
+    app.channels           = new Channels(app.inputs.channels)
+    app.stages             = new Stages(app.inputs.stages)
+    app.months             = new Months(app.inputs.months)
     app.channelSegmentMix  = new ChannelSegmentMix()
     app.initialVolume      = new InitialVolume()
     app.toplineGrowth      = new ToplineGrowth()

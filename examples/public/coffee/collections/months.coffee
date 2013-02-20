@@ -1,2 +1,2 @@
-class Months extends BackboneCollection
+class Months extends Backbone.Collection
   name: 'months'

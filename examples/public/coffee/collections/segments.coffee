@@ -1,2 +1,2 @@
-class Segments extends BackboneCollection
+class Segments extends Backbone.Collection
   name: 'segments'

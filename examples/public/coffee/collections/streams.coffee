@@ -1,2 +1,2 @@
-class Streams extends BackboneCollection
+class Streams extends Backbone.Collection
   name: 'streams'
