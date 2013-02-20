@@ -150,13 +150,13 @@ window.App =
     app.churnForecast      = new ChurnForecast()
 
     app.conversionForecast.build()
-    app.conversionForecast.onTriggers()
+    app.conversionForecast.enableTriggers()
 
     app.customerForecast.build()
-    app.customerForecast.onTriggers()
+    app.customerForecast.enableTriggers()
 
     app.churnForecast.build()
-    app.churnForecast.onTriggers()
+    app.churnForecast.enableTriggers()
 
   initView: ->
     switch location.pathname

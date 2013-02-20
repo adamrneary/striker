@@ -45,6 +45,8 @@
   # schema     - Sets order and type nested attributes (required)
   #              data save based on this attribute
   # multiplier - For percentage data equal 100, by default 1
+  # triggers    - Object with functions which called when object was changed
+  #               use short versions of variables from app
   #
   # Examples
   #
@@ -52,6 +54,8 @@
   #     name: 'conversionRates'
   #     schema: ['stageId', 'channelId', 'monthId']
   #     multiplier: 100
+  #     triggers:
+  #       toplineGrowth: (args) -> l("toplineGrowth changed with #{args.channelId} and #{args.monthId}")
   #
   #   conversionRates = new ConversionRates()
   #   conversionRates.collections
@@ -95,9 +99,16 @@
     # Set default multiplier to 1 to avoid altering data unless requested
     multiplier: 1
 
+    # If the schema ends with this ID, the collection will be treated as time
+    #   series.
+    timeSeriesIdentifier: 'monthId'
+
+    # Object with functions which called when object was changed. Extend this.
+    triggers: {}
+
     constructor: (@inputs = [])->
       @collections = (app.schemaMap(field) for field in @schema)
-      @values      = @initValues()
+      @values      = @_initValues()
 
     # Raw method for calculating a forecast value. Extend this.
     #
@@ -110,20 +121,20 @@
     #
     # Returns true or false
     isTimeSeries: ->
-      _.last(@schema) is 'monthId'
+      _.last(@schema) is @timeSeriesIdentifier
 
     # Recursive function which uses @inputs and @collections for builds @values
     # Attributes used for recursive callbacks
     #
     # Returns object with structured data
-    initValues: (values = {}, inputs = @inputs, level = 0) ->
+    _initValues: (values = {}, inputs = @inputs, level = 0) ->
       for item, order in @collections[level]
         value = inputs[order] ? 0
         if level is @schema.length - 1
           values[item.id] = value
         else
           values[item.id] = {}
-          @initValues(values[item.id], value, level + 1)
+          @_initValues(values[item.id], value, level + 1)
       values
 
     # Builds values for every element
@@ -234,39 +245,34 @@
         result['value'] = item[@schema.length]
         result
 
-
-
+    # triggers and event handling
+    # ------------------
 
     # Turns On triggers based on @triggers. Name `this` uses for self triggers
-    onTriggers: ->
+    enableTriggers: ->
       for collectionName, callback of @triggers
         collection = if collectionName is 'this' then @ else app[collectionName]
-        collection.on('change', @wrapCallback(callback), @)
+        collection.on('change', @_wrapCallback(callback), @)
 
     # Private: pass args as object with params to trigger function
     #
     # Returns trigger function
-    wrapCallback: (defaultCallback) ->
+    _wrapCallback: (defaultCallback) ->
       (args, value, collection) ->
         attributes = {}
         attributes[key] = args[order] for key, order in collection.schema
         defaultCallback.call(@, attributes)
 
-
       # Adds specific forecast functionality to Striker.Collection
       #
       # name        - Forecast name (required)
       # schema      - Schema for attributes (required)
-      # triggers    - Object with functions which called when object was changed
-      #               use short versions of variables from app
       #
       # Examples
       #
       #   class ConversionForecast extends ForecastCollection
       #     name: 'conversionForecast'
       #     schema: ['stageId', 'channelId', 'segmentId', 'monthId']
-      #     triggers:
-      #       toplineGrowth: (args) -> l("toplineGrowth changed with #{args.channelId} and #{args.monthId}")
       #
       #   conversionForecast = new ConversionForecast()
       #
@@ -274,6 +280,6 @@
       #   conversionForecast.build()
       #
       #   # Turns on all triggers
-      #   conversionForecast.onTriggers()
+      #   conversionForecast.enableTriggers()
       #   app.toplineGrowth.set(5, 1, 1)
       #   # => 'toplineGrowth changed'
