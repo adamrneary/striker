@@ -99,6 +99,19 @@
       @collections = (app.schemaMap(field) for field in @schema)
       @values      = @initValues()
 
+    # Raw method for calculating a forecast value. Extend this.
+    #
+    # args - One or more attributes from @schema
+    #
+    # Returns value to cache (type may vary based on what you wish to cache)
+    calculate: (args...) ->
+
+    # Check that collection has monthId attribute
+    #
+    # Returns true or false
+    isMonth: ->
+      _.last(@schema) is 'monthId'
+
     # Recursive function which uses @inputs and @collections for builds @values
     # Attributes used for recursive callbacks
     #
@@ -121,6 +134,9 @@
           @update(args...)
         else
           @build(level + 1, args)
+
+    # get/set/update
+    # ------------------
 
     # Get value by params
     #
@@ -185,6 +201,9 @@
     update: (args...) ->
       @set @calculate(args...), args...
 
+    # bulk return
+    # ------------------
+
     # Combine information for display
     #
     # Returns array of nested arrays
@@ -215,18 +234,8 @@
         result['value'] = item[@schema.length]
         result
 
-    # Check that collection has monthId attribute
-    #
-    # Returns true or false
-    isMonth: ->
-      _.last(@schema) is 'monthId'
 
-    # Raw method for calculating a forecast value. Extend this.
-    #
-    # args - One or more attributes from @schema
-    #
-    # Returns not rounded value.
-    calculate: (args...) ->
+
 
     # Turns On triggers based on @triggers. Name `this` uses for self triggers
     onTriggers: ->
