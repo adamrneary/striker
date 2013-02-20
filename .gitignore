@@ -1,21 +1,21 @@
 build/
 dist/
+examples/public/js/
+test/docs/
+
 node_modules/
 /nbproject/
+
 .project
-*.swp
 .DS_Store
 .sass-cache/
 .idea/
-examples/css/striker.css
-examples/js/striker.js
 .rvmrc
 .powrc
 .log
-*.orig
 .tddium*
 .tddium
 
 *.log
-
-examples/public/js/
+*.orig
+*.swp
