@@ -132,16 +132,16 @@ window.App =
 
   # Initializes collections with raw of inputs and assigns them to app
   initCollections: ->
-    app.streams            = new Streams(app.inputs.streams)
-    app.segments           = new Segments(app.inputs.segments)
-    app.channels           = new Channels(app.inputs.channels)
-    app.stages             = new Stages(app.inputs.stages)
-    app.months             = new Months(app.inputs.months)
-    app.channelSegmentMix  = new ChannelSegmentMix()
-    app.initialVolume      = new InitialVolume()
-    app.toplineGrowth      = new ToplineGrowth()
-    app.conversionRates    = new ConversionRates()
-    app.churnRates         = new ChurnRates()
+    app.streams            = new Streams app.inputs.streams
+    app.segments           = new Segments app.inputs.segments
+    app.channels           = new Channels app.inputs.channels
+    app.stages             = new Stages app.inputs.stages
+    app.months             = new Months app.inputs.months
+    app.channelSegmentMix  = new ChannelSegmentMix app.inputs.channelSegmentMix
+    app.initialVolume      = new InitialVolume app.inputs.initialVolume
+    app.toplineGrowth      = new ToplineGrowth app.inputs.toplineGrowth
+    app.conversionRates    = new ConversionRates app.inputs.conversionRates
+    app.churnRates         = new ChurnRates app.inputs.churnRates
 
   # Initializes forecasts, builds values and turns on triggers for changes
   initForecasts: ->

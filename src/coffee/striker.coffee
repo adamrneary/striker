@@ -95,8 +95,7 @@
     # Set default multiplier to 1 to avoid altering data unless requested
     multiplier: 1
 
-    constructor: ->
-      @inputs      = app.inputs[@name] || []
+    constructor: (@inputs = [])->
       @collections = (app.schemaMap(field) for field in @schema)
       @values      = @initValues()
 
