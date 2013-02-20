@@ -1,4 +1,4 @@
-module.exports = class Row extends Backbone.View
+class Row extends Backbone.View
   tagName: 'tr'
 
   render: ->

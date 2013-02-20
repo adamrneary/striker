@@ -1,8 +1,6 @@
-BaseCollection = require('app/collections/shared/base_collection')
-
-module.exports = class Tests extends Backbone.View
+class TestsView extends Backbone.View
   el: '#container'
-  printTemplate: JST['app/tests/print']
+  #printTemplate: JST['app/tests/print']
 
   events:
     'submit'       : 'runRandomizeTest'

@@ -1,4 +1,2 @@
-BackboneCollection = require('./shared/backbone_collection')
-
-module.exports = class Segments extends BackboneCollection
+class Segments extends BackboneCollection
   name: 'segments'

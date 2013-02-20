@@ -52,9 +52,9 @@ compileCoffeeSrc = (cb) ->
       cb()
 
 compileCoffeeExamples = (cb) ->
-  destDir = "#{__dirname}/../examples/public/js/"
+  dest = "#{__dirname}/../examples/public/js/demo.js"
   srcDir = "#{__dirname}/../examples/public/coffee/"
-  command1 = "#{coffeePath} -o #{destDir} -cb #{srcDir}"
+  command1 = "#{coffeePath} -j #{dest} -cb #{srcDir}"
   command2 = "#{coffeePath} -p -cb #{srcDir}"
 
   child_process.exec command1, (err,stdout,stderr) ->

@@ -3,8 +3,6 @@
 
 # (c) 2013 Adam Neary, Profitably Inc.
 
-(->
-
   # initial setup (similar to backbone.js)
   # --------------------------------------
 
@@ -26,11 +24,6 @@
 
   # Current version of the library. Keep in sync with `package.json`.
   Striker.VERSION = "0.0.1"
-
-  # Require Backbone, if we're on the server, and it's not already present.
-  Backbone = root.Backbone
-  if not Backbone and (typeof require isnt "undefined")
-    Backbone = require("backbone")
 
   # For Striker's purposes, jQuery, Zepto, or Ender owns the `$` variable.
   Striker.$ = root.jQuery or root.Zepto or root.ender
@@ -94,7 +87,7 @@
   #
   #   conversionRates.isMonth()
   #   # => true
-  Collection = Striker.Collection = ->
+  class BaseCollection
 
     # Include methods from Backbone.Events for binding support
     _.extend(@::, Backbone.Events)
@@ -206,7 +199,8 @@
   #   conversionForecast.onTriggers()
   #   app.toplineGrowth.set(5, 1, 1)
   #   # => 'toplineGrowth changed'
-  ForecastCollection extends Collection
+
+  class ForecastCollection extends BaseCollection
 
     # Raw method for calculating a forecast value. Extend this.
     #
@@ -245,4 +239,3 @@
         attributes = {}
         attributes[key] = args[order] for key, order in collection.schema
         defaultCallback.call(@, attributes)
-).call this

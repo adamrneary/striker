@@ -1,7 +1,4 @@
-HighChart = require('./high_chart')
-Row       = require('./row')
-
-module.exports = class Index extends Backbone.View
+class IndexView extends Backbone.View
   el: '#container'
 
   initialize: ->

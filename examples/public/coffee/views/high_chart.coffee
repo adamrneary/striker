@@ -1,5 +1,15 @@
-module.exports = class HighChart extends Backbone.View
+class HighChart extends Backbone.View
   render: ->
+    series = [{
+      name: 'Conversion forecast'
+      data: @average(app.conversionForecast)
+    },{
+      name: 'Churned customer forecast'
+      data: @average(app.churnForecast)
+    },{
+      name: 'Customer volume forecast'
+      data: @average(app.customerForecast)
+    }]
     chart = new Highcharts.Chart
       chart:
         renderTo: 'highchart'
@@ -23,16 +33,7 @@ module.exports = class HighChart extends Backbone.View
         x: -10
         y: 100
         borderWidth: 0
-      series: [{
-        name: 'Conversion forecast'
-        data: @average(app.conversionForecast)
-      },{
-        name: 'Churned customer forecast'
-        data: @average(app.churnForecast)
-      },{
-        name: 'Customer volume forecast'
-        data: @average(app.customerForecast)
-      }]
+      series: series
 
   average: (collection) ->
     result = _.range(1, 37)

@@ -1,6 +1,4 @@
-ForecastCollection = require('./shared/forecast_collection')
-
-module.exports = class ChurnForecast extends ForecastCollection
+class ChurnForecast extends ForecastCollection
   name: 'churnForecast'
   schema: ['channelId', 'segmentId', 'monthId']
 
