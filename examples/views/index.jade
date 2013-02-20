@@ -12,29 +12,66 @@ html
     .container
       section#objects
         .page-header
-          h1 Backbone dimensions
-
-          firstTables = [{title: 'Revenue streams', fields: ['id', 'name'], klass: 'streams'},{title: 'Customer segments', fields: ['id', 'name'], klass: 'segments'},{title: 'Channels', fields: ['id', 'name'], klass: 'channels'},{title: 'Customer acq stages', fields: ['id', 'name', 'lag period', 'is_topline', 'is_customer'], klass: 'stages'},{title: 'Channel segment mix', fields: ['channelId', 'segmentId', 'value'], klass: 'channelSegmentMix', desc: 'use: app.channelSegmentMix.set\(value, channelId, segmentId\), ex: app.channelSegmentMix.set\(50, 5, 7\)'}]
-          each table in firstTables
-            include includes/table
+          h1 Backbone collections
+          .row
+            .span4
+              h3= 'Revenue streams'
+              #streams
+            .span4
+              h3= 'Customer segments'
+              #segments
+          .row
+            .span4
+              h3= 'Channels'
+              #channels
+            .span8
+              h3= 'Customer acq stages'
+              #stages
 
       section#forecast
         .page-header
-          h1 Backbone fact table mirrors
-
-          table = {title: 'Initial volume', fields: ['stage id', 'channel id', 'segment id', 'value'],klass: 'initialVolume', desc: 'use: app.initialVolume.set(value, stageId,  channelId, segmentId), ex: appinitialVolume.set(20, 10292, 5, 7)'}
-          include includes/table
-
-          secondTables = [{title: 'Topline growth', fields: ['channelId'], klass: 'toplineGrowth', desc: 'use: app.toplineGrowth.set(value, channelId, monthId), ex: app.toplineGrowth.set(100, 5, 1)'},{title: 'Conversion rates', fields: ['notFirstStageId', 'channelId'], klass: 'conversionRates', desc: 'use: app.conversionRates.set(value, notFirstStageId, channelId, monthId), ex: app.conversionRates.set(95, 22394, 5, 1)'},{title: 'Churn rates', fields: ['segmentId'], klass: 'churnRates', desc: 'use: app.churnRates.set(value, segmentId, monthId), ex: app.churnRates.set(0, 7, 1)'}]
-          each table in secondTables
-            include includes/month_table
+          h1 Striker base collections
+          .row
+            .span6
+              h3= 'Channel mix'
+                small  app.channelSegmentMix.set(value, channelId, segmentId)
+              #channelSegmentMix
+            .span6
+              h3= 'Initial volume'
+                small  app.initialVolume.set(value, stageId, channelId, segmentId)
+              #initialVolume
+          .row
+            .span12
+              h3= 'Topline growth'
+                small  app.toplineGrowth.set(value, channelId, monthId)
+              #toplineGrowth
+          .row
+            .span12
+              h3= 'Conversion rates'
+                small  app.conversionRates.set(value, notFirstStageId, channelId, monthId)
+              #conversionRates
+          .row
+            .span12
+              h3= 'Churn rates'
+                small  'app.churnRates.set(value, segmentId, monthId)'
+              #churnRates
 
       section#calculations
         .page-header
-          h1 Striker collections
+          h1 Striker forecast collections
 
           #highchart
+          #tactile
 
-          thirdTables = [{title: 'Conversion forecast', fields: ['stageId', 'channelId', 'segmentId'], klass: 'conversionForecast'},{title: 'Churn forecast', fields: ['channelId', 'segmentId'], klass: 'churnForecast'},{title: 'Customer volume forecast', fields: ['channelId', 'segmentId'], klass: 'customerForecast'}]
-          each table in thirdTables
-            include includes/month_table
+          .row
+            .span12
+              h3= 'Conversion forecast'
+              #conversionForecast
+          .row
+            .span12
+              h3= 'Churn forecast'
+              #churnForecast
+          .row
+            .span12
+              h3= 'Customer volume forecast'
+              #customerForecast

@@ -1,26 +1,188 @@
 class IndexView extends Backbone.View
   el: '#container'
+  monthCount: 36
+  columns:
+    streams: [
+      id: "id"
+      label: "ID"
+      classes: "row-heading"
+    ,
+      id: "name"
+      label: "Name"
+    ]
+    segments: [
+      id: "id"
+      label: "ID"
+      classes: "row-heading"
+    ,
+      id: "name"
+      label: "Name"
+    ]
+    channels: [
+      id: "id"
+      label: "ID"
+      classes: "row-heading"
+    ,
+      id: "name"
+      label: "Name"
+    ]
+    stages: [
+      id: "id"
+      label: "ID"
+      classes: "row-heading"
+    ,
+      id: "name"
+      label: "Name"
+    ,
+      id: "lag"
+      label: "Lag"
+    ,
+      id: "is_topline"
+      label: "Is topline"
+    ,
+      id: "is_customer"
+      label: "Is customer"
+    ]
+    channelSegmentMix: [
+      id: "channelId"
+      label: "Channel id"
+      classes: "row-heading"
+    ,
+      id: "segmentId"
+      label: "Segment id"
+      classes: "row-heading"
+    ,
+      id: "value"
+      label: "Value"
+    ]
+    initialVolume: [
+      id: "stageId"
+      label: "Stage id"
+      classes: "row-heading"
+    ,
+      id: "channelId"
+      label: "Channel id"
+      classes: "row-heading"
+    ,
+      id: "segmentId"
+      label: "Segment id"
+      classes: "row-heading"
+    ,
+      id: "value"
+      label: "Value"
+    ]
+    toplineGrowth: [
+      id: "channelId"
+      label: "Channel id"
+      classes: "row-heading"
+      width: '70px'
+    ]
+    conversionRates: [
+      id: "stageId"
+      label: "Stage id"
+      classes: "row-heading"
+      width: '70px'
+    ,
+      id: "channelId"
+      label: "Channel id"
+      classes: "row-heading"
+      width: '70px'
+    ]
+    churnRates: [
+      id: "segmentId"
+      label: "Segment id"
+      classes: "row-heading"
+      width: '70px'
+    ]
+    conversionForecast: [
+      id: "stageId"
+      label: "Stage id"
+      classes: "row-heading"
+      width: '70px'
+    ,
+      id: "segmentId"
+      label: "Segment id"
+      classes: "row-heading"
+      width: '70px'
+    ,
+      id: "channelId"
+      label: "Channel id"
+      classes: "row-heading"
+      width: '70px'
+    ]
+    customerForecast: [
+      id: "channelId"
+      label: "Channel id"
+      classes: "row-heading"
+      width: '70px'
+    ,
+      id: "segmentId"
+      label: "Segment id"
+      classes: "row-heading"
+      width: '70px'
+    ]
+    churnForecast: [
+      id: "channelId"
+      label: "Channel id"
+      classes: "row-heading"
+      width: '70px'
+    ,
+      id: "segmentId"
+      label: "Segment id"
+      classes: "row-heading"
+      width: '70px'
+    ]
 
-  initialize: ->
-    $('li.example').addClass('active')
-
-  render: =>
-    @renderInputs()
-    @renderForecasts()
-    @highlight()
+  render: ->
+    @_renderInputs()
+    @_renderForecasts()
+    # @highlight()
     @
 
-  renderInputs: ->
-    for input in [app.streams, app.segments, app.channels, app.stages, app.channelSegmentMix,\
-                  app.initialVolume, app.toplineGrowth, app.conversionRates, app.churnRates]
-      @renderCollection(input)
-      @makeInteractive(input) if input.schema
+  _renderInputs: ->
+    for input in ['streams', 'segments', 'channels', 'stages']
+      @_renderBackboneCollection(app[input])
+    for input in [
+      'channelSegmentMix', 'initialVolume', 'toplineGrowth', 'conversionRates',
+      'churnRates'
+    ]
+      @_renderStrikerCollection(app[input])
 
-  renderForecasts: ->
-    for forecast in [app.conversionForecast, app.churnForecast, app.customerForecast]
-      @renderCollection(forecast)
+      # @makeInteractive(input) if input.schema
 
+  _renderBackboneCollection: (collection) ->
+    grid = new window.TableStakes()
+      .el("##{collection.name}")
+      .columns(@columns[collection.name])
+      .data(collection.toJSON())
+      .render()
+
+  _renderStrikerCollection: (collection) ->
+    columns = @columns[collection.name]
+    columns = @_addMonths(columns) if _.last(collection.schema) is 'monthId'
+    grid = new window.TableStakes()
+      .el("##{collection.name}")
+      .columns(columns)
+      .data(collection.toArray())
+      .render()
+
+  _addMonths: (columns) ->
+    _.times @monthCount, (i) =>
+      columns.push {id: i, label: "#{i+1}"}
+    columns
+
+  _renderForecasts: ->
     new HighChart().render()
+
+    for forecast in ['conversionForecast', 'churnForecast', 'customerForecast']
+      @_renderStrikerCollection(app[forecast])
+
+
+
+
+
+
+
 
   highlight: ->
     $('''
@@ -30,12 +192,6 @@ class IndexView extends Backbone.View
       .conversionRates td:not(:first-child, :nth-child(2)),
       .churnRates td:not(:first-child)
     ''').addClass('yellow')
-
-  renderCollection: (collection) ->
-    @$(".#{collection.name} tbody").html('')
-    for line in collection.print()
-      row = new Row(collection: line)
-      @$(".#{collection.name} tbody").append row.render().el
 
   makeInteractive: (collection) ->
     collection.on('change', @changeRow)

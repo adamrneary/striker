@@ -168,6 +168,22 @@
           @print(result, args, level + 1)
       result
 
+    # Flattens output of print to single objects with keys informed by schema
+    #
+    # Returns Array of Objects
+    toArray: ->
+      _.map @print(), (item) =>
+        result = {}
+        for key, index in @schema
+          if key is 'monthId'
+            for i, index2 in _.range(index, @print()[0].length)
+              result[index2] = item[i]
+            return result
+          else
+            result[key] = item[index]
+        result['value'] = item[@schema.length]
+        result
+
     # Check that collection has monthId attribute
     #
     # Returns true or false
