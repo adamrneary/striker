@@ -1,4 +1,4 @@
-class ConversionForecast extends ForecastCollection
+class ConversionForecast extends BaseCollection
   name: 'conversionForecast'
   schema: ['stageId', 'channelId', 'segmentId', 'monthId']
 
@@ -6,21 +6,21 @@ class ConversionForecast extends ForecastCollection
     this: (args) ->
       if stage = app.stages.at(_.indexOf(app.stages.pluck('id'), args.stageId) + 1)
         args.monthId += 1 unless stage.get('is_customer')
-        @set(stage.id, args.channelId, args.segmentId, args.monthId) if args.monthId <= 36
+        @update(stage.id, args.channelId, args.segmentId, args.monthId) if args.monthId <= 36
 
     toplineGrowth: (args) ->
       for stage in app.stages.where(is_topline: true)
         for segment in app.segments.models
-          @set(stage.id, args.channelId, segment.id, args.monthId)
+          @update(stage.id, args.channelId, segment.id, args.monthId)
 
     channelSegmentMix: (args) ->
       for stage in app.stages.where(is_topline: true)
         for month in app.months.models
-          @set(stage.id, args.channelId, args.segmentId, month.id)
+          @update(stage.id, args.channelId, args.segmentId, month.id)
 
     conversionRates: (args) ->
       for segment in app.segments.models
-        @set(args.notFirstStageId, args.channelId, segment.id, args.monthId)
+        @update(args.notFirstStageId, args.channelId, segment.id, args.monthId)
 
   calculate: (stageId, channelId, segmentId, monthId) ->
     stage = app.stages.get(stageId)

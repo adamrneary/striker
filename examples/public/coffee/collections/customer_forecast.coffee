@@ -1,13 +1,13 @@
-class CustomerForecast extends ForecastCollection
+class CustomerForecast extends BaseCollection
   name: 'customerForecast'
   schema: ['channelId', 'segmentId', 'monthId']
 
   triggers:
     churnForecast: (args) ->
-      @set(args.channelId, args.segmentId, args.monthId)
+      @update(args.channelId, args.segmentId, args.monthId)
 
     conversionForecast: (args) ->
-      @set(args.channelId, args.segmentId, args.monthId) if args.stageId is 32943
+      @update(args.channelId, args.segmentId, args.monthId) if args.stageId is 32943
 
   calculate: (channelId, segmentId, monthId) ->
     # TODO: strange logic with stage.id, stub it to 32943

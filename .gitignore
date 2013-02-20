@@ -19,3 +19,5 @@ node_modules/
 *.log
 *.orig
 *.swp
+
+test/cov/tablestakes.js
