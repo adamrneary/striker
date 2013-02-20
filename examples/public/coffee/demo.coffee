@@ -152,7 +152,9 @@ window.App =
     app.conversionForecast.build()
     app.conversionForecast.onTriggers()
 
+    app.customerForecast.build()
     app.customerForecast.onTriggers()
+
     app.churnForecast.build()
     app.churnForecast.onTriggers()
 
