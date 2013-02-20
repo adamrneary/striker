@@ -149,13 +149,8 @@ window.App =
     app.customerForecast   = new CustomerForecast()
     app.churnForecast      = new ChurnForecast()
 
-    app.conversionForecast.build()
     app.conversionForecast.enableTriggers()
-
-    app.customerForecast.build()
     app.customerForecast.enableTriggers()
-
-    app.churnForecast.build()
     app.churnForecast.enableTriggers()
 
   initView: ->

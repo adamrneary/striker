@@ -138,13 +138,13 @@
       values
 
     # Builds values for every element
-    build: (level = 0, args = []) ->
+    _build: (level = 0, args = []) ->
       for item in @collections[level]
         args[level] = item.id
         if level >= @schema.length - 1
           @update(args...)
         else
-          @build(level + 1, args)
+          @_build(level + 1, args)
 
     # get/set/update
     # ------------------
@@ -253,6 +253,7 @@
       for collectionName, callback of @triggers
         collection = if collectionName is 'this' then @ else app[collectionName]
         collection.on('change', @_wrapCallback(callback), @)
+      @_build()
 
     # Private: pass args as object with params to trigger function
     #
