@@ -87,7 +87,7 @@
   #
   #   conversionRates.isMonth()
   #   # => true
-  class BaseCollection
+  class Striker.Collection
 
     # Include methods from Backbone.Events for binding support
     _.extend(@::, Backbone.Events)
@@ -113,9 +113,18 @@
           @initValues(values[item.id], value, level + 1)
       values
 
+    # Builds values for every element
+    build: (level = 0, args = []) ->
+      for item in @collections[level]
+        args[level] = item.id
+        if level >= @schema.length - 1
+          @update(args...)
+        else
+          @build(level + 1, args)
+
     # Get value by params
     #
-    # args - Arguments split a comma and bases on schema.
+    # args - Arguments split by commas and bases on schema.
     #        If schema is ['channelId', 'monthId']
     #        then get(1,2) will be equal channelId=1 and monthId=2
     #
@@ -153,8 +162,28 @@
       result[_.last(args)] = value
       @trigger('change', args, value, @)
 
+    # Triggers a set for the collection's item as filtered by args
+    #
+    # args - Arguments split by commas and bases on schema.
+    #        If schema is ['channelId', 'monthId']
+    #        then get(1,2) will be equal channelId=1 and monthId=2
+    #
+    # Note: This acts to refresh the cached data and is generally called
+    #       proactively by a trigger after making a change to underlying data
+    #
+    # Examples
+    #
+    #   conversionRates.get(2, 1)
+    #   # => 10
+    #   conversionRates.calculate(2, 1)
+    #   # => 12
+    #   conversionRates.update(2, 1)
+    #   conversionRates.get(2, 1)
+    #   # => 12
+    #
+    # Returns nothing
     update: (args...) ->
-      @set(Math.round(@calculate(args...)), args...)
+      @set @calculate(args...), args...
 
     # Combine information for display
     #
@@ -192,18 +221,6 @@
     isMonth: ->
       _.last(@schema) is 'monthId'
 
-    # Builds values for every element
-    build: (level = 0, args = []) ->
-      for item in @collections[level]
-        args[level] = item.id
-        if level >= @schema.length - 1
-          value = Math.round(@calculate(args...))
-          args.unshift(value)
-          value = args.shift()
-          @update(args...)
-        else
-          @build(level + 1, args)
-
     # Raw method for calculating a forecast value. Extend this.
     #
     # args - One or more attributes from @schema
@@ -227,7 +244,7 @@
         defaultCallback.call(@, attributes)
 
 
-      # Adds specific forecast functionality to BaseCollection
+      # Adds specific forecast functionality to Striker.Collection
       #
       # name        - Forecast name (required)
       # schema      - Schema for attributes (required)

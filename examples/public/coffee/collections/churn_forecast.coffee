@@ -1,4 +1,4 @@
-class ChurnForecast extends BaseCollection
+class ChurnForecast extends Striker.Collection
   name: 'churnForecast'
   schema: ['channelId', 'segmentId', 'monthId']
 
@@ -15,7 +15,8 @@ class ChurnForecast extends BaseCollection
   calculate: (channelId, segmentId, monthId) ->
     # TODO: strange logic with stage.id, stub it to 32943
     if monthId is 1
-      app.churnRates.get(segmentId, monthId) * app.initialVolume.get(32943, channelId, segmentId)
+      result = app.churnRates.get(segmentId, monthId) * app.initialVolume.get(32943, channelId, segmentId)
     else
       previousMonth = monthId - 1
-      app.customerForecast.get(channelId, segmentId, previousMonth) * app.churnRates.get(segmentId, monthId)
+      result = app.customerForecast.get(channelId, segmentId, previousMonth) * app.churnRates.get(segmentId, monthId)
+    Math.round(result)

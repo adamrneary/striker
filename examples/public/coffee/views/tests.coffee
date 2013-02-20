@@ -55,9 +55,9 @@ class TestsView extends Backbone.View
     collection.set = (value, args...) -> @localSetCounter += 1; @defaultSet(value, args...)
     collection.get = (args...)        -> @localGetCounter += 1; @defaultGet(args...)
 
-    baseCollection = BaseCollection
-    baseCollection::oldGet = baseCollection::get unless baseCollection::oldGet
-    baseCollection::oldSet = baseCollection::set unless baseCollection::oldSet
+    Striker.Collection = Striker.Collection
+    Striker.Collection::oldGet = Striker.Collection::get unless Striker.Collection::oldGet
+    Striker.Collection::oldSet = Striker.Collection::set unless Striker.Collection::oldSet
     [app.setCounter, app.getCounter] = [0, 0]
-    baseCollection::set = (value, args...) -> app.setCounter +=1; @oldSet(value, args...)
-    baseCollection::get = (args...) -> app.getCounter +=1; @oldGet(args...)
+    Striker.Collection::set = (value, args...) -> app.setCounter +=1; @oldSet(value, args...)
+    Striker.Collection::get = (args...) -> app.getCounter +=1; @oldGet(args...)

@@ -1,3 +1,3 @@
-class InitialVolume extends BaseCollection
+class InitialVolume extends Striker.Collection
   name: 'initialVolume'
   schema: ['stageId', 'channelId', 'segmentId']

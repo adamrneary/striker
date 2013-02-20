@@ -1,3 +1,3 @@
-class ToplineGrowth extends BaseCollection
+class ToplineGrowth extends Striker.Collection
   name: 'toplineGrowth'
   schema: ['channelId', 'monthId']

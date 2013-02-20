@@ -1,4 +1,4 @@
-class CustomerForecast extends BaseCollection
+class CustomerForecast extends Striker.Collection
   name: 'customerForecast'
   schema: ['channelId', 'segmentId', 'monthId']
 

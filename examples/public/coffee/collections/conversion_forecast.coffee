@@ -1,4 +1,4 @@
-class ConversionForecast extends BaseCollection
+class ConversionForecast extends Striker.Collection
   name: 'conversionForecast'
   schema: ['stageId', 'channelId', 'segmentId', 'monthId']
 
@@ -25,15 +25,16 @@ class ConversionForecast extends BaseCollection
   calculate: (stageId, channelId, segmentId, monthId) ->
     stage = app.stages.get(stageId)
     if stage.get('is_topline')
-      app.toplineGrowth.get(channelId, monthId) * app.channelSegmentMix.get(channelId, segmentId)
+      result = app.toplineGrowth.get(channelId, monthId) * app.channelSegmentMix.get(channelId, segmentId)
     else
       previousStage = app.stages.at(app.stages.indexOf(stage) - 1)
       # TODO: strange logic with is_customer
       if monthId is 1 and !stage.get('is_customer')
-        app.initialVolume.get(previousStage.id, channelId, segmentId) * \
+        result = app.initialVolume.get(previousStage.id, channelId, segmentId) * \
         app.conversionRates.get(stageId, channelId, monthId)
       else
         # TODO: strange logic with monthOffset
         monthOffset = if stage.get('is_customer') then 0 else 1
-        @get(previousStage.id, channelId, segmentId, monthId - monthOffset) * \
+        result = @get(previousStage.id, channelId, segmentId, monthId - monthOffset) * \
         app.conversionRates.get(stageId, channelId, monthId)
+    Math.round(result)
