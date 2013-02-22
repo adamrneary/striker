@@ -55,11 +55,16 @@
   #     schema: ['stageId', 'channelId', 'monthId']
   #     multiplier: 100
   #     triggers:
-  #       toplineGrowth: (args) -> l("toplineGrowth changed with #{args.channelId} and #{args.monthId}")
+  #       toplineGrowth: (args) ->
+  #         l("toplineGrowth changed with channel: #{args.channelId}")
   #
   #   conversionRates = new ConversionRates()
   #   conversionRates.collections
-  #   # => [Array[stages.length], Array[channels.length], Array[months.length]]
+  #   # =>  [
+  #           Array[stages.length]
+  #           Array[channels.length]
+  #           Array[months.length]
+  #         ]
   #
   #   conversionRates.values
   #   # => object with data
@@ -81,6 +86,7 @@
   #       #   ...
   #       36: 34
   #     # other channels with data for stage with id = 3
+  #   # other stages...
   #
   #   # Get value for stageId = 2 and channelId = 1 and monthId = 36
   #   conversionRates.get(2, 1, 36)
@@ -91,6 +97,10 @@
   #
   #   conversionRates.isTimeSeries()
   #   # => true
+  #
+  #   conversionForecast.enableTriggers()
+  #   app.toplineGrowth.set(5, 1, 2, 3)
+  #   # => 'toplineGrowth changed with channel: 2'
   class Striker.Collection
 
     # Include methods from Backbone.Events for binding support
@@ -99,18 +109,81 @@
     # Set default multiplier to 1 to avoid altering data unless requested
     multiplier: 1
 
-    # If the schema ends with this ID, the collection will be treated as time
-    #   series.
+    # Collections with schemas ending with this are treated as time series
     timeSeriesIdentifier: 'monthId'
 
-    # Object with functions which called when object was changed. Extend this.
+    # String to uniquely identify collection
+    # CRITICAL: Override this in each subclass.
+    #
+    # Note: this field is used [...explain...]
+    name: ''
+
+    # Array with collection IDs that exist in app.schemaMap
+    # CRITICAL: Override this in each subclass.
+    #
+    # Example
+    #
+    #   app.schemaMap =
+    #    stageId: app.stages
+    #     channelId: app.channels
+    #     monthId: app.months
+    #
+    #   class ConversionRates extends Striker.Collection
+    #     schema: ['stageId', 'channelId', 'monthId']
+    #
+    #   conversionRates = new ConversionRates()
+    #   conversionRates.collections
+    #   # =>  [
+    #           Array[stages.length]
+    #           Array[channels.length]
+    #           Array[months.length]
+    #         ]
+    #
+    schema: []
+
+    # Object with functions which called when object was changed.
+    # CRITICAL: Override this in each subclass.
+    #
+    # key   - collection name
+    # value - function taking filter args Object as param
+    #
+    # Example
     triggers: {}
 
+    # Builds striker based on inputs (optionally) and schema
+    #
+    # @inputs - optional mechanism for loading collection with data
+    #   Note: data should be in nested Arrays matching schema and schema
+    #   collections
+    #
+    # Examples
+    #
+    #   class ChannelSegmentMix extends Striker.Collection
+    #     schema: ['channelId', 'segmentId']
+    #
+    #   app.channels.length
+    #   # => 5
+    #   app.segments.length
+    #   # => 3
+    #
+    #   data: [
+    #     [100,0,0]
+    #     [25,25,50]
+    #     [0,100,0]
+    #     [20,40,40]
+    #     [30,5,65]
+    #   ]
+    #   channelSegmentMix = new ChannelSegmentMix(data)
+    #
+    # Note: Pass no data if the collection will be populated by calcuations
+    #   In this case, the collection will be initialized with 0 values until
+    #   triggers are turned on and values can be calculated.
     constructor: (@inputs = [])->
       @collections = (app.schemaMap(field) for field in @schema)
       @values      = @_initValues()
 
-    # Raw method for calculating a forecast value. Extend this.
+    # Raw method for calculating a forecast value.
+    # CRITICAL: Override this in each subclass.
     #
     # args - One or more attributes from @schema
     #
@@ -263,24 +336,3 @@
         attributes = {}
         attributes[key] = args[order] for key, order in collection.schema
         defaultCallback.call(@, attributes)
-
-      # Adds specific forecast functionality to Striker.Collection
-      #
-      # name        - Forecast name (required)
-      # schema      - Schema for attributes (required)
-      #
-      # Examples
-      #
-      #   class ConversionForecast extends ForecastCollection
-      #     name: 'conversionForecast'
-      #     schema: ['stageId', 'channelId', 'segmentId', 'monthId']
-      #
-      #   conversionForecast = new ConversionForecast()
-      #
-      #   # Build forecast based on current inputs
-      #   conversionForecast.build()
-      #
-      #   # Turns on all triggers
-      #   conversionForecast.enableTriggers()
-      #   app.toplineGrowth.set(5, 1, 1)
-      #   # => 'toplineGrowth changed'
