@@ -110,18 +110,19 @@
     # Collections with schemas ending with this are treated as time series
     timeSeriesIdentifier: 'monthId'
 
-    # Array with collection IDs that exist in app.schemaMap
+    # Array of objects mappingcollection ids to collections. The order of the
+    #   collections reflects the structure of @collections and the
+    #   multi-dimensional data in @values
     # CRITICAL: Override this in each subclass.
     #
     # Example
     #
-    #   app.schemaMap =
-    #    stageId: app.stages
-    #     channelId: app.channels
-    #     monthId: app.months
-    #
     #   class ConversionRates extends Striker.Collection
-    #     schema: ['stageId', 'channelId', 'monthId']
+    #     schema: [
+    #       stage_id: app.stages
+    #       channel_id: app.channels
+    #       period_id: app.periods
+    #     ]
     #
     #   conversionRates = new ConversionRates()
     #   conversionRates.collections
@@ -171,7 +172,7 @@
     #   In this case, the collection will be initialized with 0 values until
     #   triggers are turned on and values can be calculated.
     constructor: (@inputs = [])->
-      @collections = (app.schemaMap(field) for field in @schema)
+      @collections = _.values @schema
       @values      = @_initValues()
 
     # Raw method for calculating a forecast value.
@@ -186,7 +187,7 @@
     #
     # Returns true or false
     isTimeSeries: ->
-      _.last(@schema) is @timeSeriesIdentifier
+      _.has _.last(@schema), @timeSeriesIdentifier
 
     # Recursive function which uses @inputs and @collections for builds @values
     # Attributes used for recursive callbacks
@@ -217,8 +218,8 @@
     # Get value by params
     #
     # args - Arguments split by commas and bases on schema.
-    #        If schema is ['channelId', 'monthId']
-    #        then get(1,2) will be equal channelId=1 and monthId=2
+    #        If schema is [{channel_id: app.channels}, {period_id: app.periods}]
+    #        then get(1,2) will be equal channel_id=1 and period_id=2
     #
     # Examples
     #
