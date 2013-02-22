@@ -1,5 +1,4 @@
 class ConversionForecast extends Striker.Collection
-  name: 'conversionForecast'
   schema: ['stageId', 'channelId', 'segmentId', 'monthId']
 
   triggers:

@@ -141,29 +141,29 @@ class IndexView extends Backbone.View
 
   _renderInputs: ->
     for input in ['streams', 'segments', 'channels', 'stages']
-      @_renderBackboneCollection(app[input])
+      @_renderBackboneCollection(input)
     for input in [
       'channelSegmentMix', 'initialVolume', 'toplineGrowth', 'conversionRates',
       'churnRates'
     ]
-      @_renderStrikerCollection(app[input])
+      @_renderStrikerCollection(input)
 
       # @makeInteractive(input) if input.schema
 
-  _renderBackboneCollection: (collection) ->
+  _renderBackboneCollection: (name) ->
     grid = new window.TableStakes()
-      .el("##{collection.name}")
-      .columns(@columns[collection.name])
-      .data(collection.toJSON())
+      .el("##{name}")
+      .columns(@columns[name])
+      .data(app[name].toJSON())
       .render()
 
-  _renderStrikerCollection: (collection) ->
-    columns = @columns[collection.name]
-    columns = @_addMonths(columns) if _.last(collection.schema) is 'monthId'
+  _renderStrikerCollection: (name) ->
+    columns = @columns[name]
+    columns = @_addMonths(columns) if app[name].isTimeSeries()
     grid = new window.TableStakes()
-      .el("##{collection.name}")
+      .el("##{name}")
       .columns(columns)
-      .data(collection.toArray())
+      .data(app[name].toArray())
       .render()
 
   _addMonths: (columns) ->
@@ -175,7 +175,7 @@ class IndexView extends Backbone.View
     new HighChart().render()
 
     for forecast in ['conversionForecast', 'churnForecast', 'customerForecast']
-      @_renderStrikerCollection(app[forecast])
+      @_renderStrikerCollection(forecast)
 
 
 

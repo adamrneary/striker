@@ -41,17 +41,15 @@
   # objects (with specific keys), it will not hamper perfomance to store
   # data as an object rather than an array.
   #
-  # name       - Name of collection (required)
   # schema     - Sets order and type nested attributes (required)
   #              data save based on this attribute
   # multiplier - For percentage data equal 100, by default 1
-  # triggers    - Object with functions which called when object was changed
-  #               use short versions of variables from app
+  # triggers   - Object with functions which called when object was changed
+  #              use short versions of variables from app
   #
   # Examples
   #
   #   class ConversionRates extends Striker.Collection
-  #     name: 'conversionRates'
   #     schema: ['stageId', 'channelId', 'monthId']
   #     multiplier: 100
   #     triggers:
@@ -111,12 +109,6 @@
 
     # Collections with schemas ending with this are treated as time series
     timeSeriesIdentifier: 'monthId'
-
-    # String to uniquely identify collection
-    # CRITICAL: Override this in each subclass.
-    #
-    # Note: this field is used [...explain...]
-    name: ''
 
     # Array with collection IDs that exist in app.schemaMap
     # CRITICAL: Override this in each subclass.

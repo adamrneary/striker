@@ -1,5 +1,4 @@
 class CustomerForecast extends Striker.Collection
-  name: 'customerForecast'
   schema: ['channelId', 'segmentId', 'monthId']
 
   triggers:
