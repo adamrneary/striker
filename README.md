@@ -1,6 +1,6 @@
-# Tablestakes 
+# Striker
 
-A bad-ass interactive grid platform.
+Description
 
 ## The five-minute setup.
 
@@ -14,13 +14,13 @@ Run tests to ensure that all pass:
     
 Run the project locally:
 
-    foreman start
+    npm start
 
 Then navigate to the [showcase](http://localhost:5000).
 
 ## Contributing
 
-To contribute to Tablestakes, please follow these instructions.
+To contribute to Striker, please follow these instructions.
 
 1. Complete the **five-minute setup** above.
 1. Create a thoughtfully named topic branch to contain your change

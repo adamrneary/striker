@@ -172,7 +172,9 @@
     #   In this case, the collection will be initialized with 0 values until
     #   triggers are turned on and values can be calculated.
     constructor: (@inputs = [])->
-      @collections = _.values @schema
+      @collections = (app.schemaMap(field) for field in @schema)
+      #@collections = _.values @schema
+
       @values      = @_initValues()
 
     # Raw method for calculating a forecast value.
@@ -194,13 +196,16 @@
     #
     # Returns object with structured data
     _initValues: (values = {}, inputs = @inputs, level = 0) ->
-      for item, order in @collections[level]
-        value = inputs[order] ? 0
-        if level is @schema.length - 1
-          values[item.id] = value
-        else
-          values[item.id] = {}
-          @_initValues(values[item.id], value, level + 1)
+      #console.log @collections[level]
+      if @collections[level]
+        for item, order in @collections[level]
+          value = inputs[order] ? 0
+          if @schema
+            if level is @schema.length - 1
+              values[item.id] = value
+            else
+              values[item.id] = {}
+              @_initValues(values[item.id], value, level + 1)
       values
 
     # Builds values for every element
@@ -329,3 +334,5 @@
         attributes = {}
         attributes[key] = args[order] for key, order in collection.schema
         defaultCallback.call(@, attributes)
+
+window.Striker = Striker

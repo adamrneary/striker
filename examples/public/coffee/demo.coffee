@@ -1,23 +1,3 @@
-# require collections
-#Streams            = require('collections/streams')
-#Segments           = require('collections/segments')
-#Channels           = require('collections/channels')
-#Stages             = require('collections/stages')
-#Months             = require('collections/months')
-#ChannelSegmentMix  = require('collections/channel_segment_mix')
-#InitialVolume      = require('collections/initial_volume')
-#ToplineGrowth      = require('collections/topline_growth')
-#ConversionRates    = require('collections/conversion_rates')
-#ChurnRates         = require('collections/churn_rates')
-
-#ConversionForecast = require('collections/conversion_forecast')
-#CustomerForecast   = require('collections/customer_forecast')
-#ChurnForecast      = require('collections/churn_forecast')
-
-# require views
-#IndexView          = require('views/index/index')
-#TestsView          = require('views/tests/tests')
-
 window.app =
   # Map for keys in schema
   # if you want to add new attribute, you should describe its here
