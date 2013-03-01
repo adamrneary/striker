@@ -6,8 +6,8 @@ class ConversionForecast extends Striker.Collection
       index = _.indexOf(app.stages.pluck('id'), args.stageId) + 1
       if stage = app.stages.at(index)
         args.monthId += 1 unless stage.get('is_customer')
-      if args.monthId <= 36
-        @update(stage.id, args.channelId, args.segmentId, args.monthId)
+        if args.monthId <= 36
+          @update(stage.id, args.channelId, args.segmentId, args.monthId)
 
     toplineGrowth: (args) ->
       for stage in app.stages.where(is_topline: true)
