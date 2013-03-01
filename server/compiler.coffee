@@ -62,7 +62,8 @@ compileCoffeeExamples = (cb) ->
       cb()
 
 compileScss = (cb) ->
-  fs.readFile "#{__dirname}/../src/scss/#{glob.config.name}.scss", (err, scssFile) ->
+  src = "#{__dirname}/../src/scss/#{glob.config.name}.scss"
+  fs.readFile src, (err, scssFile) ->
     if scssFile
       sass.render scssFile.toString(), (err, css) ->
         if err

@@ -6,7 +6,8 @@ class CustomerForecast extends Striker.Collection
       @update(args.channelId, args.segmentId, args.monthId)
 
     conversionForecast: (args) ->
-      @update(args.channelId, args.segmentId, args.monthId) if args.stageId is 32943
+      if args.stageId is 32943
+        @update(args.channelId, args.segmentId, args.monthId)
 
   calculate: (channelId, segmentId, monthId) ->
     # TODO: strange logic with stage.id, stub it to 32943

@@ -1,69 +1,22 @@
 
   ✓ [1m[32m./examples/public/coffee/collections/channel_segment_mix.coffee[39m[22m
   ✓ [1m[32m./examples/public/coffee/collections/channels.coffee[39m[22m
-  ✗ [1m[31m./examples/public/coffee/collections/churn_forecast.coffee[39m[22m
-     ✗ [31m#6[39m: Line exceeds maximum allowed length.
-     ✗ [31m#12[39m: Line exceeds maximum allowed length.
-     ✗ [31m#17[39m: Line exceeds maximum allowed length.
-     ✗ [31m#20[39m: Line exceeds maximum allowed length.
+  ✓ [1m[32m./examples/public/coffee/collections/churn_forecast.coffee[39m[22m
   ✓ [1m[32m./examples/public/coffee/collections/churn_rates.coffee[39m[22m
-  ✗ [1m[31m./examples/public/coffee/collections/conversion_forecast.coffee[39m[22m
-     ✗ [31m#6[39m: Line exceeds maximum allowed length.
-     ✗ [31m#8[39m: Line exceeds maximum allowed length.
-     ✗ [31m#27[39m: Line exceeds maximum allowed length.
-     ✗ [31m#32[39m: Line exceeds maximum allowed length.
-     ✗ [31m#37[39m: Line exceeds maximum allowed length.
+  ✓ [1m[32m./examples/public/coffee/collections/conversion_forecast.coffee[39m[22m
   ✓ [1m[32m./examples/public/coffee/collections/conversion_rates.coffee[39m[22m
-  ✗ [1m[31m./examples/public/coffee/collections/customer_forecast.coffee[39m[22m
-     ✗ [31m#9[39m: Line exceeds maximum allowed length.
+  ✓ [1m[32m./examples/public/coffee/collections/customer_forecast.coffee[39m[22m
   ✓ [1m[32m./examples/public/coffee/collections/initial_volume.coffee[39m[22m
   ✓ [1m[32m./examples/public/coffee/collections/months.coffee[39m[22m
   ✓ [1m[32m./examples/public/coffee/collections/segments.coffee[39m[22m
   ✓ [1m[32m./examples/public/coffee/collections/stages.coffee[39m[22m
   ✓ [1m[32m./examples/public/coffee/collections/streams.coffee[39m[22m
   ✓ [1m[32m./examples/public/coffee/collections/topline_growth.coffee[39m[22m
-  ✗ [1m[31m./examples/public/coffee/demo.coffee[39m[22m
-     ✗ [31m#33[39m: Line exceeds maximum allowed length.
-     ✗ [31m#34[39m: Line exceeds maximum allowed length.
-     ✗ [31m#35[39m: Line exceeds maximum allowed length.
-     ✗ [31m#38[39m: Line exceeds maximum allowed length.
-     ✗ [31m#39[39m: Line exceeds maximum allowed length.
-     ✗ [31m#40[39m: Line exceeds maximum allowed length.
-     ✗ [31m#41[39m: Line exceeds maximum allowed length.
-     ✗ [31m#77[39m: Line exceeds maximum allowed length.
-     ✗ [31m#78[39m: Line exceeds maximum allowed length.
-     ✗ [31m#79[39m: Line exceeds maximum allowed length.
-     ✗ [31m#80[39m: Line exceeds maximum allowed length.
-     ✗ [31m#81[39m: Line exceeds maximum allowed length.
-     ✗ [31m#86[39m: Line exceeds maximum allowed length.
-     ✗ [31m#87[39m: Line exceeds maximum allowed length.
-     ✗ [31m#88[39m: Line exceeds maximum allowed length.
-     ✗ [31m#89[39m: Line exceeds maximum allowed length.
-     ✗ [31m#90[39m: Line exceeds maximum allowed length.
-     ✗ [31m#93[39m: Line exceeds maximum allowed length.
-     ✗ [31m#94[39m: Line exceeds maximum allowed length.
-     ✗ [31m#95[39m: Line exceeds maximum allowed length.
-     ✗ [31m#96[39m: Line exceeds maximum allowed length.
-     ✗ [31m#97[39m: Line exceeds maximum allowed length.
-     ✗ [31m#102[39m: Line exceeds maximum allowed length.
-     ✗ [31m#103[39m: Line exceeds maximum allowed length.
-     ✗ [31m#104[39m: Line exceeds maximum allowed length.
+  ✓ [1m[32m./examples/public/coffee/demo.coffee[39m[22m
   ✓ [1m[32m./examples/public/coffee/views/high_chart.coffee[39m[22m
-  ✗ [1m[31m./examples/public/coffee/views/index.coffee[39m[22m
-     ✗ [31m#215[39m: Line exceeds maximum allowed length.
-  ✗ [1m[31m./examples/public/coffee/views/tests.coffee[39m[22m
-     ✗ [31m#32[39m: Line exceeds maximum allowed length.
-     ✗ [31m#44[39m: Line exceeds maximum allowed length.
-     ✗ [31m#55[39m: Line exceeds maximum allowed length.
-     ✗ [31m#56[39m: Line exceeds maximum allowed length.
-     ✗ [31m#59[39m: Line exceeds maximum allowed length.
-     ✗ [31m#60[39m: Line exceeds maximum allowed length.
-     ✗ [31m#62[39m: Line exceeds maximum allowed length.
-  ✗ [1m[31m./server/compiler.coffee[39m[22m
-     ✗ [31m#65[39m: Line exceeds maximum allowed length.
-  ✗ [1m[31m./server/compiler_old.coffee[39m[22m
-     ✗ [31m#35[39m: Line contains inconsistent indentation. Expected 2 got 6.
-     ✗ [31m#76[39m: Line exceeds maximum allowed length.
+  ✓ [1m[32m./examples/public/coffee/views/index.coffee[39m[22m
+  ✓ [1m[32m./examples/public/coffee/views/tests.coffee[39m[22m
+  ✓ [1m[32m./server/compiler.coffee[39m[22m
   ✓ [1m[32m./server/config.coffee[39m[22m
   ✓ [1m[32m./server/router.coffee[39m[22m
   ✓ [1m[32m./server/server.coffee[39m[22m
@@ -72,81 +25,18 @@
   ✓ [1m[32m./test/integration/base.coffee[39m[22m
   ✓ [1m[32m./test/integration/index.coffee[39m[22m
   ✓ [1m[32m./test/lint.coffee[39m[22m
-  ✗ [1m[31m./test/old_admin_helper.coffee[39m[22m
-     ✗ [31m#6[39m: Line exceeds maximum allowed length.
-  ✗ [1m[31m./test/old_collections/channel_segment_mix_spec.coffee[39m[22m
-     ✗ [31m#19[39m: Line exceeds maximum allowed length.
-     ✗ [31m#20[39m: Line exceeds maximum allowed length.
-     ✗ [31m#21[39m: Line exceeds maximum allowed length.
-     ✗ [31m#23[39m: Line exceeds maximum allowed length.
-     ✗ [31m#25[39m: Line exceeds maximum allowed length.
-     ✗ [31m#32[39m: Line exceeds maximum allowed length.
-     ✗ [31m#33[39m: Line exceeds maximum allowed length.
-     ✗ [31m#35[39m: Line exceeds maximum allowed length.
-     ✗ [31m#36[39m: Line exceeds maximum allowed length.
-     ✗ [31m#38[39m: Line exceeds maximum allowed length.
-     ✗ [31m#39[39m: Line exceeds maximum allowed length.
-  ✗ [1m[31m./test/old_collections/churn_rates_spec.coffee[39m[22m
-     ✗ [31m#11[39m: Line exceeds maximum allowed length.
-     ✗ [31m#12[39m: Line exceeds maximum allowed length.
-     ✗ [31m#20[39m: Line exceeds maximum allowed length.
-     ✗ [31m#22[39m: Line exceeds maximum allowed length.
-     ✗ [31m#23[39m: Line exceeds maximum allowed length.
-     ✗ [31m#24[39m: Line exceeds maximum allowed length.
-     ✗ [31m#26[39m: Line exceeds maximum allowed length.
-     ✗ [31m#27[39m: Line exceeds maximum allowed length.
-     ✗ [31m#28[39m: Line exceeds maximum allowed length.
-     ✗ [31m#35[39m: Line exceeds maximum allowed length.
-     ✗ [31m#37[39m: Line exceeds maximum allowed length.
-     ✗ [31m#38[39m: Line exceeds maximum allowed length.
-     ✗ [31m#40[39m: Line exceeds maximum allowed length.
-     ✗ [31m#41[39m: Line exceeds maximum allowed length.
-  ✗ [1m[31m./test/old_collections/churned_customer_forecast_spec.coffee[39m[22m
-     ✗ [31m#11[39m: Line exceeds maximum allowed length.
-     ✗ [31m#12[39m: Line exceeds maximum allowed length.
-  ✗ [1m[31m./test/old_collections/conversion_forecast_spec.coffee[39m[22m
-     ✗ [31m#17[39m: Line exceeds maximum allowed length.
-     ✗ [31m#18[39m: Line exceeds maximum allowed length.
-  ✗ [1m[31m./test/old_collections/conversion_rates_spec.coffee[39m[22m
-     ✗ [31m#10[39m: Line exceeds maximum allowed length.
-     ✗ [31m#11[39m: Line exceeds maximum allowed length.
-     ✗ [31m#19[39m: Line exceeds maximum allowed length.
-     ✗ [31m#20[39m: Line exceeds maximum allowed length.
-     ✗ [31m#21[39m: Line exceeds maximum allowed length.
-     ✗ [31m#23[39m: Line exceeds maximum allowed length.
-     ✗ [31m#25[39m: Line exceeds maximum allowed length.
-     ✗ [31m#32[39m: Line exceeds maximum allowed length.
-     ✗ [31m#34[39m: Line exceeds maximum allowed length.
-     ✗ [31m#36[39m: Line exceeds maximum allowed length.
-  ✗ [1m[31m./test/old_collections/customer_volume_forecast_spec.coffee[39m[22m
-     ✗ [31m#11[39m: Line exceeds maximum allowed length.
-     ✗ [31m#12[39m: Line exceeds maximum allowed length.
-  ✗ [1m[31m./test/old_collections/initial_volume_spec.coffee[39m[22m
-     ✗ [31m#19[39m: Line exceeds maximum allowed length.
-     ✗ [31m#21[39m: Line exceeds maximum allowed length.
-     ✗ [31m#23[39m: Line exceeds maximum allowed length.
-     ✗ [31m#30[39m: Line exceeds maximum allowed length.
-     ✗ [31m#31[39m: Line exceeds maximum allowed length.
-     ✗ [31m#33[39m: Line exceeds maximum allowed length.
-     ✗ [31m#35[39m: Line exceeds maximum allowed length.
-  ✗ [1m[31m./test/old_collections/topline_growth_spec.coffee[39m[22m
-     ✗ [31m#10[39m: Line exceeds maximum allowed length.
-     ✗ [31m#11[39m: Line exceeds maximum allowed length.
-     ✗ [31m#19[39m: Line exceeds maximum allowed length.
-     ✗ [31m#20[39m: Line exceeds maximum allowed length.
-     ✗ [31m#21[39m: Line exceeds maximum allowed length.
-     ✗ [31m#23[39m: Line exceeds maximum allowed length.
-     ✗ [31m#25[39m: Line exceeds maximum allowed length.
-     ✗ [31m#32[39m: Line exceeds maximum allowed length.
-     ✗ [31m#33[39m: Line exceeds maximum allowed length.
-     ✗ [31m#34[39m: Line exceeds maximum allowed length.
-     ✗ [31m#36[39m: Line exceeds maximum allowed length.
-     ✗ [31m#37[39m: Line exceeds maximum allowed length.
-     ✗ [31m#39[39m: Line exceeds maximum allowed length.
-     ✗ [31m#40[39m: Line exceeds maximum allowed length.
+  ✓ [1m[32m./test/old_admin_helper.coffee[39m[22m
+  ✓ [1m[32m./test/old_collections/channel_segment_mix_spec.coffee[39m[22m
+  ✓ [1m[32m./test/old_collections/churn_rates_spec.coffee[39m[22m
+  ✓ [1m[32m./test/old_collections/churned_customer_forecast_spec.coffee[39m[22m
+  ✓ [1m[32m./test/old_collections/conversion_forecast_spec.coffee[39m[22m
+  ✓ [1m[32m./test/old_collections/conversion_rates_spec.coffee[39m[22m
+  ✓ [1m[32m./test/old_collections/customer_volume_forecast_spec.coffee[39m[22m
+  ✓ [1m[32m./test/old_collections/initial_volume_spec.coffee[39m[22m
+  ✓ [1m[32m./test/old_collections/topline_growth_spec.coffee[39m[22m
   ✓ [1m[32m./test/server/index.coffee[39m[22m
   ✓ [1m[32m./test/unit/collection_test.coffee[39m[22m
   ✓ [1m[32m./test/unit/index.coffee[39m[22m
 
-✗ [1m[31mLint![39m[22m » 109 errors and 0 warnings in 39 files
+✓ [1m[32mOk![39m[22m » 0 errors and 0 warnings in 38 files
 

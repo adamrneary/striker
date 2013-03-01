@@ -3,9 +3,11 @@ class ConversionForecast extends Striker.Collection
 
   triggers:
     this: (args) ->
-      if stage = app.stages.at(_.indexOf(app.stages.pluck('id'), args.stageId) + 1)
+      index = _.indexOf(app.stages.pluck('id'), args.stageId) + 1
+      if stage = app.stages.at(index)
         args.monthId += 1 unless stage.get('is_customer')
-        @update(stage.id, args.channelId, args.segmentId, args.monthId) if args.monthId <= 36
+      if args.monthId <= 36
+        @update(stage.id, args.channelId, args.segmentId, args.monthId)
 
     toplineGrowth: (args) ->
       for stage in app.stages.where(is_topline: true)
@@ -24,16 +26,22 @@ class ConversionForecast extends Striker.Collection
   calculate: (stageId, channelId, segmentId, monthId) ->
     stage = app.stages.get(stageId)
     if stage.get('is_topline')
-      result = app.toplineGrowth.get(channelId, monthId) * app.channelSegmentMix.get(channelId, segmentId)
+      a = app.toplineGrowth.get(channelId, monthId)
+      b = app.channelSegmentMix.get(channelId, segmentId)
+      result = a * b
     else
       previousStage = app.stages.at(app.stages.indexOf(stage) - 1)
       # TODO: strange logic with is_customer
       if monthId is 1 and !stage.get('is_customer')
-        result = app.initialVolume.get(previousStage.id, channelId, segmentId) * \
-        app.conversionRates.get(stageId, channelId, monthId)
+        a = app.initialVolume.get(previousStage.id, channelId, segmentId)
+        b = app.conversionRates.get(stageId, channelId, monthId)
+        result = a * b
+        
       else
         # TODO: strange logic with monthOffset
         monthOffset = if stage.get('is_customer') then 0 else 1
-        result = @get(previousStage.id, channelId, segmentId, monthId - monthOffset) * \
-        app.conversionRates.get(stageId, channelId, monthId)
+        a = @get(previousStage.id, channelId, segmentId, monthId - monthOffset)
+        b = app.conversionRates.get(stageId, channelId, monthId)
+        result = a*b
+        
     Math.round(result)

@@ -29,7 +29,10 @@ class TestsView extends Backbone.View
   run: (collection, eventsLog, value, args...) ->
     startTime = (new Date).getTime()
     collection.set value, args...
-    eventsLog.push value: value, args: args, time: (new Date).getTime() - startTime
+    eventsLog.push
+      value: value,
+      args: args,
+      time: (new Date).getTime() - startTime
 
   getRandomInt: (min, max) ->
     Math.floor(Math.random() * (max - min + 1)) + min
@@ -38,10 +41,14 @@ class TestsView extends Backbone.View
     position = @getRandomInt(0, collection.length - 1)
     collection[position].id
 
-  printResults: (id, count, collection, startTime, eventsLog) ->
+  printResults: (id,count,collection,startTime,eventsLog)->
     time = (new Date).getTime() - startTime
     @$("##{id}Results").html @printTemplate
-      count: count, time: time, collection: collection, average: time/count, times: _(eventsLog).pluck('time')
+      count: count,
+      time: time,
+      collection: collection,
+      average: time/count,
+      times: _(eventsLog).pluck('time')
 
   clear: (event) ->
     event.preventDefault()
@@ -49,15 +56,27 @@ class TestsView extends Backbone.View
     @$("##{id}Results").html('')
 
   addCounters: (collection) ->
-    collection.defaultSet = collection.set unless collection.defaultSet
-    collection.defaultGet = collection.get unless collection.defaultGet
+    unless collection.defaultSet
+      collection.defaultSet = collection.set
+    unless collection.defaultGet
+      collection.defaultGet = collection.get
     [collection.localSetCounter, collection.localGetCounter] = [0, 0]
-    collection.set = (value, args...) -> @localSetCounter += 1; @defaultSet(value, args...)
-    collection.get = (args...)        -> @localGetCounter += 1; @defaultGet(args...)
+    collection.set = (value, args...)->
+      @localSetCounter += 1
+      @defaultSet(value, args...)
+    collection.get = (args...)->
+      @localGetCounter += 1
+      @defaultGet(args...)
 
     Striker.Collection = Striker.Collection
-    Striker.Collection::oldGet = Striker.Collection::get unless Striker.Collection::oldGet
-    Striker.Collection::oldSet = Striker.Collection::set unless Striker.Collection::oldSet
+    unless Striker.Collection::oldGet
+      Striker.Collection::oldGet = Striker.Collection::get
+    unless Striker.Collection::oldSet
+      Striker.Collection::oldSet = Striker.Collection::set
     [app.setCounter, app.getCounter] = [0, 0]
-    Striker.Collection::set = (value, args...) -> app.setCounter +=1; @oldSet(value, args...)
-    Striker.Collection::get = (args...) -> app.getCounter +=1; @oldGet(args...)
+    Striker.Collection::set = (value, args...)->
+      app.setCounter +=1
+      @oldSet(value, args...)
+    Striker.Collection::get = (args...)->
+      app.getCounter +=1
+      @oldGet(args...)

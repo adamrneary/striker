@@ -177,13 +177,6 @@ class IndexView extends Backbone.View
     for forecast in ['conversionForecast', 'churnForecast', 'customerForecast']
       @_renderStrikerCollection(forecast)
 
-
-
-
-
-
-
-
   highlight: ->
     $('''
       .channelSegmentMix td:last-child,
@@ -212,7 +205,8 @@ class IndexView extends Backbone.View
 
   changeRow: (args, value, collection) =>
     selector = ''
-    selector += "[#{field}=#{args[order]}]" for field, order in collection.schema
+    for field, order in collection.schema
+      selector += "[#{field}=#{args[order]}]"
     $("table.#{collection.name} tbody tr td#{selector}:first").html(value)
 
     @renderForecasts()

@@ -3,7 +3,8 @@ window.appHelper =
     {collection, attributes, results} = options
 
     oldAtributes = _.clone(attributes)
-    oldAtributes[0] = collection.get(attributes.slice(1)...) * collection.multiplier
+    attr = collection.get(attributes.slice(1)...)
+    oldAtributes[0] = attr * collection.multiplier
 
     describe description, ->
       for forecastName, testResults of results

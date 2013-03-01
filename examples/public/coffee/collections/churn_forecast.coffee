@@ -3,19 +3,26 @@ class ChurnForecast extends Striker.Collection
 
   triggers:
     customerForecast: (args) ->
-      @update(args.channelId, args.segmentId, args.monthId + 1) if args.monthId isnt 36
+      if args.monthId isnt 36
+        @update(args.channelId, args.segmentId, args.monthId + 1)
 
     initialVolume: (args) ->
-      @update(args.channelId, args.segmentId, 1) if args.stageId is 32943
+      if args.stageId is 32943
+        @update(args.channelId, args.segmentId, 1)
 
     churnRates: (args) ->
-      @update(channel.id, args.segmentId, args.monthId) for channel in app.channels.models
+      for channel in app.channels.models
+        @update(channel.id, args.segmentId, args.monthId)
 
   calculate: (channelId, segmentId, monthId) ->
     # TODO: strange logic with stage.id, stub it to 32943
     if monthId is 1
-      result = app.churnRates.get(segmentId, monthId) * app.initialVolume.get(32943, channelId, segmentId)
+      a = app.churnRates.get(segmentId, monthId)
+      b = app.initialVolume.get(32943, channelId, segmentId)
+      result = a*b
     else
       previousMonth = monthId - 1
-      result = app.customerForecast.get(channelId, segmentId, previousMonth) * app.churnRates.get(segmentId, monthId)
+      a = app.customerForecast.get(channelId, segmentId, previousMonth)
+      b = app.churnRates.get(segmentId, monthId)
+      result = a*b
     Math.round(result)
