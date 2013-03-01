@@ -10,8 +10,10 @@ describe 'unit tests', ->
       global.window = window
       global.d3 = browser.window.d3
       global._ = window._
-      if glob.report
-        require("__dirname/../cov/#{glob.config.name}.js")
+      global.Backbone = browser.window.Backbone
+      #if glob.report
+      require("#{__dirname}/../cov/#{glob.config.name}.js")
       done()
 
   require './collection_test'
+  #require './channel_segment_mix_test'

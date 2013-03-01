@@ -1,0 +1,19 @@
+!!! 5
+html
+  head
+    include includes/head
+  body
+    include includes/toppanel
+    .container#container
+      - arr = [ {title: 'Channel Segment Mix', id: 'channelSegmentMix', count: 1000}, {title: 'Initial volume', id: 'initialVolume', count: 1000}, {title: 'Topline Growth', id: 'toplineGrowth', count: 1000}, {title: 'Conversion rates', id: 'conversionRates', count: 1000}, {title: 'Churn rates', id: 'churnRates', count: 1000} ]
+      .page-header
+        h1 Randomize Tests</h1>
+
+      each block in arr 
+        section
+          h3= block.title
+           form(class="form-horizontal", id="#{block.id}")
+             input(class="input-xlarge", id="#{block.id}Input", value="#{block.count}")
+             button(type="submit", class="btn") Run
+           a(href="#", class="clear pull-right", data-id="#{block.id}") clear
+           pre(id="#{block.id}Results", class="test-results") No results

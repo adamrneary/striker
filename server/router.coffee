@@ -78,6 +78,10 @@ app.get '/styleguide', (req,res)->
         sections: sections
         page: 'styleguide'
 
+app.get '/performance', (req,res)->
+  res.render 'performance'
+    page: 'performance'
+
 app.get "/js/#{name}.js", (req,res)->
   script = modules.fs.readFileSync "#{__dirname}/../dist/#{name}.js"
   res.setHeader 'Content-Type', 'text/javascript'

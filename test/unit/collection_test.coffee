@@ -9,6 +9,5 @@ describe "Striker", ->
       {id: 21231, name: 'Revenue stream 2'}
       {id: 123, name: 'Revenue stream 3'}
     ]
-
     assert new Striker.Collection streams
     done()

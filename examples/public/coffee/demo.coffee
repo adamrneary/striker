@@ -176,7 +176,7 @@ window.App =
   initView: ->
     switch location.pathname
       when '/'        then new IndexView().render()
-      when '/#performance'  then new TestsView()
+      when '/performance'  then new TestsView()
 
 $(document).ready ->
   App.initialize()

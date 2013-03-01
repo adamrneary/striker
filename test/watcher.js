@@ -43,8 +43,9 @@ server = function () {
   });
 };
 
+globals = 'd3,window,_$jscoverage,_$jscoverage_cond,_$jscoverage_done,_$jscoverage_init,_,browser,Backbone'
 report = function (cb) {
-  cmd = 'REPORT=1 '+__dirname+'/../node_modules/mocha/bin/mocha '+__dirname+'/run.js -R html-cov -s 20 --timeout 6000 --globals d3,window,_$jscoverage,_$jscoverage_cond,_$jscoverage_done,_$jscoverage_init,_,browser'
+  cmd = 'REPORT=1 '+__dirname+'/../node_modules/mocha/bin/mocha '+__dirname+"/run.js -R html-cov -s 20 --timeout 6000 --globals "+globals
   exec(cmd,function(err,stdout,stderr) {
     require('fs').writeFile(__dirname+'/reports/coverage.html',stdout)
     if (cb) cb()
@@ -53,7 +54,7 @@ report = function (cb) {
 
 spec = function (cb) {
   //proc = spawn(__dirname+'/../node_modules/mocha/bin/mocha',[__dirname+'/run.js', '-Gw','-R','spec','-s','20','--timeout','6000','--globals','d3,window,_$jscoverage,_$jscoverage_cond,_$jscoverage_done,_$jscoverage_init,_,browser'], {customFds: [0,1,2]})
-  proc = spawn(__dirname+'/../node_modules/mocha/bin/mocha',[__dirname+'/run.js', '-Gw','-R','spec','-s','20','--timeout','6000','--globals','d3,window,_$jscoverage,_$jscoverage_cond,_$jscoverage_done,_$jscoverage_init,_,browser'], {stdio: 'inherit'})
+  proc = spawn(__dirname+'/../node_modules/mocha/bin/mocha',[__dirname+'/run.js', '-Gw','-R','spec','-s','20','--timeout','6000','--globals',globals], {stdio: 'inherit'})
   //proc.stdout.pipe(process.stdout, {end: false})
   proc.on('exit',function() {
     start()

@@ -15,7 +15,12 @@
   ✓ [1m[32m./examples/public/coffee/demo.coffee[39m[22m
   ✓ [1m[32m./examples/public/coffee/views/high_chart.coffee[39m[22m
   ✓ [1m[32m./examples/public/coffee/views/index.coffee[39m[22m
-  ✓ [1m[32m./examples/public/coffee/views/tests.coffee[39m[22m
+  ✗ [1m[31m./examples/public/coffee/views/tests.coffee[39m[22m
+     ✗ [31m#10[39m: Line exceeds maximum allowed length.
+     ✗ [31m#12[39m: Line exceeds maximum allowed length.
+     ✗ [31m#13[39m: Line exceeds maximum allowed length.
+     ✗ [31m#15[39m: Line exceeds maximum allowed length.
+     ✗ [31m#16[39m: Line exceeds maximum allowed length.
   ✓ [1m[32m./server/compiler.coffee[39m[22m
   ✓ [1m[32m./server/config.coffee[39m[22m
   ✓ [1m[32m./server/router.coffee[39m[22m
@@ -26,7 +31,7 @@
   ✓ [1m[32m./test/integration/index.coffee[39m[22m
   ✓ [1m[32m./test/lint.coffee[39m[22m
   ✓ [1m[32m./test/old_admin_helper.coffee[39m[22m
-  ✓ [1m[32m./test/old_collections/channel_segment_mix_spec.coffee[39m[22m
+  ✓ [1m[32m./test/old_collections/channel_segment_mix_test.coffee[39m[22m
   ✓ [1m[32m./test/old_collections/churn_rates_spec.coffee[39m[22m
   ✓ [1m[32m./test/old_collections/churned_customer_forecast_spec.coffee[39m[22m
   ✓ [1m[32m./test/old_collections/conversion_forecast_spec.coffee[39m[22m
@@ -38,5 +43,5 @@
   ✓ [1m[32m./test/unit/collection_test.coffee[39m[22m
   ✓ [1m[32m./test/unit/index.coffee[39m[22m
 
-✓ [1m[32mOk![39m[22m » 0 errors and 0 warnings in 38 files
+✗ [1m[31mLint![39m[22m » 5 errors and 0 warnings in 38 files
 
