@@ -15,8 +15,8 @@ app.configure 'development', ->
 app.use(express.favicon())
 app.use(express.bodyParser())
 app.use(express.methodOverride())
+app.use(express.static(path.join(__dirname, '../public')))
 app.use(app.router)
-app.use(express.static(path.join(__dirname, 'public')))
 app.use(express.errorHandler())
 
 app.get('/', examples.index)
