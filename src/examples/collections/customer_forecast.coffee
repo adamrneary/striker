@@ -1,4 +1,4 @@
-class CustomerForecast extends Striker.Collection
+class App.Collections.CustomerForecast extends Striker.Collection
   schema: ['channelId', 'segmentId', 'monthId']
 
   triggers:

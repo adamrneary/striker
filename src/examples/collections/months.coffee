@@ -1,1 +1,1 @@
-class Months extends Backbone.Collection
+class App.Collections.Months extends Backbone.Collection

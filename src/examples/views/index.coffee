@@ -1,4 +1,4 @@
-class IndexView extends Backbone.View
+class App.Views.IndexView extends Backbone.View
   el: '#container'
   monthCount: 36
   columns:
@@ -172,7 +172,7 @@ class IndexView extends Backbone.View
     columns
 
   _renderForecasts: ->
-    new HighChart().render()
+    new App.Views.HighChart().render()
 
     for forecast in ['conversionForecast', 'churnForecast', 'customerForecast']
       @_renderStrikerCollection(forecast)

@@ -1,4 +1,4 @@
-class TestsView extends Backbone.View
+class App.Views.TestsView extends Backbone.View
   el: '#container'
   printTemplate: _.template \
     '''
@@ -18,7 +18,6 @@ class TestsView extends Backbone.View
       <hr>
       <b>Total time:</b><%= time %>ms || <%= (time/1000).toFixed(2) %>s
     '''
-  #printTemplate: JST['app/tests/print']
 
   events:
     'submit'       : 'runRandomizeTest'

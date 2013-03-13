@@ -145,6 +145,9 @@ window.app =
     ]
 
 window.App =
+  Collections: {}
+  Views: {}
+
   initialize: ->
     @initCollections()
     @initForecasts()
@@ -152,22 +155,22 @@ window.App =
 
   # Initializes collections with raw of inputs and assigns them to app
   initCollections: ->
-    app.streams            = new Streams app.inputs.streams
-    app.segments           = new Segments app.inputs.segments
-    app.channels           = new Channels app.inputs.channels
-    app.stages             = new Stages app.inputs.stages
-    app.months             = new Months app.inputs.months
-    app.channelSegmentMix  = new ChannelSegmentMix app.inputs.channelSegmentMix
-    app.initialVolume      = new InitialVolume app.inputs.initialVolume
-    app.toplineGrowth      = new ToplineGrowth app.inputs.toplineGrowth
-    app.conversionRates    = new ConversionRates app.inputs.conversionRates
-    app.churnRates         = new ChurnRates app.inputs.churnRates
+    app.streams            = new App.Collections.Streams app.inputs.streams
+    app.segments           = new App.Collections.Segments app.inputs.segments
+    app.channels           = new App.Collections.Channels app.inputs.channels
+    app.stages             = new App.Collections.Stages app.inputs.stages
+    app.months             = new App.Collections.Months app.inputs.months
+    app.channelSegmentMix  = new App.Collections.ChannelSegmentMix app.inputs.channelSegmentMix
+    app.initialVolume      = new App.Collections.InitialVolume app.inputs.initialVolume
+    app.toplineGrowth      = new App.Collections.ToplineGrowth app.inputs.toplineGrowth
+    app.conversionRates    = new App.Collections.ConversionRates app.inputs.conversionRates
+    app.churnRates         = new App.Collections.ChurnRates app.inputs.churnRates
 
   # Initializes forecasts, builds values and turns on triggers for changes
   initForecasts: ->
-    app.conversionForecast = new ConversionForecast()
-    app.customerForecast   = new CustomerForecast()
-    app.churnForecast      = new ChurnForecast()
+    app.conversionForecast = new App.Collections.ConversionForecast()
+    app.customerForecast   = new App.Collections.CustomerForecast()
+    app.churnForecast      = new App.Collections.ChurnForecast()
 
     app.conversionForecast.enableTriggers()
     app.customerForecast.enableTriggers()
@@ -175,8 +178,8 @@ window.App =
 
   initView: ->
     switch location.pathname
-      when '/'        then new IndexView().render()
-      when '/performance'  then new TestsView()
+      when '/'            then new App.Views.IndexView().render()
+      when '/performance' then new App.Views.TestsView()
 
-$(document).ready ->
+$ ->
   App.initialize()

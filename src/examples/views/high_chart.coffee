@@ -1,4 +1,4 @@
-class HighChart extends Backbone.View
+class App.Views.HighChart extends Backbone.View
   render: ->
     series = [{
       name: 'Conversion forecast'

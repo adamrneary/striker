@@ -1,4 +1,4 @@
-class ConversionForecast extends Striker.Collection
+class App.Collections.ConversionForecast extends Striker.Collection
   schema: ['stageId', 'channelId', 'segmentId', 'monthId']
 
   triggers:
@@ -36,12 +36,12 @@ class ConversionForecast extends Striker.Collection
         a = app.initialVolume.get(previousStage.id, channelId, segmentId)
         b = app.conversionRates.get(stageId, channelId, monthId)
         result = a * b
-        
+
       else
         # TODO: strange logic with monthOffset
         monthOffset = if stage.get('is_customer') then 0 else 1
         a = @get(previousStage.id, channelId, segmentId, monthId - monthOffset)
         b = app.conversionRates.get(stageId, channelId, monthId)
         result = a*b
-        
+
     Math.round(result)

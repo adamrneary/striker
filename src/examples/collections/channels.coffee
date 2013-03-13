@@ -1,1 +1,1 @@
-class Channels extends Backbone.Collection
+class App.Collections.Channels extends Backbone.Collection

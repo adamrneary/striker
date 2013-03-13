@@ -1,4 +1,4 @@
-class ChurnForecast extends Striker.Collection
+class App.Collections.ChurnForecast extends Striker.Collection
   schema: ['channelId', 'segmentId', 'monthId']
 
   triggers:

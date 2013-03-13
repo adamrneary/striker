@@ -1,1 +1,1 @@
-class Stages extends Backbone.Collection
+class App.Collections.Stages extends Backbone.Collection

@@ -1,6 +1,7 @@
 express  = require('express')
 http     = require('http')
 path     = require('path')
+grunt    = require('grunt')
 examples = require('./routes/examples')
 
 app = express()
@@ -11,6 +12,7 @@ app.set('view engine', 'jade')
 
 app.configure 'development', ->
   app.use(express.logger('dev'))
+  grunt.cli()
 
 app.use(express.favicon())
 app.use(express.bodyParser())
