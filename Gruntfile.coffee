@@ -17,7 +17,7 @@ module.exports = (grunt) ->
           'public/vendor/js/backbone.js',
           'public/vendor/js/highcharts.js',
           'public/vendor/js/d3.js',
-          'public/lib/js/tablestakes.js',
+          'public/vendor/tablestakes/tablestakes.js',
           'tmp/striker.js'
           'tmp/application.js'
           'tmp/modules.js'
@@ -27,19 +27,28 @@ module.exports = (grunt) ->
       css:
         src: [
           'public/vendor/css/bootstrap.css',
-          'public/lib/css/tablestakes.css',
+          'public/vendor/tablestakes/tablestakes.css',
           'src/examples/css/application.css'
         ],
         dest: 'public/assets/application.css'
 
+    docco:
+      debug:
+        src: ['src/striker.coffee']
+        options:
+          output: 'public/docs'
+
     watch:
       scripts:
-        files: ['src/**/*.coffee', 'Gruntfile.coffee']
-        tasks: ['coffee', 'concat']
+        files: ['src/**/*.coffee', 'Gruntfile.coffee', 'public/vendor/**/*']
+        tasks: ['coffee', 'concat', 'docco']
+
+    coffeelint:
+      app: ['src/*.coffee', 'src/**/*.coffee']
 
   grunt.loadNpmTasks('grunt-contrib-coffee')
   grunt.loadNpmTasks('grunt-contrib-watch')
   grunt.loadNpmTasks('grunt-contrib-concat')
   grunt.loadNpmTasks('grunt-docco')
   grunt.loadNpmTasks('grunt-coffeelint')
-  grunt.registerTask('default', ['coffee', 'concat', 'watch'])
+  grunt.registerTask('default', ['coffee', 'docco', 'concat', 'watch'])

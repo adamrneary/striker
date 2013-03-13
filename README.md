@@ -13,6 +13,7 @@ Run tests to ensure that all pass:
 Run the project locally:
 
     npm start
+    sudo easy_install pygments
 
 Then navigate to the [showcase](http://localhost:5000).
 
