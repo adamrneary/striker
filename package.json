@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "test": "node test/test.js",
-    "start": "node run"
+    "start": "./node_modules/nodemon/nodemon.js --watch lib run.js"
   },
   "engines": {
     "node": "0.8.x"
@@ -20,5 +20,6 @@
     "jquery-browser": "~1.9.1",
     "backbone": "0.9.10",
     "underscore": "1.4.4",
+    "nodemon": "~0.7.2"
   }
 }

@@ -1,12 +1,10 @@
 express = require('express')
-routes  = require('./routes')
-user    = require('./routes/user')
 http    = require('http')
 path    = require('path')
 
 app = express()
 
-app.set('port', process.env.PORT || 3000)
+app.set('port', process.env.PORT || 5000)
 app.set('views', __dirname + '/views')
 app.set('view engine', 'jade')
 app.use(express.favicon())
@@ -19,10 +17,7 @@ app.use(express.static(path.join(__dirname, 'public')))
 app.configure 'development', ->
   app.use(express.errorHandler())
 
-app.get('/', routes.index)
-app.get('/users', user.list)
+require('./routes')(app)
 
 http.createServer(app).listen app.get('port'), ->
-  console.log('Express server listening on port %d', app.get('port'));
-
-module.exports = app
+  console.log('Server listening on port %d in %s mode', app.get('port'), app.get('env'))

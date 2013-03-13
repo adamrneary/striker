@@ -1,73 +1,65 @@
-!!! 5
-html
-  head
-    include includes/head
-  body
-    include includes/toppanel
-    .container
-      section#objects
-        .page-header
-          h1 Backbone collections
-          .row
-            .span4
-              h3= 'Revenue streams'
-              #streams
-            .span4
-              h3= 'Customer segments'
-              #segments
-          .row
-            .span4
-              h3= 'Channels'
-              #channels
-            .span8
-              h3= 'Customer acq stages'
-              #stages
+section#objects
+  .page-header
+    h1 Backbone collections
+    .row
+      .span4
+        h3 Revenue streams
+        #streams
+      .span4
+        h3 Customer segments
+        #segments
+    .row
+      .span4
+        h3 Channels
+        #channels
+      .span8
+        h3 Customer acq stages
+        #stages
 
-      section#forecast
-        .page-header
-          h1 Striker base collections
-          .row
-            .span6
-              h3= 'Channel mix'
-                small  app.channelSegmentMix.set(value, channelId, segmentId)
-              #channelSegmentMix
-            .span6
-              h3= 'Initial volume'
-                small  app.initialVolume.set(value, stageId, channelId, segmentId)
-              #initialVolume
-          .row
-            .span12
-              h3= 'Topline growth'
-                small  app.toplineGrowth.set(value, channelId, monthId)
-              #toplineGrowth
-          .row
-            .span12
-              h3= 'Conversion rates'
-                small  app.conversionRates.set(value, notFirstStageId, channelId, monthId)
-              #conversionRates
-          .row
-            .span12
-              h3= 'Churn rates'
-                small  'app.churnRates.set(value, segmentId, monthId)'
-              #churnRates
+section#forecast
+  .page-header
+    h1 Striker base collections
+    .row
+      .span6
+        h3 Channel mix
+          small  app.channelSegmentMix.set(value, channelId, segmentId)
+        #channelSegmentMix
+      .span6
+        h3 Initial volume
+          small  app.initialVolume.set(value, stageId, channelId, segmentId)
+        #initialVolume
+    .row
+      .span12
+        h3 Topline growth
+          small  app.toplineGrowth.set(value, channelId, monthId)
+        #toplineGrowth
+    .row
+      .span12
+        h3 Conversion rates
+          small  app.conversionRates.set(value, notFirstStageId, channelId, monthId)
+        #conversionRates
+    .row
+      .span12
+        h3 Churn rates
+          small  'app.churnRates.set(value, segmentId, monthId)'
+        #churnRates
 
-      section#calculations
-        .page-header
-          h1 Striker forecast collections
+section#calculations
+  .page-header
+    h1 Striker forecast collections
 
-          #highchart
-          #tactile
+    #highchart
+    #tactile
 
-          .row
-            .span12
-              h3= 'Conversion forecast'
-              #conversionForecast
-          .row
-            .span12
-              h3= 'Churn forecast'
-              #churnForecast
-          .row
-            .span12
-              h3= 'Customer volume forecast'
-              #customerForecast
-
+    .row
+      .span12
+        h3 Conversion forecast
+        #conversionForecast
+    .row
+      .span12
+        h3 Churn forecast
+        #churnForecast
+    .row
+      .span12
+        h3 Customer volume forecast
+        #customerForecast
