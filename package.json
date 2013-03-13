@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "test": "node test/test.js",
-    "start": "./node_modules/nodemon/nodemon.js --watch lib run.js"
+    "start": "node_modules/nodemon/nodemon.js --watch lib/ lib/server.coffee"
   },
   "engines": {
     "node": "0.8.x"
