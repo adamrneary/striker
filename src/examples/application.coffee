@@ -177,6 +177,7 @@ window.App =
     app.churnForecast.enableTriggers()
 
   initView: ->
+    return if mocha
     switch location.pathname
       when '/'            then new App.Views.IndexView().render()
       when '/performance' then new App.Views.TestsView()

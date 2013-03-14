@@ -3,9 +3,14 @@ module.exports = (grunt) ->
     coffee:
       compile:
         files:
-          'public/assets/striker.js'     : 'src/striker.coffee'
-          'public/assets/application.js' : 'src/examples/application.coffee'
-          'public/assets/modules.js'     : ['src/examples/**/*.coffee']
+          'public/assets/striker.js'             : 'src/striker.coffee'
+          'public/assets/example_app.js'         : 'src/examples/application.coffee'
+          'public/assets/example_collections.js' : ['src/examples/collections/*.coffee']
+          'public/assets/example_views.js'       : ['src/examples/views/*.coffee']
+      test:
+        files:
+          'tmp/striker_test.js'  : 'test/striker_test.coffee'
+          'tmp/example_tests.js' : ['test/examples/**/*.coffee']
 
     docco:
       debug:

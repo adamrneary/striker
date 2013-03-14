@@ -1,0 +1,17 @@
+{
+  "framework": "mocha",
+  "before_tests": "node -e 'require(\"grunt\").tasks(\"coffee\")'",
+  "launch_in_ci": ["phantomjs"],
+  "launch_in_dev": ["phantomjs"],
+  "src_files": [
+    "public/vendor/js/jquery.js",
+    "public/vendor/js/underscore.js",
+    "public/vendor/js/backbone.js",
+    "public/vendor/test/chai.js",
+    "public/assets/striker.js",
+    "public/assets/example_app.js",
+    "public/assets/example_collections.js",
+    "tmp/striker_test.js",
+    "tmp/example_test.js"
+  ]
+}

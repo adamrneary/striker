@@ -52,7 +52,7 @@ All design should be documented with [kss](https://github.com/kneath/kss) and sh
 
 ### Ideas for Showcase
 
-- add to bootstrap: `npm install -g grunt-cli` & `sudo easy_install pygments` & `phantomjs`
+- add to bootstrap: `npm install -g grunt-cli mocha testem` & `sudo easy_install pygments` & `phantomjs`
 - extract lib/server as require('showcase')
 - public/vendor as symlink with all necessary modules
 - script/bootstrap is symlink from showcase
