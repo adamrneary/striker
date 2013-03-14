@@ -14,7 +14,7 @@ Run the project locally:
 
     npm start
 
-Then navigate to the [showcase](http://localhost:5000).
+Then navigate to the [](http://localhost:5000).
 
 ## Contributing
 Please (please please please) read the following sections on our wiki:
@@ -49,3 +49,15 @@ For the showcase, you can either update the existing examples, or create a new e
 * Templates for the styleguide sections are in [jade](http://jade-lang.com/) format in examples/views/sections/
 
 All design should be documented with [kss](https://github.com/kneath/kss) and showcased in our style guide. Simply ensure that you have a valid section commented in the source and a corresponding template available.
+
+### Questions ?
+
+- why do we use jade, maybe eco with erb-like syntax as activecell?
+- bootstrap: `sudo easy_install pygments` & `phantomjs`
+- do we need tests or coverage pages? Does it useful for development?
+
+### Tasks
+
+- basic docs: testem & testem ci
+- fix 'http://localhost:5000/auth/github/callback' + GITHUB_CLIENT_ID/GITHUB_CLIENT_SECRET
+- tests for auth

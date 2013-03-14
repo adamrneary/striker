@@ -1,1 +1,0 @@
-class Channels extends Backbone.Collection

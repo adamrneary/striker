@@ -1,29 +1,20 @@
 {
-    "name": "Striker",
-    "version": "0.0.1",
-    "private": true,
-    "scripts": {
-        "test": "node test/test.js",
-        "start": "node test/watcher.js"
-    },
-    "engines": {
-        "node": "0.8.x",
-        "npm": "1.1.x"
-    },
-    "dependencies": {
-        "express": "3.0.6",
-        "jade": "",
-        "coffee-script": "1.4.0",
-        "node-sass": "",
-        "kss": "",
-        "mocha": "",
-        "request": "",
-        "coffeelint": "",
-        "coffeestand": "",
-        "docco":"",
-        "pygments":"",
-        "zombie":"",
-        "chai":"",
-        "jscoverage": ""
-    }
+  "name": "Striker",
+  "version": "0.2.0",
+  "private": true,
+  "scripts": {
+    "test": "testem ci",
+    "start": "./script/start"
+  },
+  "engines": {
+    "node": "0.8.x"
+  },
+  "dependencies": {
+    "showcase": "git+https://activecell-machine-user:NYVy98BbBb6Lae3DAdfWSLCQ@github.com/activecell/showcase#new"
+  },
+  "devDependencies": {
+    "grunt-contrib-coffee": "~0.6.0",
+    "grunt-coffeelint": "0.0.6",
+    "grunt-docco": "~0.2.0"
+  }
 }
