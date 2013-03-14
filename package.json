@@ -10,7 +10,8 @@
     "node": "0.8.x"
   },
   "dependencies": {
-    "showcase": "git+https://activecell-machine-user:NYVy98BbBb6Lae3DAdfWSLCQ@github.com/activecell/showcase#new"
+    "showcase": "git+https://activecell-machine-user:NYVy98BbBb6Lae3DAdfWSLCQ@github.com/activecell/showcase#new",
+    "testem": "0.2.70"
   },
   "devDependencies": {
     "grunt-contrib-coffee": "~0.6.0",
