@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "test": "node test/test.js",
-    "start": "node_modules/nodemon/nodemon.js -w app.coffee -w Gruntfile.coffee app.coffee"
+    "start": "node_modules/nodemon/nodemon.js -w app.coffee -w Gruntfile.coffee -w src app.coffee"
   },
   "engines": {
     "node": "0.8.x"

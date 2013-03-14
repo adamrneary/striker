@@ -66,3 +66,4 @@ To think
 
 - why do we use jade, maybe eco with erb-like syntax as activecell?
 - share dependencies
+- do we need tests or coverage pages? Does it useful for development?

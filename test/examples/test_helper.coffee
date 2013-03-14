@@ -1,3 +1,5 @@
+window.expect = chai.expect
+
 window.appHelper =
   set: (description, options) ->
     {collection, attributes, results} = options
@@ -15,7 +17,7 @@ window.appHelper =
 
           for row, values of testResults
             spec = it "returns array for row=#{row}", ->
-              expect(result[parseInt(@row) - 1]).toEqual @values
+              expect(result[parseInt(@row) - 1]).equal @values
 
             spec.row    = row
             spec.values = values
@@ -31,7 +33,7 @@ window.appHelper =
         output += " #{collection.schema[order]}=#{key}" for key, order in keys
 
         spec = it "returns #{value} for #{output}", ->
-          expect(collection.get(@keys...)).toEqual parseFloat(@value)
+          expect(collection.get(@keys...)).equal parseFloat(@value)
 
         spec.keys  = keys
         spec.value = value
@@ -40,7 +42,7 @@ window.appHelper =
       result = collection.print()
       for row, values of printParams
         spec = it "returns array for row=#{row}", ->
-          expect(result[@row - 1]).toEqual @values
+          expect(result[@row - 1]).equal @values
 
         spec.row    = row
         spec.values = values

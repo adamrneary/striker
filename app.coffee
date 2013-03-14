@@ -19,4 +19,4 @@ performance = (req, res) ->
 app.setup ->
   app.get('/', index)
   app.get('/performance', performance)
-  grunt.tasks('default')
+  grunt.tasks('coffee:src')
