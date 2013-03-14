@@ -1,1 +1,0 @@
-class Stages extends Backbone.Collection

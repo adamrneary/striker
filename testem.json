@@ -1,0 +1,23 @@
+{
+  "framework": "mocha",
+  "before_tests": "grunt coffee",
+  "launch_in_ci": ["phantomjs"],
+  "launch_in_dev": ["phantomjs"],
+  "src_files": [
+    "src/**/*",
+    "test/*.coffee",
+    "test/examples/**/*"
+  ],
+  "serve_files": [
+    "public/vendor/js/jquery.js",
+    "public/vendor/js/underscore.js",
+    "public/vendor/js/backbone.js",
+    "public/vendor/test/chai.js",
+    "public/assets/striker.js",
+    "public/assets/example_app.js",
+    "public/assets/example_collections.js",
+    "tmp/striker_test.js",
+    "tmp/example_test_helper.js",
+    "tmp/example_tests.js"
+  ]
+}
