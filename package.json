@@ -3,7 +3,7 @@
   "version": "0.2.0",
   "private": true,
   "scripts": {
-    "test": "testem ci",
+    "test": "./script/test ci",
     "start": "./script/start"
   },
   "engines": {
