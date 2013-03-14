@@ -1,4 +1,5 @@
 window.expect = chai.expect
+App.initialize()
 
 window.appHelper =
   set: (description, options) ->
@@ -28,21 +29,15 @@ window.appHelper =
     {collection, getParams, printParams} = options
 
     describe 'get', ->
-      for value, keys of getParams
+      _.each getParams, (keys, value) ->
         output = ''
         output += " #{collection.schema[order]}=#{key}" for key, order in keys
 
-        spec = it "returns #{value} for #{output}", ->
-          expect(collection.get(@keys...)).equal parseFloat(@value)
-
-        spec.keys  = keys
-        spec.value = value
+        it "returns #{value} for #{output}", ->
+          expect(collection.get(keys...)).equal parseFloat(value)
 
     describe 'print', ->
       result = collection.print()
-      for row, values of printParams
-        spec = it "returns array for row=#{row}", ->
-          expect(result[@row - 1]).equal @values
-
-        spec.row    = row
-        spec.values = values
+      _.each printParams, (values, row) ->
+        it "returns array for row=#{row}", ->
+          expect(result[row - 1]).eql values

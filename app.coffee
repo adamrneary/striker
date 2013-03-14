@@ -16,7 +16,6 @@ performance = (req, res) ->
   res.render 'examples/performance',
     examples: examples
 
-app.setup ->
+app.setup 'coffee:src', ->
   app.get('/', index)
   app.get('/performance', performance)
-  grunt.tasks('coffee:src')

@@ -52,18 +52,15 @@ All design should be documented with [kss](https://github.com/kneath/kss) and sh
 
 ### Ideas for Showcase
 
-- add to bootstrap: `npm install -g grunt-cli mocha testem` & `sudo easy_install pygments` & `phantomjs`
-- extract lib/server as require('showcase')
-- public/vendor as symlink with all necessary modules
-- script/bootstrap is symlink from showcase
-- rename run.js to app.js as main app with routes
-- /routes /views - default express behaviour
-- load all necessary modules in showcase's package.json
-- require('grunt').tasks('watch')
-- testem for unit-testing
-
-To think
+### To think
 
 - why do we use jade, maybe eco with erb-like syntax as activecell?
 - share dependencies
+- bootstrap: `sudo easy_install pygments` & `phantomjs`
 - do we need tests or coverage pages? Does it useful for development?
+
+### Tasks
+
+- extract script/start
+- github auth
+- basic docs: testem & testem ci

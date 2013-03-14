@@ -1,9 +1,10 @@
 {
   "framework": "mocha",
-  "before_tests": "node -e 'require(\"grunt\").tasks(\"coffee\")'",
+  "before_tests": "grunt coffee",
   "launch_in_ci": ["phantomjs"],
   "launch_in_dev": ["phantomjs"],
   "src_files": [
+    "src/**/*",
     "test/*.coffee",
     "test/examples/**/*"
   ],
