@@ -13,9 +13,8 @@ Run tests to ensure that all pass:
 Run the project locally:
 
     npm start
-    sudo easy_install pygments
 
-Then navigate to the [showcase](http://localhost:5000).
+Then navigate to the [](http://localhost:5000).
 
 ## Contributing
 Please (please please please) read the following sections on our wiki:
@@ -50,3 +49,16 @@ For the showcase, you can either update the existing examples, or create a new e
 * Templates for the styleguide sections are in [jade](http://jade-lang.com/) format in examples/views/sections/
 
 All design should be documented with [kss](https://github.com/kneath/kss) and showcased in our style guide. Simply ensure that you have a valid section commented in the source and a corresponding template available.
+
+### Ideas for Showcase
+
+- add to bootstrap: `npm install -g grunt-cli` & `sudo easy_install pygments` & `phantomjs`
+- extract lib/server as require('showcase')
+- public/vendor as symlink with all necessary modules
+- script/bootstrap is symlink from showcase
+- rename run.js to app.js as main app with routes
+- /routes /views - default express behaviour
+- load all necessary modules in showcase's package.json
+- require('grunt').tasks('watch')
+- why do we use jade, maybe eco with erb-like syntax as activecell?
+- testem for unit-testing
