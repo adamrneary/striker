@@ -3,9 +3,9 @@ module.exports = (grunt) ->
     coffee:
       compile:
         files:
-          'tmp/striker.js'     : 'src/striker.coffee'
-          'tmp/application.js' : 'src/examples/application.coffee'
-          'tmp/modules.js'     : ['src/examples/**/*.coffee']
+          'public/assets/striker.js'     : 'src/striker.coffee'
+          'public/assets/application.js' : 'src/examples/application.coffee'
+          'public/assets/modules.js'     : ['src/examples/**/*.coffee']
 
     docco:
       debug:
@@ -15,8 +15,8 @@ module.exports = (grunt) ->
 
     watch:
       scripts:
-        files: ['src/**/*.coffee', 'Gruntfile.coffee', 'public/vendor/**/*']
-        tasks: ['coffee', 'concat', 'docco']
+        files: ['src/**/*.coffee']
+        tasks: ['coffee', 'docco']
 
     coffeelint:
       app: ['src/*.coffee', 'src/**/*.coffee']
@@ -26,4 +26,4 @@ module.exports = (grunt) ->
   grunt.loadNpmTasks('grunt-contrib-concat')
   grunt.loadNpmTasks('grunt-docco')
   grunt.loadNpmTasks('grunt-coffeelint')
-  grunt.registerTask('default', ['coffee', 'docco', 'concat', 'watch'])
+  grunt.registerTask('default', ['coffee', 'docco', 'watch'])

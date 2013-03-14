@@ -1,4 +1,4 @@
-app   = require('./lib')(__dirname)
+app   = require('showcase')(__dirname)
 grunt = require('grunt')
 
 examples = [
@@ -19,4 +19,4 @@ performance = (req, res) ->
 app.setup ->
   app.get('/', index)
   app.get('/performance', performance)
-  grunt.tasks('')
+  grunt.tasks('default')

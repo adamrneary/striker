@@ -3,10 +3,22 @@ html
   head
     title Striker: Bad-ass, greasy-fast, cached calculated collections
     meta(http-equiv='content-type', content='text/html;charset=UTF-8')
-    link(href='assets/application.css', rel='stylesheet', type='text/css')
+    link(href='vendor/css/bootstrap.css', rel='stylesheet', type='text/css')
+    link(href='vendor/tablestakes/tablestakes.css', rel='stylesheet', type='text/css')
 
   body
     include shared/toppanel
     .container
       block content
+
+    script(type='text/javascript', src='vendor/js/jquery.js')
+    script(type='text/javascript', src='vendor/js/underscore.js')
+    script(type='text/javascript', src='vendor/js/backbone.js')
+    script(type='text/javascript', src='vendor/js/d3.js')
+    script(type='text/javascript', src='vendor/js/highcharts.js')
+    script(type='text/javascript', src='vendor/js/bootstrap.js')
+    script(type='text/javascript', src='vendor/tablestakes/tablestakes.js')
+
+    script(type='text/javascript', src='assets/striker.js')
     script(type='text/javascript', src='assets/application.js')
+    script(type='text/javascript', src='assets/modules.js')

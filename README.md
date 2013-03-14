@@ -60,5 +60,9 @@ All design should be documented with [kss](https://github.com/kneath/kss) and sh
 - /routes /views - default express behaviour
 - load all necessary modules in showcase's package.json
 - require('grunt').tasks('watch')
-- why do we use jade, maybe eco with erb-like syntax as activecell?
 - testem for unit-testing
+
+To think
+
+- why do we use jade, maybe eco with erb-like syntax as activecell?
+- share dependencies
