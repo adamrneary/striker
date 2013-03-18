@@ -1,6 +1,4 @@
 describe 'Striker', ->
-  expect = chai.expect
-
   it 'constructor', ->
     expect(Striker).exist
     expect(Striker.Collection).exist

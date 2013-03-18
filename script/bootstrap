@@ -46,3 +46,4 @@ fi
 #
 echo "Installing from package.json"
 npm install
+npm install -g grunt-cli testem mocha coffee-script
