@@ -11,6 +11,7 @@
     "public/vendor/js/jquery.js",
     "public/vendor/js/underscore.js",
     "public/vendor/js/backbone.js",
-    "public/assets/striker.js"
+    "public/assets/striker.js",
+    "public/tests/*.js"
   ]
 }

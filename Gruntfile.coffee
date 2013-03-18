@@ -3,15 +3,10 @@ module.exports = (grunt) ->
     coffee:
       src:
         files:
-          'public/assets/striker.js'             : 'src/striker.coffee'
-          'public/assets/example_app.js'         : 'src/examples/application.coffee'
-          'public/assets/example_collections.js' : ['src/examples/collections/*.coffee']
-          'public/assets/example_views.js'       : ['src/examples/views/*.coffee']
+          'public/assets/striker.js' : 'src/striker.coffee'
       test:
         files:
-          'tmp/striker_test.js'        : 'test/striker_test.coffee'
-          'tmp/example_test_helper.js' : 'test/examples/test_helper.coffee'
-          'tmp/example_tests.js'       : ['test/examples/**/*.coffee']
+          'public/tests/striker_test.js' : 'test/striker_test.coffee'
 
     docco:
       debug:
@@ -20,7 +15,7 @@ module.exports = (grunt) ->
           output: 'public/docs'
 
     coffeelint:
-      app: ['src/*.coffee', 'src/**/*.coffee']
+      app: ['src/*.coffee', 'examples/*.coffee', 'examples/**/*.coffee', 'examples/**/**/*.coffee']
 
   grunt.loadNpmTasks('grunt-contrib-coffee')
   grunt.loadNpmTasks('grunt-docco')
