@@ -10,9 +10,9 @@ module.exports = class Period extends Backbone.Model
 
   notFuture: ->
     app.periods.notFuture(@get('id'))
-  
+
   # provides an integer for a given period specifying the number of periods
-  #   between the current period and the specified period. past periods are 
+  #   between the current period and the specified period. past periods are
   #   returned as negative integers, and the current period is 0
   index: ->
     periodFirstDay = moment @get('first_day')

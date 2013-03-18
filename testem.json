@@ -1,9 +1,10 @@
 {
   "framework": "jasmine",
-  "before_tests": "grunt coffee",
+  "before_tests": "grunt test",
   "launch_in_ci": ["phantomjs"],
   "launch_in_dev": ["phantomjs"],
   "src_files": [
+    "examples/**/*",
     "src/**/*",
     "test/**/*"
   ],
@@ -12,6 +13,8 @@
     "public/vendor/js/underscore.js",
     "public/vendor/js/backbone.js",
     "public/assets/striker.js",
-    "public/tests/*.js"
+    "public/tests/striker_test.js",
+    "public/tests/examples/test_helper.js",
+    "public/tests/examples/striker.js"
   ]
 }

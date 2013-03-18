@@ -1,6 +1,3 @@
-OldStriker = require('striker/base/striker')
-utils        = require('striker/base/utils')
-
 # SalesMarketingExpense - transactions where the account is expense group == CAC
 #
 # Examples:
@@ -16,7 +13,7 @@ utils        = require('striker/base/utils')
 #   # get sales marketing expense on 2012-02
 #   salesMarketingExpense.getValue '2012-02'
 #   # => {actual: 38, plan: 0}
-module.exports = class SalesMarketingExpense extends OldStriker
+module.exports = class SalesMarketingExpense extends Striker.Collection
   initialize: ->
     @setBackbone app.financialSummary, account_id: app.accounts.filterIds('isSalesMarketing')
 
@@ -25,4 +22,3 @@ module.exports = class SalesMarketingExpense extends OldStriker
       plan = for segmentId, value of app.channels.salesMarketingExpense(periodId)
         value.plan
       @set periodId, plan: _.sum(plan)
-

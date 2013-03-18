@@ -1,8 +1,6 @@
-OldStriker = require('striker/base/striker')
-
 # Calculate: Sales & Marketing ROI
 # salesMarketingRoi = (revenue - salesMarketingExpense) / salesMarketingExpense
-module.exports = class SalesMarketingRoi extends OldStriker
+module.exports = class SalesMarketingRoi extends Striker.Collection
   initialize: ->
     getROI = (periodId, type) ->
       periodRevenue = app.revenue.get(periodId)[type]

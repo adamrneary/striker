@@ -1,6 +1,3 @@
-OldStriker = require('striker/base/striker')
-utils        = require('striker/base/utils')
-
 # Revenue - transactions where account type is Revenue
 #
 # Examples:
@@ -15,7 +12,7 @@ utils        = require('striker/base/utils')
 #
 #   revenue.get '2012-03'
 #   # => {actual: 12, plan: 0}
-module.exports = class Revenue extends OldStriker
+module.exports = class Revenue extends Striker.Collection
   initialize: (options) ->
     @setBackbone app.financialSummary, {account_id: app.accounts.filterIds('isRevenue')}, options.actualMap
 

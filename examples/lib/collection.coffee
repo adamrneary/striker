@@ -27,7 +27,7 @@ module.exports = class Collection extends Backbone.Collection
       .pluck('id')
       .value()
 
-  # applies a filter method to all models in a collection, 
+  # applies a filter method to all models in a collection,
   # returning ids that meet the filter criteria
   # TODO: handle arguments--with help from someone that knows js??? :-
   filterIds: (method, args...) ->
@@ -45,17 +45,17 @@ module.exports = class Collection extends Backbone.Collection
       new @constructor(
         @where(comparison)
       )
-    
+
   nameIsUsed: (name) =>
     @where(name: name).length > 0
 
   nextNewName: =>
-    newName = "New "+ 
+    newName = "New "+
       @model.name.replace(/([a-z])([A-Z])/g, '$1 $2').toLowerCase()
     if @nameIsUsed(newName)
       i = 1
       rawName = newName
       while @nameIsUsed(newName)
-        newName = rawName + ' ' + i 
+        newName = rawName + ' ' + i
         i += 1
     newName

@@ -1,4 +1,4 @@
-Collection = require('collections/shared/collection')
+Collection = require('lib/collection')
 Period     = require('models/period')
 
 module.exports = class Periods extends Collection
