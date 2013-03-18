@@ -2,4 +2,4 @@
 node_modules
 public/assets/
 public/docs/
-tmp/
+public/tests/
