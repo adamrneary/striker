@@ -3,15 +3,16 @@
   "version": "0.2.0",
   "private": true,
   "scripts": {
-    "test": "./script/test ci",
-    "start": "./script/start"
+    "test": "./node_modules/testem/testem.js ci",
+    "start": "./node_modules/nodemon/nodemon.js -w app.coffee -w Gruntfile.coffee -w src app.coffee"
   },
   "engines": {
     "node": "0.8.x"
   },
   "dependencies": {
-    "showcase": "git+https://activecell-machine-user:NYVy98BbBb6Lae3DAdfWSLCQ@github.com/activecell/showcase#new",
-    "testem": "0.2.70"
+    "showcase": "git+https://activecell-machine-user:NYVy98BbBb6Lae3DAdfWSLCQ@github.com/activecell/showcase",
+    "testem": "*",
+    "nodemon": "*"
   },
   "devDependencies": {
     "grunt-contrib-coffee": "~0.6.0",

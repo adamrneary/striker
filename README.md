@@ -59,6 +59,8 @@ All design should be documented with [kss](https://github.com/kneath/kss) and sh
 
 ### Tasks
 
+- add grunt-cli & testem install globally and remove script/start script/test
+- store sessions 6 month, don't use /login
 - basic docs: testem & testem ci
 - fix 'http://localhost:5000/auth/github/callback' + GITHUB_CLIENT_ID/GITHUB_CLIENT_SECRET
 - tests for auth
