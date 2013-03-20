@@ -18,8 +18,8 @@ module.exports = class Conversion extends Striker.Collection
   groupBy: ['period_id', 'stage_id']
 
   initialize: ->
-    @setBackbone app.conversionSummary, stage_id: app.stages.notCustomerIds()
-    @setBackbone app.conversionForecast
+    @setValues app.conversionSummary, stage_id: app.stages.notCustomerIds()
+    @setValues app.conversionForecast
 
   actual: ->
     customerStageId = app.stages.customer().id
@@ -27,4 +27,4 @@ module.exports = class Conversion extends Striker.Collection
       count = app.newCustomers?.get(periodId)?.length ? 0
       period_id: periodId, stage_id: customerStageId, count: count
 
-    @assign items, getValue: (item) -> actual: item.count
+    @setValuesForArray items, getValue: (item) -> actual: item.count

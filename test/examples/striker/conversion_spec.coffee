@@ -5,7 +5,7 @@
 # Stages             = require('collections/stages')
 # ConversionSummary  = require('collections/conversion_summary')
 # ConversionForecast = require('collections/conversion_forecast')
-#
+
 # describe 'conversion', ->
 #   beforeEach ->
 #     stubCurrentDate '2012-02-14'
@@ -52,7 +52,7 @@
 #       {period_id: 'next-month', stage_id: 'customer', channel_id: 'channel1', conversion_forecast: 280},
 #       {period_id: 'next-month', stage_id: 'customer', channel_id: 'channel2', conversion_forecast: 290}
 #     ]
-#
+
 #   # default conversion is the number of new potential customers at each stage
 #   #   in the customer acquisition cycle.
 #   #
@@ -65,32 +65,32 @@
 #         switch periodId
 #           when 'last-month' then ['customer1', 'customer2']
 #           when 'this-month' then ['customer3']
-#
+
 #       @analysis = new Conversion()
-#
+
 #     describe 'get', ->
 #       it 'contains all stages', ->
 #         result = @analysis.get('this-month')
 #         expect(_.keys(result).length).toEqual 3
-#
+
 #       it 'calculates values for a single stage', ->
 #         result = @analysis.get('last-month')
 #         expect(result['prospect']).toEqual actual: 30, plan: 250
 #         expect(result['lead']).toEqual     actual: 70, plan: 290
 #         expect(result['customer']).toEqual actual: 2,  plan: 330
-#
+
 #       it 'contains no "actuals" for a future month', ->
 #         result = @analysis.get('next-month')
 #         expect(result['prospect']).toEqual plan: 490
 #         expect(result['lead']).toEqual     plan: 530
 #         expect(result['customer']).toEqual plan: 570
-#
+
 #       it 'contains object grouped by period and stage', ->
 #         result = @analysis.get ['last-month', 'this-month', 'next-month']
 #         expect(result['this-month']['prospect']).toEqual actual: 110, plan: 370
 #         expect(result['this-month']['lead']).toEqual     actual: 150, plan: 410
 #         expect(result['this-month']['customer']).toEqual actual: 1, plan: 450
-#
+
 #   # channel conversion is the number of new potential customers at each stage
 #   #   in the customer acquisition cycle in that channel
 #   #
@@ -104,24 +104,24 @@
 #         switch periodId
 #           when 'last-month' then ['customer1', 'customer2', 'customer4']
 #           when 'this-month' then ['customer3']
-#
+
 #     describe 'get', ->
 #       it 'contains all stages', ->
 #         result = @channel.conversion('this-month')
 #         expect(_.keys(result).length).toEqual 3
-#
+
 #       it 'calculates values for a single stage', ->
 #         result = @channel.conversion('last-month')
 #         expect(result['prospect']).toEqual actual: 10, plan: 120
 #         expect(result['lead']).toEqual     actual: 30, plan: 140
 #         expect(result['customer']).toEqual actual: 3,  plan: 160
-#
+
 #       it 'contains no "actuals" for a future month', ->
 #         result = @channel.conversion('next-month')
 #         expect(result['prospect']).toEqual plan: 240
 #         expect(result['lead']).toEqual     plan: 260
 #         expect(result['customer']).toEqual plan: 280
-#
+
 #       it 'contains object grouped by period and stage', ->
 #         result = @channel.conversion ['last-month', 'this-month', 'next-month']
 #         expect(result['this-month']['prospect']).toEqual actual: 50, plan: 180

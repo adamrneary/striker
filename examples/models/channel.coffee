@@ -2,13 +2,13 @@ Model = require('lib/model')
 
 module.exports = class Channel extends Model
   @hasAnalyse 'reach'
-  # @hasAnalyse 'conversionRate',
+  @hasAnalyse 'conversionRate',
   @hasAnalyse 'segmentMix', file: 'channel_segment_mix'
   @hasAnalyse 'churnRate',
   @hasAnalyse 'churnedCustomers',
   @hasAnalyse 'customerVolume',
   @hasAnalyse 'newCustomers',
-  # @hasAnalyse 'newCustomerCount',
+  @hasAnalyse 'newCustomerCount',
 
   @hasAnalyse 'churn', plan: (periodId) ->
     result = app.segments.eachIds (segmentId) =>
@@ -20,12 +20,12 @@ module.exports = class Channel extends Model
       customerVolume * segmentMix * churnRate
     Math.round Striker.utils.sum(result)
 
-  # @hasAnalyse 'conversion', actual: (periodId) ->
-  #   result = {}
-  #   if app.periods.notFuture(periodId)
-  #     customerStageId = app.stages.customer().id
-  #     result[customerStageId] = actual: @newCustomers(periodId)?.length ? 0
-  #   result
+  @hasAnalyse 'conversion', actual: (periodId) ->
+    result = {}
+    if app.periods.notFuture(periodId)
+      customerStageId = app.stages.customer().id
+      result[customerStageId] = actual: @newCustomers(periodId)?.length ? 0
+    result
 
   @hasAnalyse 'revenue', actualMap: {from: 'customer_id', to: 'channel_id'}, plan: (periodId) ->
     Striker.utils.sum app.segments.eachIds (segmentId) =>

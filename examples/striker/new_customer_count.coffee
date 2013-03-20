@@ -8,4 +8,4 @@ module.exports = class NewCustomerCount extends Striker.Collection
     if newCustomers > 0 then actual: newCustomers else {}
 
   plan: ->
-    @setBackbone app.conversionForecast, stage_id: app.stages.customer().id
+    @setValues app.conversionForecast, stage_id: app.stages.customer().id

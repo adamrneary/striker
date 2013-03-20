@@ -1,4 +1,7 @@
-HFCollection = require('lib/hf_collection')
+Collection = require('lib/collection')
 
-module.exports = class ConversionForecast extends HFCollection
+module.exports = class ConversionForecast extends Collection
   url: 'api/v1/conversion_forecast'
+
+  getValue: ->
+    (item) -> plan: item.value

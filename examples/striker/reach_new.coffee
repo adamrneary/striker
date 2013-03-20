@@ -52,9 +52,8 @@ module.exports = class Reach extends Striker.Collection
     #   app.conversionForecast.get(32943, channelId, segmentId, monthId) - \
     #   app.churnForecast.get(channelId, segmentId, monthId)
 
-  #
   # initialize: ->
   #   toplineStageId = app.stages.topline()?.id
   #
-  #   @setBackbone app.conversionSummary,  stage_id: toplineStageId
-  #   @setBackbone app.conversionForecast, stage_id: toplineStageId
+  #   @setValues app.conversionSummary,  stage_id: toplineStageId
+  #   @setValues app.conversionForecast, stage_id: toplineStageId

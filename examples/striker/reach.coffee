@@ -20,5 +20,5 @@ module.exports = class Reach extends Striker.Collection
   initialize: ->
     toplineStageId = app.stages.topline()?.id
 
-    @setBackbone app.conversionSummary,  stage_id: toplineStageId
-    @setBackbone app.conversionForecast, stage_id: toplineStageId
+    @setValues app.conversionSummary,  stage_id: toplineStageId
+    @setValues app.conversionForecast, stage_id: toplineStageId

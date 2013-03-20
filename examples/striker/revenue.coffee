@@ -14,7 +14,7 @@
 #   # => {actual: 12, plan: 0}
 module.exports = class Revenue extends Striker.Collection
   initialize: (options) ->
-    @setBackbone app.financialSummary, {account_id: app.accounts.filterIds('isRevenue')}, options.actualMap
+    @setValues app.financialSummary, {account_id: app.accounts.filterIds('isRevenue')}, options.actualMap
 
   plan: ->
     app.periods.eachIds (periodId) =>

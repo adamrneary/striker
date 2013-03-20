@@ -1,7 +1,10 @@
-HFCollection = require('lib/hf_collection')
+Collection = require('lib/collection')
 
-module.exports = class FinancialSummary extends HFCollection
+module.exports = class FinancialSummary extends Collection
   url: 'api/v1/financial_summary'
+
+  getValue: ->
+    (item) -> actual: item.amount_cents
 
   #############################################################################
   # filter methods
