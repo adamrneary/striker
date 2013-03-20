@@ -11,7 +11,7 @@ module.exports = class ChannelSegmentMix extends Striker.Collection
     revenue       = app.customers.revenue(periodId)
     customers     = app.customers.where(filterObject)
     channelSM     = app.channelSegmentMix.where(_.extend period_id: periodId, filterObject)
-    totalRevenue  = _.sum(revenue?[customer.id]?.actual for customer in customers)
+    totalRevenue  = Striker.utils.sum(revenue?[customer.id]?.actual for customer in customers)
 
     for key2Id in collectionIds
       customerId    = _.find(customers, (item) -> item.get(key2) is key2Id)?.id

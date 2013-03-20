@@ -10,6 +10,14 @@ else
 Striker.VERSION = "0.3.0"
 
 Striker.utils = utils =
+  object: (prop, value) ->
+    result = {}
+    result[prop] = value
+    result
+
+  sum: (object) ->
+    _.reduce object, ((memo, val) -> memo += val), 0
+
   specialCondition: (value) ->
     if value
       if _(value).has('actual') then value.actual else value.plan
@@ -69,14 +77,14 @@ class Striker.Collection
       options.default = false
       @["#{methodName}-#{options.name}"] ||= new @(options)
 
-    _.object methodName, (range) ->
+    utils.object methodName, (range) ->
       analyse = getAnalyse()
       values  = analyse.get(@id)
 
       analyse.get range, @, (periodId) =>
         for option in ['actual', 'plan'] when options[option]
           value = options[option].call(@, periodId)
-          value = _.object(option, value) unless _.isObject(value)
+          value = utils.object(option, value) unless _.isObject(value)
           analyse.set periodId, value, values
 
         analyse.set periodId, analyse.calc?.call(@, periodId), values if analyse.calc
@@ -162,7 +170,8 @@ class Striker.Collection
     'stage_id'    : 'stages'
 
   _handleOptions: (options) ->
-    @groupBy = _.uniq options.groupBy.concat(@groupBy) if _.isArray(options.groupBy)
+    if _.isArray(options.groupBy)
+      @groupBy = _.uniq options.groupBy.concat(@groupBy)
 
   _initValues: (values = {}, level = 0) ->
     collectionIds = @getBySchema(@groupBy[level])

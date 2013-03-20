@@ -18,7 +18,7 @@ module.exports = class Channel extends Model
       segmentMix     = Striker.utils.specialCondition @segmentMix(prevPeriodId)?[segmentId]
       churnRate      = segment.churnRate(periodId).plan
       customerVolume * segmentMix * churnRate
-    Math.round _.sum(result)
+    Math.round Striker.utils.sum(result)
 
   # @hasAnalyse 'conversion', actual: (periodId) ->
   #   result = {}
@@ -28,7 +28,7 @@ module.exports = class Channel extends Model
   #   result
 
   @hasAnalyse 'revenue', actualMap: {from: 'customer_id', to: 'channel_id'}, plan: (periodId) ->
-    _.sum app.segments.eachIds (segmentId) =>
+    Striker.utils.sum app.segments.eachIds (segmentId) =>
       @segmentMix(periodId)[segmentId].plan * app.segments.revenue(periodId, segmentId).plan
 
   initialize: ->

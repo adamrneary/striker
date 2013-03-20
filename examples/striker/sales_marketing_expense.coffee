@@ -21,4 +21,4 @@ module.exports = class SalesMarketingExpense extends Striker.Collection
     app.periods.eachIds (periodId) =>
       plan = for segmentId, value of app.channels.salesMarketingExpense(periodId)
         value.plan
-      @set periodId, plan: _.sum(plan)
+      @set periodId, plan: Striker.utils.sum(plan)

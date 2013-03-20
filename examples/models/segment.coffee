@@ -11,7 +11,7 @@ module.exports = class Segment extends Model
     newCustomers = app.channels.newCustomers(periodId)
     result = for channelId, values of @channelMix(periodId)
       values.plan * newCustomers[channelId].plan
-    Math.round _.sum(result)
+    Math.round Striker.utils.sum(result)
 
   @hasAnalyse 'churn', plan: (periodId) ->
     prevPeriodId   = app.periods.prevId(periodId)
