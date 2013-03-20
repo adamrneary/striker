@@ -1,4 +1,4 @@
-Collection  = require('collections/shared/collection')
+Collection  = require('lib/collection')
 Account     = require('models/account')
 
 module.exports = class Accounts extends Collection
@@ -44,28 +44,28 @@ module.exports = class Accounts extends Collection
   #############################################################################
   # aggregation methods
   #############################################################################
-  
+
   assetBalance: =>
-    _.reduce( 
+    _.reduce(
       @asset().map((account) -> account.balanceAsOf())
       (memo, num) -> memo + num
       0
     )
-  
+
   liabilityBalance: =>
-    _.reduce( 
+    _.reduce(
       @liability().map((account) -> account.balanceAsOf())
       (memo, num) -> memo + num
       0
     )
-  
+
   equityBalance: =>
-    _.reduce( 
+    _.reduce(
       @equity().map((account) -> account.balanceAsOf())
       (memo, num) -> memo + num
       0
     )
-  
+
   revenueTotal: ->
     app?.financialSummaryCrossfilter?.forAccountType('Revenue')
 

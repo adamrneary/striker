@@ -1,5 +1,3 @@
-OldStriker = require('striker/base/striker')
-
 # Calculate reach
 # Filtered conversionSummary and conversionForecast by stage, group by period and channel
 # Use summary for 'actual' data and forecast for 'plan' data
@@ -16,7 +14,7 @@ OldStriker = require('striker/base/striker')
 #     2012-05: {channel1: {plan: 7},  channel2: {plan: 16}}
 #     2012-06: {channel1: {plan: 2},  channel2: {plan: 26}}
 #   }
-module.exports = class Reach extends OldStriker
+module.exports = class Reach extends Striker.Collection
   groupBy: ['period_id', 'channel_id']
 
   initialize: ->

@@ -1,4 +1,4 @@
-Collection = require('collections/shared/collection')
+Collection = require('lib/collection')
 Customer   = require('models/customer')
 
 module.exports = class Customers extends Collection

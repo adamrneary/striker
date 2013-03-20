@@ -1,4 +1,4 @@
-Model = require('models/shared/base_model')
+Model = require('lib/model')
 
 module.exports = class Customer extends Model
   @hasAnalyse 'revenue', plan: false

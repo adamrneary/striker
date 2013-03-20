@@ -1,6 +1,4 @@
-OldStriker = require('striker/base/striker')
-
-module.exports = class Churn extends OldStriker
+module.exports = class Churn extends Striker.Collection
   default: ->
     @churnedCustomers = app.churnedCustomers?.get
     app.periods.eachIds (periodId) =>

@@ -1,6 +1,4 @@
-OldStriker = require('striker/base/striker')
-
-module.exports = class ConversionRate extends OldStriker
+module.exports = class ConversionRate extends Striker.Collection
   groupBy: ['period_id', 'stage_not_topline_id']
 
   default: ->

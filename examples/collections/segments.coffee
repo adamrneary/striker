@@ -1,4 +1,4 @@
-Collection = require('collections/shared/collection')
+Collection = require('lib/collection')
 Segment   = require('models/segment')
 
 module.exports = class Segments extends Collection

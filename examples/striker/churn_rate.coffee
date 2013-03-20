@@ -1,7 +1,4 @@
-OldStriker = require('striker/base/striker')
-utils        = require('striker/base/utils')
-
-module.exports = class ChurnRate extends OldStriker
+module.exports = class ChurnRate extends Striker.Collection
   default: ->
     @churn          = app.churn.get
     @customerVolume = app.customerVolume.get
@@ -11,7 +8,7 @@ module.exports = class ChurnRate extends OldStriker
     result         = {}
     churn          = @churn(periodId)
     prevPeriodId   = app.periods.prevId(periodId)
-    customerVolume = utils.specialCondition @customerVolume(prevPeriodId)
+    customerVolume = Striker.utils.specialCondition @customerVolume(prevPeriodId)
 
     result.plan = if customerVolume && churn then churn?.plan / customerVolume else null
     if app.periods.notFuture(periodId)

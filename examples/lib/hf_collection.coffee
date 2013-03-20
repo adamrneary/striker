@@ -1,5 +1,5 @@
 # Base class for History/Forceast collections
-Collection  = require('collections/shared/collection')
+Collection  = require('lib/collection')
 
 module.exports = class HFCollection extends Collection
   minify: ->

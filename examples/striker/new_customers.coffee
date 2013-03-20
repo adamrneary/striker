@@ -1,6 +1,4 @@
-OldStriker = require('striker/base/striker')
-
-module.exports = class NewCustomers extends OldStriker
+module.exports = class NewCustomers extends Striker.Collection
   default: ->
     @customers = -> app.customers.models
     app.periods.setAnalysis(@)

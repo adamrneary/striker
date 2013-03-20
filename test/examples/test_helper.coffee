@@ -1,3 +1,25 @@
+_.mixin
+  sum: (object) ->
+    _.reduce object, ((memo, val) -> memo += val), 0
+
+  object: (prop, value) ->
+    result = {}
+    result[prop] = value
+    result
+
+  toCamel: (string) ->
+    string.replace /(_([a-z])|-([a-z]))/g, (g) ->
+      g[1].toUpperCase()
+
+  toUnderscore: (string) ->
+    string.replace /([A-Z])/g, ($1) ->
+      "_" + $1.toLowerCase()
+
+window.app = {}
+
+window.stubCurrentDate = (date) ->
+  spyOn(moment.fn, 'startOf').andReturn moment(date)
+
 # window.expect = chai.expect
 # App.initialize()
 

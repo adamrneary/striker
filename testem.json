@@ -12,7 +12,9 @@
     "public/vendor/js/jquery.js",
     "public/vendor/js/underscore.js",
     "public/vendor/js/backbone.js",
+    "public/vendor/js/moment.js",
     "public/assets/striker.js",
+    "public/assets/examples.js",
     "public/tests/striker_test.js",
     "public/tests/examples/test_helper.js",
     "public/tests/examples/striker.js"

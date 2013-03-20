@@ -1,4 +1,4 @@
-Collection = require('collections/shared/collection')
+Collection = require('lib/collection')
 Stage      = require('models/stage')
 
 module.exports = class Stages extends Collection

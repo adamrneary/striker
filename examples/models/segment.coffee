@@ -1,5 +1,4 @@
-Model = require('models/shared/base_model')
-utils = require('striker/base/utils')
+Model = require('lib/model')
 
 module.exports = class Segment extends Model
   @hasAnalyse 'channelMix', file: 'channel_segment_mix'
@@ -16,7 +15,7 @@ module.exports = class Segment extends Model
 
   @hasAnalyse 'churn', plan: (periodId) ->
     prevPeriodId   = app.periods.prevId(periodId)
-    customerVolume = utils.specialCondition @customerVolume(prevPeriodId)
+    customerVolume = Striker.utils.specialCondition @customerVolume(prevPeriodId)
     churnRate      = @churnRate(periodId)?.plan
 
     Math.round(churnRate * customerVolume)

@@ -1,6 +1,4 @@
-OldStriker = require('striker/base/striker')
-
-module.exports = class ChannelSegmentMix extends OldStriker
+module.exports = class ChannelSegmentMix extends Striker.Collection
   calc: (periodId) ->
     [key1, key2]  = switch @constructor.name
       when 'Channel' then ['channel_id', 'segment_id']
@@ -8,7 +6,7 @@ module.exports = class ChannelSegmentMix extends OldStriker
     filterObject = {}
     filterObject[key1] = @id
 
-    collectionIds = ChannelSegmentMix::idSchema(key2)
+    collectionIds = ChannelSegmentMix::getBySchema(key2)
     result        = {}
     revenue       = app.customers.revenue(periodId)
     customers     = app.customers.where(filterObject)

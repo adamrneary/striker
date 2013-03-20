@@ -1,4 +1,4 @@
-Collection = require('collections/shared/collection')
+Collection = require('lib/collection')
 Channel    = require('models/channel')
 
 module.exports = class Channels extends Collection
@@ -10,4 +10,4 @@ module.exports = class Channels extends Collection
   newCustomers: ->
   defaultId: ->
     app.channels.first().get('id')
-  
+
