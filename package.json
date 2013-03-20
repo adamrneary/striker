@@ -12,12 +12,13 @@
   "dependencies": {
     "showcase": "git+https://activecell-machine-user:NYVy98BbBb6Lae3DAdfWSLCQ@github.com/activecell/showcase",
     "testem": "*",
-    "nodemon": "*"
-  },
-  "devDependencies": {
+    "grunt": "~0.4.1",
     "grunt-contrib-coffee": "~0.6.0",
     "grunt-coffeelint": "0.0.6",
     "grunt-docco": "~0.2.0",
     "grunt-tusk-coffee": "0.0.1"
+  },
+  "devDependencies": {
+    "nodemon": "*"
   }
 }

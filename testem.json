@@ -1,6 +1,6 @@
 {
   "framework": "jasmine",
-  "before_tests": "grunt test",
+  "before_tests": "node -e 'require(\"grunt\").tasks(\"test\")'",
   "launch_in_ci": ["phantomjs"],
   "launch_in_dev": ["phantomjs"],
   "src_files": [
