@@ -1,4 +1,4 @@
-Revenue          = require('striker/revenue')
+CustomerRevenue  = require('striker/customer_revenue')
 Accounts         = require('collections/accounts')
 Periods          = require('collections/periods')
 Customers        = require('collections/customers')
@@ -52,36 +52,39 @@ describe 'customer revenue', ->
 
   describe 'overall revenue', ->
     beforeEach ->
-      app.revenue = new Revenue()
-      app.revenue.enable()
+      app.customerRevenue = new CustomerRevenue()
+      app.customerRevenue.enable()
 
     describe 'get', ->
       it 'calculates values for a single customer and period', ->
-        result = app.revenue.get('customer1', 'this-month')
+        result = app.customerRevenue.get('customer1', 'this-month')
         expect(result.actual).toEqual 100 + 200
         expect(result.plan).toBeUndefined()
         expect(result.variance).toBeUndefined()
 
       it 'contains nothing for future months', ->
-        result = app.revenue.get('customer1', 'next-month')
+        result = app.customerRevenue.get('customer1', 'next-month')
         expect(result.actual).toBeUndefined()
         expect(result.plan).toBeUndefined()
         expect(result.variance).toBeUndefined()
 
-      # TODO: not understood this spec, see alternative below
-      #
-      # it 'returns an array of objects (all periods) by default', ->
-      #   result = app.revenue.revenue()
-      #   expect(_.isArray(result)).toBeTruthy()
-      #   expect(_.size(result)).toEqual 4
-      #   expect(result[0]['customerId']).toEqual 'customer1'
-      #   expect(result[0]['periodId']).toEqual 'last-month'
-      #   expect(result[0]['actual']).toEqual 100
-      #   expect(result[0]['plan']).toBeUndefined()
-      #   expect(result[0]['variance']).toBeUndefined()
+      it 'returns an array of objects (all periods) by default', ->
+        result = app.customerRevenue.get()
+        expect(_.isArray(result)).toBeTruthy()
+        expect(_.size(result)).toEqual 12
+        expect(result[0]['customerId']).toEqual 'customer1'
+        expect(result[0]['periodId']).toEqual 'last-month'
+        expect(result[0]['actual']).toEqual 100
+        expect(result[0]['plan']).toBeUndefined()
+        expect(result[0]['variance']).toBeUndefined()
+        expect(result[1]['customerId']).toEqual 'customer1'
+        expect(result[1]['periodId']).toEqual 'this-month'
+        expect(result[1]['actual']).toEqual (100+200)
+        expect(result[1]['plan']).toBeUndefined()
+        expect(result[1]['variance']).toBeUndefined()
 
       it 'returns object with all periods for customer', ->
-        result = app.revenue.get('customer1')
+        result = app.customerRevenue.get('customer1')
         expect(_.size(result)).toEqual 4
 
         lastMonth = result['last-month']
@@ -96,7 +99,7 @@ describe 'customer revenue', ->
         )
         model.set(amount_cents: 123)
 
-        result = app.revenue.get('customer1', 'last-month')
+        result = app.customerRevenue.get('customer1', 'last-month')
         expect(result.actual).toEqual 123
 
   describe 'customer revenue', ->
