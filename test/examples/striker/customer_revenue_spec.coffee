@@ -22,30 +22,30 @@ FinancialSummary = require('collections/financial_summary')
 describe 'customer revenue', ->
   beforeEach ->
     app.periods  = new Periods [
-      {id: 'last-month',    first_day: '2012-01-01'},
-      {id: 'this-month',    first_day: '2012-02-01'},
-      {id: 'next-month',    first_day: '2012-03-01'},
-      {id: 'two-years-ago', first_day: '2010-02-01'}
+      { id: 'last-month',    first_day: '2012-01-01' }
+      { id: 'this-month',    first_day: '2012-02-01' }
+      { id: 'next-month',    first_day: '2012-03-01' }
+      { id: 'two-years-ago', first_day: '2010-02-01' }
     ]
     app.accounts = new Accounts [
-      {id: 'ast',  type: 'Asset'},
-      {id: 'rev',  type: 'Revenue'},
-      {id: 'rev2', type: 'Revenue'},
-      {id: 'exp',  type: 'Expense'}
+      { id: 'ast',  type: 'Asset' }
+      { id: 'rev',  type: 'Revenue' }
+      { id: 'rev2', type: 'Revenue' }
+      { id: 'exp',  type: 'Expense' }
     ]
     app.customers = new Customers [
-      {id: 'customer1', channel_id: 'channel1', segment_id: 'segment1'},
-      {id: 'customer2', channel_id: 'channel1', segment_id: 'segment1'},
-      {id: 'customer3', channel_id: 'channel2', segment_id: 'segment2'}
+      { id: 'customer1', channel_id: 'channel1', segment_id: 'segment1' }
+      { id: 'customer2', channel_id: 'channel1', segment_id: 'segment1' }
+      { id: 'customer3', channel_id: 'channel2', segment_id: 'segment2' }
     ]
     app.financialSummary = new FinancialSummary [
-      {period_id: 'last-month', account_id: 'rev',  customer_id: 'customer1', amount_cents: 100},
-      {period_id: 'this-month', account_id: 'rev',  customer_id: 'customer1', amount_cents: 100},
-      {period_id: 'this-month', account_id: 'ast',  customer_id: 'customer1', amount_cents: 300},
-      {period_id: 'this-month', account_id: 'rev2', customer_id: 'customer1', amount_cents: 200},
-      {period_id: 'this-month', account_id: 'rev',  customer_id: 'customer2', amount_cents: 123},
-      {period_id: 'this-month', account_id: 'rev',  customer_id: 'customer3', amount_cents: 456},
-      {period_id: 'this-month', account_id: 'exp',  customer_id: 'customer1', amount_cents: 200}
+      { period_id: 'last-month', account_id: 'rev',  customer_id: 'customer1', amount_cents: 100 }
+      { period_id: 'this-month', account_id: 'rev',  customer_id: 'customer1', amount_cents: 100 }
+      { period_id: 'this-month', account_id: 'ast',  customer_id: 'customer1', amount_cents: 300 }
+      { period_id: 'this-month', account_id: 'rev2', customer_id: 'customer1', amount_cents: 200 }
+      { period_id: 'this-month', account_id: 'rev',  customer_id: 'customer2', amount_cents: 123 }
+      { period_id: 'this-month', account_id: 'rev',  customer_id: 'customer3', amount_cents: 456 }
+      { period_id: 'this-month', account_id: 'exp',  customer_id: 'customer1', amount_cents: 200 }
     ]
 
     stubCurrentDate '2012-02-14'

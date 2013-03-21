@@ -317,3 +317,18 @@ class Striker.Collection
       attributes = {}
       attributes[key] = args[order] for key, order in collection.schema
       defaultCallback.call(@, attributes)
+
+Striker.utils =
+  where: (collection, attrs) ->
+    collection.filter (model) ->
+      for key of attrs
+        if _.isArray(attrs[key])
+          return false unless _.include(attrs[key], model.get(key))
+        else
+          return false unless attrs[key] is model.get(key)
+      true
+
+  sum: (collection, field) ->
+    _.reduce collection, (memo, item) ->
+      memo += item.get(field)
+    , 0
