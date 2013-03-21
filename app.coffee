@@ -1,5 +1,4 @@
-app   = require('showcase')(__dirname)
-grunt = require('grunt')
+app = require('showcase')(__dirname)
 
 examples = [
   { title: 'Channel Segment Mix', id: 'channelSegmentMix', count: 1000 }
