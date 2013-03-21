@@ -2,8 +2,8 @@ module.exports = class Revenue extends Striker.Collection
   schema: ['customer_id', 'period_id']
 
   observers:
-    financialSummary: (changed, model) ->
-      # TODO: add smart way to cache revenues
+    financialSummary: (model, changed) ->
+      # see only updates for revenue accounts
       return unless _.include(_.pluck(app.accounts.revenue(), 'id'), model.get('account_id'))
 
       if _.has(changed, 'amount_cents')

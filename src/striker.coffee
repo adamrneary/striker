@@ -216,7 +216,7 @@ class Striker.Collection
     result = @values
     result = result[key] for key in args.slice(0, -1)
     result[_.last(args)] = value
-    @trigger('change', args, value, @)
+    @trigger('change', @, args, value)
 
   # Triggers a set for the collection's item as filtered by args
   #
@@ -286,10 +286,15 @@ class Striker.Collection
   #
   # Returns trigger function
   _wrapCallback: (defaultCallback) ->
-    (model) ->
-      # attributes = {}
-      # attributes[key] = args[order] for key, order in collection.schema
-      defaultCallback.call(@, model.changed, model)
+    (model, args, value) ->
+      if model instanceof Backbone.Model
+        defaultCallback.call(@, model, model.changed)
+      else
+        defaultCallback.call(@, model, args, value)
+
+# Extend model with existing analysis
+Striker.addAnalysis = (Model, analysisName) ->
+  # old extend
 
 Striker.utils =
   where: (collection, attrs) ->

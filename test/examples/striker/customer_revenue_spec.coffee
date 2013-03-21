@@ -99,16 +99,16 @@ describe 'customer revenue', ->
         result = app.revenue.get('customer1', 'last-month')
         expect(result.actual).toEqual 123
 
-  # describe 'customer revenue', ->
-  #   beforeEach ->
-  #     @customer = app.customers.get('customer1')
+  describe 'customer revenue', ->
+    beforeEach ->
+      @customer = app.customers.get('customer1')
 
-  #   describe 'get', ->
-  #     it 'calculates values for a single period', ->
-  #       result = @customer.revenue 'this-month'
-  #       expect(result['actual']).toEqual 100 + 200
-  #       expect(result['plan']).toBeUndefined
-  #       expect(result['variance']).toBeUndefined
+    describe 'get', ->
+      it 'calculates values for a single period', ->
+        result = @customer.revenue 'this-month'
+        expect(result['actual']).toEqual 100 + 200
+        expect(result['plan']).toBeUndefined
+        expect(result['variance']).toBeUndefined
 
   #     it 'contains nothing for future months', ->
   #       result = @customer.revenue 'next-month'
