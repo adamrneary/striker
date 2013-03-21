@@ -9,5 +9,3 @@ module.exports = class Revenue extends Striker.Collection
     total = Striker.utils.sum(summaries, 'amount_cents')
 
     actual:   if total isnt 0 then total else undefined
-    plan:     undefined
-    variance: undefined
