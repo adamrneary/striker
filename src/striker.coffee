@@ -127,7 +127,7 @@ class Striker.Collection
   # value - function taking filter args Object as param
   #
   # Example
-  triggers: {}
+  observers: {}
 
   # Builds striker based on inputs (optionally) and schema
   #
@@ -156,7 +156,7 @@ class Striker.Collection
   #
   # Note: Pass no data if the collection will be populated by calcuations
   #   In this case, the collection will be initialized with 0 values until
-  #   triggers are turned on and values can be calculated.
+  #   observers are turned on and values can be calculated.
   constructor: (@inputs = [])->
     @collections = _.map @schema, schemaMap
     @values      = @_initValues()
@@ -241,13 +241,18 @@ class Striker.Collection
   update: (args...) ->
     @set @calculate(args...), args...
 
-  # triggers and event handling
+  # observers and event handling
   # ------------------
 
-  # Turns on triggers based on @triggers. Name `this` uses for self triggers
-  # And run
-  enableTriggers: ->
-    for collectionName, callback of @triggers
+  # Setup collection observers based on @observers property.
+  # Name `this` uses for self reference
+  # And than build values with `calculate` method
+  #
+  # We can build values in constructor because we need initialize all necessary collections
+  # Often calculate method refer recursively.
+  enable: ->
+    for collectionName, callback of @observers
+      # TODO: don't use app as a global namespace
       collection = if collectionName is 'this' then @ else app[collectionName]
       collection.on('change', @_wrapCallback(callback), @)
     @_build()
@@ -277,14 +282,14 @@ class Striker.Collection
       else
         @_build(level + 1, args)
 
-  # Private: pass args as object with params to trigger function
+  # Private: pass changed attributes to observer
   #
   # Returns trigger function
   _wrapCallback: (defaultCallback) ->
-    (args, value, collection) ->
-      attributes = {}
-      attributes[key] = args[order] for key, order in collection.schema
-      defaultCallback.call(@, attributes)
+    (model) ->
+      # attributes = {}
+      # attributes[key] = args[order] for key, order in collection.schema
+      defaultCallback.call(@, model.changed, model)
 
 Striker.utils =
   where: (collection, attrs) ->

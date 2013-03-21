@@ -53,7 +53,7 @@ describe 'customer revenue', ->
   describe 'overall revenue', ->
     beforeEach ->
       app.revenue = new Revenue()
-      app.revenue.enableTriggers()
+      app.revenue.enable()
 
     describe 'get', ->
       it 'calculates values for a single customer and period', ->
@@ -80,7 +80,7 @@ describe 'customer revenue', ->
       #   expect(result[0]['plan']).toBeUndefined()
       #   expect(result[0]['variance']).toBeUndefined()
 
-      it 'returns an all periods by customer id', ->
+      it 'returns object with all periods for customer', ->
         result = app.revenue.get('customer1')
         expect(_.size(result)).toEqual 4
 
