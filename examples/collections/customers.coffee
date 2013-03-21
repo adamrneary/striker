@@ -1,0 +1,1 @@
+module.exports = class Customers extends Backbone.Collection

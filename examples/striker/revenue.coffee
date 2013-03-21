@@ -1,0 +1,1 @@
+module.exports = class Revenue extends Striker.Collection

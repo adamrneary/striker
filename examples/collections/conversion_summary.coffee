@@ -1,0 +1,1 @@
+module.exports = class ConversionSummary extends Backbone.Collection

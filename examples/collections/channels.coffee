@@ -1,0 +1,1 @@
+module.exports = class Channels extends Backbone.Collection

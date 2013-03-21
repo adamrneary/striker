@@ -1,0 +1,1 @@
+module.exports = class FinancialSummary extends Backbone.Collection
