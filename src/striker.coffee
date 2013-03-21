@@ -13,6 +13,14 @@ else
 # Current version of the library.
 Striker.VERSION = "0.3.0"
 
+schemaMap = ->
+  throw new Error('Setup your striker mapping with Striker.setSchemaMap')
+
+# Setup schema mapping in order to work
+# with Striker.Collection.prototype.schema
+Striker.setSchemaMap = (cb) ->
+  schemaMap = cb
+
 # Striker.Collection
 # ------------------
 #
@@ -29,11 +37,11 @@ Striker.VERSION = "0.3.0"
 # Examples
 #
 #   class ConversionRates extends Striker.Collection
-#     schema: ['stageId', 'channelId', 'monthId']
+#     schema: ['stage_id', 'channel_id', 'period_id']
 #     multiplier: 100
 #     triggers:
 #       toplineGrowth: (args) ->
-#         l("toplineGrowth changed with channel: #{args.channelId}")
+#         l("toplineGrowth changed with channel: #{args.channel_id}")
 #
 #   conversionRates = new ConversionRates()
 #   conversionRates.collections
@@ -65,11 +73,11 @@ Striker.VERSION = "0.3.0"
 #     # other channels with data for stage with id = 3
 #   # other stages...
 #
-#   # Get value for stageId = 2 and channelId = 1 and monthId = 36
+#   # Get value for stage_id = 2 and channel_id = 1 and period_id = 36
 #   conversionRates.get(2, 1, 36)
 #   # => 27
 #
-#   # Set 75% for stageId = 3, channelId = 1 and monthId = 1
+#   # Set 75% for stage_id = 3, channel_id = 1 and period_id = 1
 #   conversionRates.set(75, 3, 1, 1)
 #
 #   conversionRates.isTimeSeries()
@@ -87,20 +95,20 @@ class Striker.Collection
   multiplier: 1
 
   # Collections with schemas ending with this are treated as time series
-  timeSeriesIdentifier: 'monthId'
+  timeSeriesIdentifier: 'period_id'
 
-  # Array with collection IDs that exist in app.schemaMap
+  # Array with collection IDs that setups with Striker.setSchemaMap
   # CRITICAL: Override this in each subclass.
   #
   # Example
   #
-  #   app.schemaMap =
-  #     stageId: app.stages
-  #     channelId: app.channels
-  #     monthId: app.months
+  #   Striker.setSchemaMap (key) ->
+  #     stage_id:   app.stages
+  #     channel_id: app.channels
+  #     period_id:  app.months
   #
   #   class ConversionRates extends Striker.Collection
-  #     schema: ['stageId', 'channelId', 'monthId']
+  #     schema: ['stage_id', 'channel_id', 'period_id']
   #
   #   conversionRates = new ConversionRates()
   #   conversionRates.collections
@@ -130,7 +138,7 @@ class Striker.Collection
   # Examples
   #
   #   class ChannelSegmentMix extends Striker.Collection
-  #     schema: ['channelId', 'segmentId']
+  #     schema: ['channel_id', 'segment_id']
   #
   #   app.channels.length
   #   # => 5
@@ -150,7 +158,7 @@ class Striker.Collection
   #   In this case, the collection will be initialized with 0 values until
   #   triggers are turned on and values can be calculated.
   constructor: (@inputs = [])->
-    @collections = (app.schemaMap(field) for field in @schema)
+    @collections = _.map @schema, schemaMap
     @values      = @_initValues()
 
   # Raw method for calculating a forecast value.
@@ -161,7 +169,7 @@ class Striker.Collection
   # Returns value to cache (type may vary based on what you wish to cache)
   calculate: (args...) ->
 
-  # Check that collection has monthId attribute
+  # Check that collection has period_id attribute
   #
   # Returns true or false
   isTimeSeries: ->
@@ -172,7 +180,6 @@ class Striker.Collection
   #
   # Returns object with structured data
   _initValues: (values = {}, inputs = @inputs, level = 0) ->
-    #console.log @collections[level]
     if @collections[level]
       for item, order in @collections[level]
         value = inputs[order] ? 0
@@ -199,8 +206,8 @@ class Striker.Collection
   # Get value by params
   #
   # args - Arguments split by commas and bases on schema.
-  #        If schema is ['channelId', 'monthId']
-  #        then get(1,2) will be equal channelId=1 and monthId=2
+  #        If schema is ['channel_id', 'period_id']
+  #        then get(1,2) will be equal channel_id=1 and period_id=2
   #
   # Examples
   #
@@ -239,8 +246,8 @@ class Striker.Collection
   # Triggers a set for the collection's item as filtered by args
   #
   # args - Arguments split by commas and bases on schema.
-  #        If schema is ['channelId', 'monthId']
-  #        then get(1,2) will be equal channelId=1 and monthId=2
+  #        If schema is ['channel_id', 'period_id']
+  #        then get(1,2) will be equal channel_id=1 and period_id=2
   #
   # Note: This acts to refresh the cached data and is generally called
   #       proactively by a trigger after making a change to underlying data
@@ -283,7 +290,7 @@ class Striker.Collection
     _.map @print(), (item) =>
       result = {}
       for key, index in @schema
-        if key is 'monthId'
+        if key is 'period_id'
           for i, index2 in _.range(index, @print()[0].length)
             result[index2] = item[i]
           return result
