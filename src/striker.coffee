@@ -309,7 +309,10 @@ class Striker.Collection
 Striker.addAnalysis = (Model, methodName, options = {}) ->
   analysisName = options.analysis ? methodName
   Model.prototype[methodName] = (args...) ->
-    app[analysisName].get.apply(app[analysisName], [@id].concat(args))
+    if args.length > 0
+      app[analysisName].get.apply(app[analysisName], [@id].concat(args))
+    else
+      app[analysisName].flat.apply(app[analysisName], [1, [@id]])
 
 Striker.utils =
   where: (collection, attrs) ->

@@ -100,7 +100,7 @@ describe 'customer revenue', ->
         result = app.customerRevenue.get('customer1', 'last-month')
         expect(result.actual).toEqual 123
 
-  describe 'customer revenue', ->
+  describe 'for customer', ->
     beforeEach ->
       @customer = app.customers.get('customer1')
 
@@ -119,13 +119,14 @@ describe 'customer revenue', ->
 
       it 'returns an array of objects (all periods) by default', ->
         result = @customer.revenue()
+        expect(_.isArray(result)).toBeTruthy()
+        expect(_.size(result)).toEqual 4
 
-        # expect(_.isArray(result)).toBeTruthy()
-        # expect(_.size(result)).toEqual 4
-        # expect(result[0]['period_id']).toEqual 'last-month'
-        # expect(result[0]['actual']).toEqual 100
-        # expect(result[0]['plan']).toBeUndefined
-        # expect(result[0]['variance']).toBeUndefined
+        lastMonth = result[0]
+        expect(lastMonth.period_id).toEqual 'last-month'
+        expect(lastMonth.actual).toEqual 100
+        expect(lastMonth.plan).toBeUndefined()
+        expect(lastMonth.variance).toBeUndefined()
 
     describe 'triggers', ->
       it 'responds to changes in financialSummary', ->
