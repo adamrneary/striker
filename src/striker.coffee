@@ -241,6 +241,19 @@ class Striker.Collection
   update: (args...) ->
     @set @calculate(args...), args...
 
+  # bulk return
+  # ------------------
+  flat: (level = 0, args = [], result = []) ->
+    for item in @collections[level]
+      args[level] = item.id
+      if level < @schema.length - 1
+        @flat(level + 1, args, result)
+      else
+        object = {}
+        object[@schema[index]] = value for value, index in args
+        result.push _.extend(object, @get.apply(@, args))
+    result
+
   # observers and event handling
   # ------------------
 
@@ -293,8 +306,10 @@ class Striker.Collection
         defaultCallback.call(@, model, args, value)
 
 # Extend model with existing analysis
-Striker.addAnalysis = (Model, analysisName) ->
-  # old extend
+Striker.addAnalysis = (Model, methodName, options = {}) ->
+  analysisName = options.analysis ? methodName
+  Model.prototype[methodName] = (args...) ->
+    app[analysisName].get.apply(app[analysisName], [@id].concat(args))
 
 Striker.utils =
   where: (collection, attrs) ->
