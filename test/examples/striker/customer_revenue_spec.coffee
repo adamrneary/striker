@@ -58,15 +58,15 @@ describe 'customer revenue', ->
     describe 'get', ->
       it 'calculates values for a single customer and period', ->
         result = app.revenue.get('customer1', 'this-month')
-        expect(result['actual']).toEqual 100 + 200
-        expect(result['plan']).toBeUndefined()
-        expect(result['variance']).toBeUndefined()
+        expect(result.actual).toEqual 100 + 200
+        expect(result.plan).toBeUndefined()
+        expect(result.variance).toBeUndefined()
 
       it 'contains nothing for future months', ->
         result = app.revenue.get('customer1', 'next-month')
-        expect(result['actual']).toBeUndefined()
-        expect(result['plan']).toBeUndefined()
-        expect(result['variance']).toBeUndefined()
+        expect(result.actual).toBeUndefined()
+        expect(result.plan).toBeUndefined()
+        expect(result.variance).toBeUndefined()
 
       # TODO: not understood this spec, see alternative below
       #
@@ -89,15 +89,15 @@ describe 'customer revenue', ->
         expect(lastMonth.plan).toBeUndefined()
         expect(lastMonth.variance).toBeUndefined()
 
-  #   describe 'triggers', ->
-  #     it 'responds to changes in financialSummary', ->
-  #       model = app.financialSummary.findWhere(
-  #         {period_id: 'last-month', account_id: 'rev',  customer_id: 'customer1'}
-  #       )
-  #       model.set(amount_cents: 123)
+    describe 'triggers', ->
+      it 'responds to changes in financialSummary', ->
+        model = app.financialSummary.findWhere(
+          { period_id: 'last-month', account_id: 'rev',  customer_id: 'customer1' }
+        )
+        model.set(amount_cents: 123)
 
-  #       result = app.revenue 'customer1', 'last-month'
-  #       expect(result['actual']).toEqual 123
+        result = app.revenue.get('customer1', 'last-month')
+        expect(result.actual).toEqual 123
 
   # describe 'customer revenue', ->
   #   beforeEach ->

@@ -196,3 +196,36 @@ Striker.utils = utils =
       joinId = collectionFrom.get(id).get(map.to)
       item[map.to] = joinId
     items
+
+# # bulk return
+# # ------------------
+
+# # Combine information for display
+# #
+# # Returns array of nested arrays
+# print: (result = [], args = [], level = 0) ->
+#   for item in @collections[level]
+#     args[level] = item.id
+#     if level >= @schema.length - 2 and @isTimeSeries()
+#       result.push args.concat _.values(@get(args...))
+#     else if level >= @schema.length - 1 and !@isTimeSeries()
+#       result.push args.concat @get(args...) * @multiplier
+#     else
+#       @print(result, args, level + 1)
+#   result
+
+# # Flattens output of print to single objects with keys informed by schema
+# #
+# # Returns Array of Objects
+# toArray: ->
+#   _.map @print(), (item) =>
+#     result = {}
+#     for key, index in @schema
+#       if key is 'period_id'
+#         for i, index2 in _.range(index, @print()[0].length)
+#           result[index2] = item[i]
+#         return result
+#       else
+#         result[key] = item[index]
+#     result['value'] = item[@schema.length]
+#     result

@@ -175,31 +175,6 @@ class Striker.Collection
   isTimeSeries: ->
     _.last(@schema) is @timeSeriesIdentifier
 
-  # Recursive function which uses @inputs and @collections for builds @values
-  # Attributes used for recursive callbacks
-  #
-  # Returns object with structured data
-  _initValues: (values = {}, inputs = @inputs, level = 0) ->
-    if @collections[level]
-      for item, order in @collections[level]
-        value = inputs[order] ? 0
-        if @schema
-          if level is @schema.length - 1
-            values[item.id] = value
-          else
-            values[item.id] = {}
-            @_initValues(values[item.id], value, level + 1)
-    values
-
-  # Builds values for every element
-  _build: (level = 0, args = []) ->
-    for item in @collections[level]
-      args[level] = item.id
-      if level >= @schema.length - 1
-        @update(args...)
-      else
-        @_build(level + 1, args)
-
   # get/set/update
   # ------------------
 
@@ -266,48 +241,41 @@ class Striker.Collection
   update: (args...) ->
     @set @calculate(args...), args...
 
-  # bulk return
-  # ------------------
-
-  # Combine information for display
-  #
-  # Returns array of nested arrays
-  print: (result = [], args = [], level = 0) ->
-    for item in @collections[level]
-      args[level] = item.id
-      if level >= @schema.length - 2 and @isTimeSeries()
-        result.push args.concat _.values(@get(args...))
-      else if level >= @schema.length - 1 and !@isTimeSeries()
-        result.push args.concat @get(args...) * @multiplier
-      else
-        @print(result, args, level + 1)
-    result
-
-  # Flattens output of print to single objects with keys informed by schema
-  #
-  # Returns Array of Objects
-  toArray: ->
-    _.map @print(), (item) =>
-      result = {}
-      for key, index in @schema
-        if key is 'period_id'
-          for i, index2 in _.range(index, @print()[0].length)
-            result[index2] = item[i]
-          return result
-        else
-          result[key] = item[index]
-      result['value'] = item[@schema.length]
-      result
-
   # triggers and event handling
   # ------------------
 
-  # Turns On triggers based on @triggers. Name `this` uses for self triggers
+  # Turns on triggers based on @triggers. Name `this` uses for self triggers
+  # And run
   enableTriggers: ->
     for collectionName, callback of @triggers
       collection = if collectionName is 'this' then @ else app[collectionName]
       collection.on('change', @_wrapCallback(callback), @)
     @_build()
+
+  # Recursive function which uses @inputs and @collections for builds @values
+  # Attributes used for recursive callbacks
+  #
+  # Returns object with structured data
+  _initValues: (values = {}, inputs = @inputs, level = 0) ->
+    if @collections[level]
+      for item, order in @collections[level]
+        value = inputs[order] ? 0
+        if @schema
+          if level is @schema.length - 1
+            values[item.id] = value
+          else
+            values[item.id] = {}
+            @_initValues(values[item.id], value, level + 1)
+    values
+
+  # Builds values for every element
+  _build: (level = 0, args = []) ->
+    for item in @collections[level]
+      args[level] = item.id
+      if level >= @schema.length - 1
+        @update(args...)
+      else
+        @_build(level + 1, args)
 
   # Private: pass args as object with params to trigger function
   #
