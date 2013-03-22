@@ -328,6 +328,11 @@ Striker.sum = (array, field) ->
     memo += item.get(field)
   , 0
 
-# TODO: performance problem. Need to cache data on first enable
-# Add Striker.Cache for this sort of data around usual collection
-# Fix problem with global namespace. Tests use only local namespace. It helps make striker indi :)
+###
+TODO:
+  - performance problem
+    Striker.filter - runs every time with the whole data,
+                     need to create and support index for fast calculations
+  - global namespace
+    don't use app. as a global namespace. Setup all collections + indexes in one place
+###
