@@ -1,5 +1,17 @@
+observer = (value) ->
+  (model, changed) ->
+    toplineId = app.channels.toplineId()
+    return unless model.get('stage_id') is toplineId
+
+    if _.has(changed, value)
+      @update(model.get('channel_id'), model.get('period_id'))
+
 module.exports = class Reach extends Striker.Collection
   schema: ['channel_id', 'period_id']
+
+  observers:
+    conversionSummary:  observer('customer_volume')
+    conversionForecast: observer('value')
 
   calculate: (channelId, periodId) ->
     toplineId          = app.channels.toplineId()
