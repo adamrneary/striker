@@ -10,10 +10,10 @@ module.exports = class Revenue extends Striker.Collection
         @update(model.get('customer_id'), model.get('period_id'))
 
   calculate: (customerId, periodId) ->
-    summaries = Striker.utils.where app.financialSummary,
+    summaries = Striker.filter 'financialSummary',
       period_id:   periodId
       customer_id: customerId
       account_id:  _.pluck(app.accounts.revenue(), 'id')
-    total = Striker.utils.sum(summaries, 'amount_cents')
 
-    actual:   if total isnt 0 then total else undefined
+    actual: if _.isEmpty(summaries) then undefined \
+            else Striker.sum(summaries, 'amount_cents')

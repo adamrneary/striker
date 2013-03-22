@@ -307,24 +307,27 @@ class Striker.Collection
 
 # Extend model with existing analysis
 Striker.addAnalysis = (Model, methodName, options = {}) ->
-  analysisName = options.analysis ? methodName
   Model.prototype[methodName] = (args...) ->
+    analysis = app[options.analysis ? methodName]
     if args.length > 0
-      app[analysisName].get.apply(app[analysisName], [@id].concat(args))
+      analysis.get(@id, args...)
     else
-      app[analysisName].flat.apply(app[analysisName], [1, [@id]])
+      analysis.flat(1, [@id])
 
-Striker.utils =
-  where: (collection, attrs) ->
-    collection.filter (model) ->
-      for key of attrs
-        if _.isArray(attrs[key])
-          return false unless _.include(attrs[key], model.get(key))
-        else
-          return false unless attrs[key] is model.get(key)
-      true
+Striker.filter = (collection, attrs) ->
+  app[collection].filter (model) ->
+    for key of attrs
+      if _.isArray(attrs[key])
+        return false unless _.include(attrs[key], model.get(key))
+      else
+        return false unless attrs[key] is model.get(key)
+    true
 
-  sum: (collection, field) ->
-    _.reduce collection, (memo, item) ->
-      memo += item.get(field)
-    , 0
+Striker.sum = (array, field) ->
+  _.reduce array, (memo, item) ->
+    memo += item.get(field)
+  , 0
+
+# TODO: performance problem. Need to cache data on first enable
+# Add Striker.Cache for this sort of data around usual collection
+# Fix problem with global namespace. Tests use only local namespace. It helps make striker indi :)

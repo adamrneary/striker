@@ -47,7 +47,7 @@ describe 'customer revenue', ->
       { period_id: 'this-month', account_id: 'rev',  customer_id: 'customer3', amount_cents: 456 }
       { period_id: 'this-month', account_id: 'exp',  customer_id: 'customer1', amount_cents: 200 }
     ]
-
+    stubCurrentDate '2012-02-14'
     app.customerRevenue = new CustomerRevenue()
     app.customerRevenue.enable()
 
@@ -69,7 +69,7 @@ describe 'customer revenue', ->
         result = app.customerRevenue.flat()
         expect(_.isArray(result)).toBeTruthy()
         expect(_.size(result)).toEqual 12
-        console.log result
+
         expect(result[0]['customer_id']).toEqual 'customer1'
         expect(result[0]['period_id']).toEqual 'last-month'
         expect(result[0]['actual']).toEqual 100
