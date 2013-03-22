@@ -1,8 +1,10 @@
 beforeEach ->
   window.app = {}
 
-window.stubCurrentDate = (date) ->
-  spyOn(Date, 'now').andReturn((new Date date) - 1)
+  # stub current Date
+  Periods = require('collections/periods')
+  spyOn(Periods::, 'compare').andCallFake (date1, date2) ->
+    new Date(date1).getTime() > new Date('2012-02-14T14:25:30.000Z').getTime()
 
 Striker.setSchemaMap (key) ->
   switch key

@@ -20,10 +20,10 @@ ConversionForecast = require('collections/conversion_forecast')
 describe 'reach', ->
   beforeEach ->
     app.periods = new Periods [
-      { id: 'last-month',    first_day: '2012.01.01' }
-      { id: 'this-month',    first_day: '2012.02.01' }
-      { id: 'next-month',    first_day: '2012.03.01' }
-      { id: 'two-years-ago', first_day: '2010.02.14' }
+      { id: 'last-month',    first_day: '2012-01-01T00:00:00.000Z' }
+      { id: 'this-month',    first_day: '2012-02-01T00:00:00.000Z' }
+      { id: 'next-month',    first_day: '2012-03-01T00:00:00.000Z' }
+      { id: 'two-years-ago', first_day: '2010-02-01T00:00:00.000Z' }
     ]
     app.channels = new Channels [
       {id: 'channel1'}
@@ -49,7 +49,6 @@ describe 'reach', ->
       { period_id: 'next-month', channel_id: 'channel2', stage_id: 'topline', value: 11 }
       { period_id: 'this-month', channel_id: 'channel1', stage_id: 'customer', value: 12 }
     ]
-    stubCurrentDate '2012.02.14'
     app.reach = new Reach()
     app.reach.enable()
 

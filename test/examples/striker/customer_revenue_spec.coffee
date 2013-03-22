@@ -47,7 +47,6 @@ describe 'customer revenue', ->
       { period_id: 'this-month', account_id: 'rev',  customer_id: 'customer3', amount_cents: 456 }
       { period_id: 'this-month', account_id: 'exp',  customer_id: 'customer1', amount_cents: 200 }
     ]
-    stubCurrentDate '2012-02-14'
     app.customerRevenue = new CustomerRevenue()
     app.customerRevenue.enable()
 
