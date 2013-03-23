@@ -21,6 +21,10 @@ schemaMap = ->
 Striker.setSchemaMap = (cb) ->
   schemaMap = cb
 
+# Group-by indexes for Backbone.Collections
+# Setup with Striker.setIndex
+Striker.index = {}
+
 # Striker.Collection
 # ------------------
 #
@@ -157,9 +161,11 @@ class Striker.Collection
   # Note: Pass no data if the collection will be populated by calcuations
   #   In this case, the collection will be initialized with 0 values until
   #   observers are turned on and values can be calculated.
-  constructor: (@inputs = [])->
+  constructor: (options = {})->
+    @inputs      = options.inputs || []
     @collections = _.map @schema, schemaMap
     @values      = @_initValues()
+    @_enableObserversAndBuild()
 
   # Raw method for calculating a forecast value.
   # CRITICAL: Override this in each subclass.
@@ -263,7 +269,7 @@ class Striker.Collection
   #
   # We can build values in constructor because we need initialize all necessary collections
   # Often calculate method refer recursively.
-  enable: ->
+  _enableObserversAndBuild: ->
     for collectionName, callback of @observers
       # TODO: don't use app as a global namespace
       collection = if collectionName is 'this' then @ else app[collectionName]
@@ -314,25 +320,25 @@ Striker.addAnalysis = (Model, methodName, options = {}) ->
     else
       analysis.flat(1, [@id])
 
-Striker.filter = (collection, attrs) ->
-  app[collection].filter (model) ->
-    for key of attrs
-      if _.isArray(attrs[key])
-        return false unless _.include(attrs[key], model.get(key))
-      else
-        return false unless attrs[key] is model.get(key)
-    true
+# Add observable index to Striker.index
+# Useful to improve performance of Striker.filter
+#
+# Examples:
+#    Striker.setIndex 'financialSummary', ['period_id', 'customer_id', 'account_id']
+Striker.setIndex = (collectionName, schema) ->
+  index = app[collectionName].groupBy (item) ->
+    _.map schema, (key) -> item.get(key)
+
+  Striker.index[collectionName] = index
+
+Striker.filter = (collectionName, attrs) ->
+  if Striker.index[collectionName]
+    key = _.values(attrs).join()
+    Striker.index[collectionName][key] ? []
+  else
+    app[collectionName].where(attrs)
 
 Striker.sum = (array, field) ->
   _.reduce array, (memo, item) ->
     memo += item.get(field)
   , 0
-
-###
-TODO:
-  - performance problem
-    Striker.filter - runs every time with the whole data,
-                     need to create and support index for fast calculations
-  - global namespace
-    don't use app. as a global namespace. Setup all collections + indexes in one place
-###

@@ -47,8 +47,9 @@ describe 'customer revenue', ->
       { period_id: 'this-month', account_id: 'rev',  customer_id: 'customer3', amount_cents: 456 }
       { period_id: 'this-month', account_id: 'exp',  customer_id: 'customer1', amount_cents: 200 }
     ]
+
+    Striker.setIndex 'financialSummary', ['period_id', 'customer_id', 'account_id']
     app.customerRevenue = new CustomerRevenue()
-    app.customerRevenue.enable()
 
   describe 'overall revenue', ->
     describe 'get', ->

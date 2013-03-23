@@ -49,8 +49,11 @@ describe 'reach', ->
       { period_id: 'next-month', channel_id: 'channel2', stage_id: 'topline', value: 11 }
       { period_id: 'this-month', channel_id: 'channel1', stage_id: 'customer', value: 12 }
     ]
+
+    Striker.setIndex 'conversionForecast', ['stage_id', 'channel_id', 'period_id']
+    Striker.setIndex 'conversionSummary', ['stage_id', 'channel_id', 'period_id']
+
     app.reach = new Reach()
-    app.reach.enable()
 
   describe 'overall', ->
     describe 'get', ->
