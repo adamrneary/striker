@@ -11,7 +11,7 @@ module.exports = class Revenue extends Striker.Collection
 
   calculate: (customerId, periodId) ->
     summaries = _.map _.pluck(app.accounts.revenue(), 'id'), (accountId) ->
-      Striker.filter('financialSummary', period_id: periodId, customer_id: customerId, account_id:  accountId)
+      Striker.where('financialSummary', period_id: periodId, customer_id: customerId, account_id:  accountId)
     summaries = _.flatten(summaries)
 
     object = {}

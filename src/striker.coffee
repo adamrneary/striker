@@ -321,7 +321,7 @@ Striker.addAnalysis = (Model, methodName, options = {}) ->
       analysis.flat(1, [@id])
 
 # Add observable index to Striker.index
-# Useful to improve performance of Striker.filter
+# Useful to improve performance of Striker.where
 #
 # Examples:
 #    Striker.setIndex 'financialSummary', ['period_id', 'customer_id', 'account_id']
@@ -331,7 +331,7 @@ Striker.setIndex = (collectionName, schema) ->
 
   Striker.index[collectionName] = index
 
-Striker.filter = (collectionName, attrs) ->
+Striker.where = (collectionName, attrs) ->
   if Striker.index[collectionName]
     key = _.values(attrs).join()
     Striker.index[collectionName][key] ? []
