@@ -42,17 +42,6 @@ else
 fi
 
 #
-# Check for node-gyp
-#
-if test ! $(which node-gyp); then
-  echo "  x You need to install node-gyp. Try:"
-  echo "    npm install -g node-gyp"
-  exit
-else
-  echo "  + node-gyp found."
-fi
-
-#
 # Install from packages
 #
 echo "Installing from package.json"

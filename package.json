@@ -10,6 +10,7 @@
     "node": "0.8.x"
   },
   "dependencies": {
+    "node-gyp":"0.9.2",
     "showcase": "git+https://activecell-machine-user:NYVy98BbBb6Lae3DAdfWSLCQ@github.com/activecell/showcase",
     "testem": "*",
     "grunt": "~0.4.1",
