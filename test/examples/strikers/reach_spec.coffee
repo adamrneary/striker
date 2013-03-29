@@ -86,7 +86,7 @@ describe 'reach', ->
 
       it 'has periodIds at the top key of the returned collection', ->
         expect(_.size(@result)).toEqual 4
-        _.map app.periods.ids(), (pId) =>
+        _.map _.pluck(app.periods.models, 'id'), (pId) =>
           expect(@result[pId]).toBeTruthy()
 
       it 'has channelId as the lowest level key', ->
