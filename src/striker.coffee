@@ -293,6 +293,29 @@ class Striker.Collection
             @_initValues(values[item.id], value, level + 1)
     values
 
+  # Returns same thing as .get() would but with reversed schema
+  # This doesn't modify any of existing instance values and doesn't call `calculate` or `set`
+  # If schema was [channel_id, period_id] it will now return values in reversed order:
+  # period_1:
+  #   channel1:
+  #   channel2:
+  #
+  # period2:
+  #   channel1:
+  #   channel2:
+  #   #... and so on
+  reversedSchemaValues: (result = {}, values = _.toArray(@values), level = 0)  ->
+    for item in values
+      if level is @schema.length - 1
+        key = @schema[level]
+        pKey = @schema[level - 1]
+        if _.isUndefined(result[item[key]])
+          result[item[key]] = {}
+        result[item[key]][item[pKey]] = item
+      else
+        @reversedSchemaValues(result, _.toArray(item), level + 1)
+    result
+
   # Builds values for every element
   _build: (level = 0, args = []) ->
     for item in @collections[level]
