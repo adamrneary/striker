@@ -1,4 +1,4 @@
-class App.Views.TestsView extends Backbone.View
+module.exports = class PerformanceView extends Backbone.View
   el: '#container'
   printTemplate: _.template \
     '''

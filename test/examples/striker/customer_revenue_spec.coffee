@@ -1,4 +1,4 @@
-CustomerRevenue  = require('examples/striker/customer_revenue')
+CustomerRevenue  = require('examples/strikers/customer_revenue')
 Accounts         = require('examples/collections/accounts')
 Periods          = require('examples/collections/periods')
 Customers        = require('examples/collections/customers')

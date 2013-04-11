@@ -1,4 +1,4 @@
-Reach              = require('examples/striker/reach')
+Reach              = require('examples/strikers/reach')
 Periods            = require('examples/collections/periods')
 Channels           = require('examples/collections/channels')
 Stages             = require('examples/collections/stages')
