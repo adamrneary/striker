@@ -1,10 +1,17 @@
 app = require('showcase').app(__dirname)
 {isAuth, docco} = require('showcase')
 
-app.get '/', (req, res) ->
+app.configure 'development', ->
+  require('brunch').watch({})
+
+app.configure 'production', ->
+  app.set('github-client-id', '82102b21492744f5be7e')
+  app.set('github-client-secret', '97dfcb37004236efd4d86508f25f072f25789257')
+
+app.get '/', isAuth, (req, res) ->
   res.render 'examples/index'
 
-app.get '/performance', (req, res) ->
+app.get '/performance', isAuth, (req, res) ->
   res.render 'examples/performance',
     examples: [
       { title: 'Channel Segment Mix', id: 'channelSegmentMix', count: 1000 }
