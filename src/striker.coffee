@@ -1,4 +1,3 @@
-# Striker.js 0.1.0
 # Bad-ass, greasy-fast, cached calculated collections
 # (c) 2013 Adam Neary & Aleksey Kulikov, Profitably Inc.
 
@@ -11,7 +10,7 @@ else
   Striker = window.Striker = {}
 
 # Current version of the library.
-Striker.VERSION = "0.3.0"
+Striker.VERSION = '0.3.2'
 
 schemaMap = ->
   throw new Error('Setup your striker mapping with Striker.setSchemaMap')
