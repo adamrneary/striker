@@ -16,6 +16,6 @@
     "brunch": "~1.6.3",
     "javascript-brunch": "~1.5.1",
     "coffee-script-brunch": "~1.5.1",
-    "testem": ""
+    "testem": "0.2.83"
   }
 }
