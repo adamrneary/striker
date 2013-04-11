@@ -3,7 +3,7 @@
   "version": "0.3.2",
   "private": true,
   "scripts": {
-    "test": "./node_modules/testem/testem.js ci",
+    "test": "npm run build && ./node_modules/testem/testem.js ci",
     "start": "node index.js",
     "build": "./node_modules/brunch/bin/brunch build"
   },

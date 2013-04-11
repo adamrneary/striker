@@ -1,9 +1,9 @@
-Reach              = require('striker/reach')
-Periods            = require('collections/periods')
-Channels           = require('collections/channels')
-Stages             = require('collections/stages')
-ConversionSummary  = require('collections/conversion_summary')
-ConversionForecast = require('collections/conversion_forecast')
+Reach              = require('examples/striker/reach')
+Periods            = require('examples/collections/periods')
+Channels           = require('examples/collections/channels')
+Stages             = require('examples/collections/stages')
+ConversionSummary  = require('examples/collections/conversion_summary')
+ConversionForecast = require('examples/collections/conversion_forecast')
 
 # Reach analysis striker
 # Reach (also called "Topline growth") is the conversion number for the topline

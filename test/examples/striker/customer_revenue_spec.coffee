@@ -1,8 +1,8 @@
-CustomerRevenue  = require('striker/customer_revenue')
-Accounts         = require('collections/accounts')
-Periods          = require('collections/periods')
-Customers        = require('collections/customers')
-FinancialSummary = require('collections/financial_summary')
+CustomerRevenue  = require('examples/striker/customer_revenue')
+Accounts         = require('examples/collections/accounts')
+Periods          = require('examples/collections/periods')
+Customers        = require('examples/collections/customers')
+FinancialSummary = require('examples/collections/financial_summary')
 
 # Customer revenue analysis striker
 # Revenue is amount of money made over a period of time, even if the cash comes

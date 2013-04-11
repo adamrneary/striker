@@ -7,9 +7,25 @@ exports.config = defaultConfig
       joinTo:
         'assets/striker.js'    : path('src/striker.coffee')
         'assets/examples.js'   : path('src/examples/collections/*', 'src/examples/striker/*')
-        'assets/unit_tests.js' : path('')
+        'assets/unit_tests.js' : path('test/striker_test.coffee', 'test/examples/striker/*', 'test/examples/test_helper.coffee')
 
-# 'public/assets/examples.js': ['examples/lib/*.coffee', 'examples/collections/*.coffee', 'examples/models/*.coffee', 'examples/striker/*.coffee']
-# 'public/tests/striker_test.js'         : 'test/striker_test.coffee'
-# 'public/tests/examples/test_helper.js' : 'test/examples/test_helper.coffee'
-# 'public/tests/examples/striker.js'     : ['test/examples/striker/*.coffee']
+  modules:
+    definition: false
+    wrapper: (path, data) ->
+      if path.match(/\.(coffee|hbs)$/)
+        if !path.match(/^test/) && data.match(/module\.exports|exports\./)
+          # commonjs wrapper
+          path = path.replace(/^src\//, '').replace(/\.(coffee|hbs)$/, '')
+          data = """
+          require.define({"#{path}": function(exports, require, module) {
+            #{data}
+          }});
+          """
+        else
+          # classic coffee-script wrapper
+          data = """
+          (function() {
+            #{data}
+          }).call(this);
+          """
+      data + '\n\n'
