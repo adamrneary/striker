@@ -11,7 +11,7 @@
     "node": "0.10.x"
   },
   "dependencies": {
-    "showcase": "~0.2.4",
+    "showcase": "~0.2.5",
     "coffee-script": "~1.6.2"
   },
   "devDependencies": {
