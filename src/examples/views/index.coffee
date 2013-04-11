@@ -1,4 +1,4 @@
-module.exports = class App.Views.IndexView extends Backbone.View
+module.exports = class IndexView extends Backbone.View
   el: '#container'
   monthCount: 36
   columns:
