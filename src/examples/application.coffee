@@ -60,7 +60,18 @@ $ ->
   ]
 
   # Setup strikers
-  # ...
+  Striker.setIndex 'financialSummary', ['period_id', 'customer_id', 'account_id']
+  Striker.setIndex 'conversionForecast', ['stage_id', 'channel_id', 'period_id']
+  Striker.setIndex 'conversionSummary', ['stage_id', 'channel_id', 'period_id']
+
+  Striker.setSchemaMap (key) ->
+    switch key
+      when 'channel_id'  then app.channels.models
+      when 'customer_id' then app.customers.models
+      when 'period_id'   then app.periods.models
+
+  app.reach           = init('strikers/reach')
+  app.customerRevenue = init('strikers/customer_revenue')
 
   # Init view
   switch location.pathname

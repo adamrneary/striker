@@ -1,15 +1,23 @@
-<div class="container">
-  <h1>Randomize Tests</h1>
+<div class="container" id="container">
+  <h1>Performance Tests</h1>
 
-  {{#each examples}}
-    <section>
-      <h3>{{title}}</h3>
-      <form class="form-horizontal" id="{{id}}">
-        <input class="input-xlarge" id="{{id}}Input" value="{{count}}">
-        <button type="submit" class="btn">Run</button>
-      </form>
-      <a href="#" class="clear pull-right", data-id="{{id}}">clear</a>
-      <pre id="{{id}}Results" class="test-results">No results</pre>
-    </section>
-  {{/each}}
+  <section>
+    <h3>Customer Revenue</h3>
+    <form class="form-horizontal" id="customerRevenue">
+      <input class="input-xlarge" id="customerRevenueInput" value="1000">
+      <button type="submit" class="btn">Run</button>
+    </form>
+    <a href="#" class="clear pull-right", data-id="customerRevenue">clear</a>
+    <pre id="customerRevenueResults" class="test-results">No results</pre>
+  </section>
+
+  <section>
+    <h3>Reach</h3>
+    <form class="form-horizontal" id="reach">
+      <input class="input-xlarge" id="reachInput" value="1000">
+      <button type="submit" class="btn">Run</button>
+    </form>
+    <a href="#" class="clear pull-right", data-id="reach">clear</a>
+    <pre id="reachResults" class="test-results">No results</pre>
+  </section>
 </div>
