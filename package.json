@@ -12,9 +12,7 @@
   },
   "dependencies": {
     "showcase": "~0.2.5",
-    "coffee-script": "~1.6.2"
-  },
-  "devDependencies": {
+    "coffee-script": "~1.6.2",
     "brunch": "~1.6.2",
     "javascript-brunch": "~1.5.1",
     "coffee-script-brunch": "~1.5.1",
