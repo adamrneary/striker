@@ -55,40 +55,40 @@ describe 'customer revenue', ->
     describe 'get', ->
       it 'calculates values for a single customer and period', ->
         result = app.customerRevenue.get('customer1', 'this-month')
-        expect(result.actual).toEqual 100 + 200
-        expect(result.plan).toBeUndefined()
-        expect(result.variance).toBeUndefined()
+        expect(result.actual).equal 100 + 200
+        expect(result.plan).equal(undefined)
+        expect(result.variance).equal(undefined)
 
       it 'contains nothing for future months', ->
         result = app.customerRevenue.get('customer1', 'next-month')
-        expect(result.actual).toBeUndefined()
-        expect(result.plan).toBeUndefined()
-        expect(result.variance).toBeUndefined()
+        expect(result.actual).equal(undefined)
+        expect(result.plan).equal(undefined)
+        expect(result.variance).equal(undefined)
 
       it 'returns an array of objects (all periods) by default', ->
         result = app.customerRevenue.flat()
-        expect(_.isArray(result)).toBeTruthy()
-        expect(_.size(result)).toEqual 12
+        expect(_.isArray(result)).equal(true)
+        expect(_.size(result)).equal 12
 
-        expect(result[0]['customer_id']).toEqual 'customer1'
-        expect(result[0]['period_id']).toEqual 'last-month'
-        expect(result[0]['actual']).toEqual 100
-        expect(result[0]['plan']).toBeUndefined()
-        expect(result[0]['variance']).toBeUndefined()
-        expect(result[1]['customer_id']).toEqual 'customer1'
-        expect(result[1]['period_id']).toEqual 'this-month'
-        expect(result[1]['actual']).toEqual (100+200)
-        expect(result[1]['plan']).toBeUndefined()
-        expect(result[1]['variance']).toBeUndefined()
+        expect(result[0]['customer_id']).equal 'customer1'
+        expect(result[0]['period_id']).equal 'last-month'
+        expect(result[0]['actual']).equal 100
+        expect(result[0]['plan']).equal(undefined)
+        expect(result[0]['variance']).equal(undefined)
+        expect(result[1]['customer_id']).equal 'customer1'
+        expect(result[1]['period_id']).equal 'this-month'
+        expect(result[1]['actual']).equal (100+200)
+        expect(result[1]['plan']).equal(undefined)
+        expect(result[1]['variance']).equal(undefined)
 
       it 'returns object with all periods for customer', ->
         result = app.customerRevenue.get('customer1')
-        expect(_.size(result)).toEqual 4
+        expect(_.size(result)).equal 4
 
         lastMonth = result['last-month']
-        expect(lastMonth.actual).toEqual 100
-        expect(lastMonth.plan).toBeUndefined()
-        expect(lastMonth.variance).toBeUndefined()
+        expect(lastMonth.actual).equal 100
+        expect(lastMonth.plan).equal(undefined)
+        expect(lastMonth.variance).equal(undefined)
 
     describe 'triggers', ->
       it 'responds to changes in financialSummary', ->
@@ -98,7 +98,7 @@ describe 'customer revenue', ->
         model.set(amount_cents: 123)
 
         result = app.customerRevenue.get('customer1', 'last-month')
-        expect(result.actual).toEqual 123
+        expect(result.actual).equal 123
 
   describe 'for customer', ->
     beforeEach ->
@@ -107,26 +107,26 @@ describe 'customer revenue', ->
     describe 'get', ->
       it 'calculates values for a single period', ->
         result = @customer.revenue 'this-month'
-        expect(result['actual']).toEqual 100 + 200
-        expect(result['plan']).toBeUndefined
-        expect(result['variance']).toBeUndefined
+        expect(result['actual']).equal 100 + 200
+        expect(result['plan']).equal(undefined)
+        expect(result['variance']).equal(undefined)
 
       it 'contains nothing for future months', ->
         result = @customer.revenue 'next-month'
-        expect(result['actual']).toBeUndefined
-        expect(result['plan']).toBeUndefined
-        expect(result['variance']).toBeUndefined
+        expect(result['actual']).equal(undefined)
+        expect(result['plan']).equal(undefined)
+        expect(result['variance']).equal(undefined)
 
       it 'returns an array of objects (all periods) by default', ->
         result = @customer.revenue()
-        expect(_.isArray(result)).toBeTruthy()
-        expect(_.size(result)).toEqual 4
+        expect(_.isArray(result)).equal(true)
+        expect(_.size(result)).equal 4
 
         lastMonth = result[0]
-        expect(lastMonth.period_id).toEqual 'last-month'
-        expect(lastMonth.actual).toEqual 100
-        expect(lastMonth.plan).toBeUndefined()
-        expect(lastMonth.variance).toBeUndefined()
+        expect(lastMonth.period_id).equal 'last-month'
+        expect(lastMonth.actual).equal 100
+        expect(lastMonth.plan).equal(undefined)
+        expect(lastMonth.variance).equal(undefined)
 
     describe 'triggers', ->
       it 'responds to changes in financialSummary', ->
@@ -136,4 +136,4 @@ describe 'customer revenue', ->
         model.set(amount_cents: 123)
 
         result = @customer.revenue 'last-month'
-        expect(result['actual']).toEqual 123
+        expect(result['actual']).equal 123

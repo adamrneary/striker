@@ -1,4 +1,4 @@
 describe 'Striker', ->
   it 'exists', ->
-    expect(Striker).toBeDefined()
-    expect(Striker.Collection).toBeDefined()
+    expect(Striker).exists
+    expect(Striker.Collection).exists

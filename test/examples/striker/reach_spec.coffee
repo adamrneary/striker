@@ -59,26 +59,26 @@ describe 'reach', ->
     describe 'get', ->
       it 'calculates values for a single channel and period', ->
         result = app.reach.get('channel1', 'last-month')
-        expect(result['actual']).toEqual 1
-        expect(result['plan']).toEqual 6
-        expect(result['variance']).toEqual (1-6)
+        expect(result['actual']).equal 1
+        expect(result['plan']).equal 6
+        expect(result['variance']).equal (1-6)
 
       it 'contains no "actual" or "variance" for future months', ->
         result = app.reach.get('channel1', 'next-month')
-        expect(result['actual']).toBeUndefined()
-        expect(result['plan']).toEqual 10
-        expect(result['variance']).toBeUndefined()
+        expect(result['actual']).equal(undefined)
+        expect(result['plan']).equal 10
+        expect(result['variance']).equal(undefined)
 
       it 'returns an array of objects (all periods) by default', ->
         result = app.reach.flat()
-        expect(_.isArray(result)).toBeTruthy()
-        expect(_.size(result)).toEqual 8
+        expect(_.isArray(result)).equal(true)
+        expect(_.size(result)).equal 8
 
-        expect(result[0]['channel_id']).toEqual 'channel1'
-        expect(result[0]['period_id']).toEqual 'last-month'
-        expect(result[0]['actual']).toEqual 1
-        expect(result[0]['plan']).toEqual 6
-        expect(result[0]['variance']).toEqual (1-6)
+        expect(result[0]['channel_id']).equal 'channel1'
+        expect(result[0]['period_id']).equal 'last-month'
+        expect(result[0]['actual']).equal 1
+        expect(result[0]['plan']).equal 6
+        expect(result[0]['variance']).equal (1-6)
 
     describe 'triggers', ->
       it 'responds to changes in conversionSummary', ->
@@ -88,9 +88,9 @@ describe 'reach', ->
         model.set(customer_volume: 2)
 
         result = app.reach.get('channel1', 'last-month')
-        expect(result['actual']).toEqual 2
-        expect(result['plan']).toEqual 6
-        expect(result['variance']).toEqual (2-6)
+        expect(result['actual']).equal 2
+        expect(result['plan']).equal 6
+        expect(result['variance']).equal (2-6)
 
       it 'responds to changes in conversionForecast', ->
         model = app.conversionForecast.findWhere(
@@ -99,9 +99,9 @@ describe 'reach', ->
         model.set(value: 9)
 
         result = app.reach.get('channel1', 'last-month')
-        expect(result['actual']).toEqual 1
-        expect(result['plan']).toEqual 9
-        expect(result['variance']).toEqual (1-9)
+        expect(result['actual']).equal 1
+        expect(result['plan']).equal 9
+        expect(result['variance']).equal (1-9)
 
   describe 'channel reach', ->
     beforeEach ->
@@ -110,24 +110,24 @@ describe 'reach', ->
     describe 'get', ->
       it 'calculates values for a single period', ->
         result = @channel.reach 'last-month'
-        expect(result['actual']).toEqual 1
-        expect(result['plan']).toEqual 6
-        expect(result['variance']).toEqual (1-6)
+        expect(result['actual']).equal 1
+        expect(result['plan']).equal 6
+        expect(result['variance']).equal (1-6)
 
       it 'contains no "actuals" for a future month', ->
         result = @channel.reach 'next-month'
-        expect(result['actual']).toBeUndefined
-        expect(result['plan']).toEqual 10
-        expect(result['variance']).toBeUndefined
+        expect(result['actual']).equal(undefined)
+        expect(result['plan']).equal 10
+        expect(result['variance']).equal(undefined)
 
       it 'returns an array of objects (all periods) by default', ->
         result = @channel.reach()
-        expect(_.isArray(result)).toBeTruthy()
-        expect(_.size(result)).toEqual 4
-        expect(result[0]['period_id']).toEqual 'last-month'
-        expect(result[0]['actual']).toEqual 1
-        expect(result[0]['plan']).toEqual 6
-        expect(result[0]['variance']).toEqual (1-6)
+        expect(_.isArray(result)).equal(true)
+        expect(_.size(result)).equal 4
+        expect(result[0]['period_id']).equal 'last-month'
+        expect(result[0]['actual']).equal 1
+        expect(result[0]['plan']).equal 6
+        expect(result[0]['variance']).equal (1-6)
 
     describe 'triggers', ->
       it 'responds to changes in conversionSummary', ->
@@ -137,9 +137,9 @@ describe 'reach', ->
         model.set(customer_volume: 2)
 
         result = @channel.reach 'last-month'
-        expect(result['actual']).toEqual 2
-        expect(result['plan']).toEqual 6
-        expect(result['variance']).toEqual (2-6)
+        expect(result['actual']).equal 2
+        expect(result['plan']).equal 6
+        expect(result['variance']).equal (2-6)
 
       it 'responds to changes in conversionForecast', ->
         model = app.conversionForecast.findWhere(
@@ -148,6 +148,6 @@ describe 'reach', ->
         model.set(value: 9)
 
         result = @channel.reach 'last-month'
-        expect(result['actual']).toEqual 1
-        expect(result['plan']).toEqual 9
-        expect(result['variance']).toEqual (1-9)
+        expect(result['actual']).equal 1
+        expect(result['plan']).equal 9
+        expect(result['variance']).equal (1-9)
