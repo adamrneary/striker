@@ -1,0 +1,32 @@
+<!doctype html>
+<html>
+  <head>
+    <title>Striker unit tests</title>
+    <!-- Vendors -->
+    <script src="vendor/js/jquery.js"></script>
+    <script src="vendor/js/underscore.js"></script>
+    <script src="vendor/js/backbone.js"></script>
+    <script src="vendor/js/moment.js"></script>
+
+    <!-- Test vendors -->
+    <link rel="stylesheet" href="vendor/test/mocha.css">
+    <script src="vendor/test/chai.js"></script>
+    <script src="vendor/test/mocha.js"></script>
+    <script src="/testem.js"></script>
+    <script src="assets/striker.js" data-cover></script>
+    <script src="assets/examples.js"></script>
+
+    <!-- Blanket -->
+    <script src="vendor/test/blanket.js" data-cover-only="striker"></script>
+    <script>mocha.setup('bdd');</script>
+
+    <!-- Include tests -->
+    <script src="assets/unit_tests.js"></script>
+  </head>
+  <body>
+    <div id="mocha"></div>
+    <script>
+      window.assert = chai.assert;
+    </script>
+  </body>
+</html>

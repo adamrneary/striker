@@ -1,22 +1,8 @@
 {
-  "framework": "jasmine",
-  "before_tests": "node -e 'require(\"grunt\").tasks(\"test\")'",
+  "test_page": "public/test_runner.html",
   "launch_in_ci": ["phantomjs"],
   "launch_in_dev": ["phantomjs"],
-  "src_files": [
-    "examples/**/*",
-    "src/**/*",
-    "test/**/*"
-  ],
   "serve_files": [
-    "public/vendor/js/jquery.js",
-    "public/vendor/js/underscore.js",
-    "public/vendor/js/backbone.js",
-    "public/vendor/js/moment.js",
-    "public/assets/striker.js",
-    "public/assets/examples.js",
-    "public/tests/striker_test.js",
-    "public/tests/examples/test_helper.js",
-    "public/tests/examples/striker.js"
+    "public/assets/*.js"
   ]
 }
