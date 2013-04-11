@@ -3,3 +3,6 @@ deployment:
     branch: master
     heroku:
       appname: striker-showcase
+machine:
+  node:
+    version: 0.10.3
