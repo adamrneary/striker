@@ -1,20 +1,16 @@
-app = require('showcase')(__dirname)
+app = require('showcase').app(__dirname)
 
-examples = [
-  { title: 'Channel Segment Mix', id: 'channelSegmentMix', count: 1000 }
-  { title: 'Initial volume',      id: 'initialVolume',     count: 1000 }
-  { title: 'Topline Growth',      id: 'toplineGrowth',     count: 1000 }
-  { title: 'Conversion rates',    id: 'conversionRates',   count: 1000 }
-  { title: 'Churn rates',         id: 'churnRates',        count: 1000 }
-]
-
-index = (req, res) ->
+app.get '/', (req, res) ->
   res.render 'examples/index'
 
-performance = (req, res) ->
+app.get '/performance', (req, res) ->
   res.render 'examples/performance',
-    examples: examples
+    examples: [
+      { title: 'Channel Segment Mix', id: 'channelSegmentMix', count: 1000 }
+      { title: 'Initial volume',      id: 'initialVolume',     count: 1000 }
+      { title: 'Topline Growth',      id: 'toplineGrowth',     count: 1000 }
+      { title: 'Conversion rates',    id: 'conversionRates',   count: 1000 }
+      { title: 'Churn rates',         id: 'churnRates',        count: 1000 }
+    ]
 
-app.setup 'coffee:src', ->
-  app.get('/', index)
-  app.get('/performance', performance)
+app.start()
