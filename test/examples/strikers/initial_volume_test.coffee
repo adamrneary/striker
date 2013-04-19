@@ -1,8 +1,7 @@
-describe 'InitialVolume', ->
-  beforeEach ->
-    window.init
-      collections: ['segments', 'channels', 'stages']
-      strikers: ['initial_volume']
+describe 'initial volume', ->
+  beforeEach -> init
+    collections: ['segments', 'channels', 'stages']
+    strikers: ['initial_volume']
 
   it "#get - returns value", ->
     expect(app.initialVolume.get(10292, 2, 6)).equal(12)

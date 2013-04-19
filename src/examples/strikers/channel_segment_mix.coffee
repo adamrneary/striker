@@ -1,3 +1,3 @@
 module.exports = class ChannelSegmentMix extends Striker.Collection
-  schema: ['channelId', 'segmentId']
+  schema: ['channel_id', 'segment_id']
   multiplier: 100
