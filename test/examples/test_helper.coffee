@@ -13,6 +13,8 @@ Striker.setSchemaMap (key) ->
     when 'channel_id'  then app.channels.models
     when 'customer_id' then app.customers.models
     when 'period_id'   then app.periods.models
+    when 'stage_id'    then app.stages.models
+    when 'segment_id'  then app.segments.models
 
 beforeEach ->
   window.app = {}

@@ -164,17 +164,18 @@ class Striker.Collection
   #   observers are turned on and values can be calculated.
   constructor: (options = {})->
     @inputs      = options.inputs || []
-    @collections = _.map @schema, schemaMap
-    @values      = @_initValues()
-    @_enableObserversAndBuild()
+    @collections = _.map(@schema, schemaMap)
+    @values      = @_initValues({}, @inputs, 0)
+    @_enableObserversAndBuild() if @calculate
 
+  # calculate: (args...) ->
+  #
   # Raw method for calculating a forecast value.
   # CRITICAL: Override this in each subclass.
   #
   # args - One or more attributes from @schema
   #
   # Returns value to cache (type may vary based on what you wish to cache)
-  calculate: (args...) ->
 
   # Check that collection has period_id attribute
   #
@@ -281,16 +282,16 @@ class Striker.Collection
   # Attributes used for recursive callbacks
   #
   # Returns object with structured data
-  _initValues: (values = {}, inputs = @inputs, level = 0) ->
-    if @collections[level]
-      for item, order in @collections[level]
-        value = inputs[order] ? 0
-        if @schema
-          if level is @schema.length - 1
-            values[item.id] = value
-          else
-            values[item.id] = {}
-            @_initValues(values[item.id], value, level + 1)
+  _initValues: (values, inputs, level) ->
+    return unless @collections[level]
+
+    for item, order in @collections[level]
+      value = inputs[order] ? 0
+      if level is @schema.length - 1
+        values[item.id] = value
+      else
+        values[item.id] = {}
+        @_initValues(values[item.id], value, level + 1)
     values
 
   # Builds values for every element

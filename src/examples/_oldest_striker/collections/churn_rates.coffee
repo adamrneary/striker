@@ -1,3 +1,3 @@
-class App.Collections.ChurnRates extends Striker.Collection
+module.exports = class ChurnRates extends Striker.Collection
   schema: ['segmentId', 'monthId']
   multiplier: 100

@@ -1,1 +1,0 @@
-class App.Collections.Segments extends Backbone.Collection

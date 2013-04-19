@@ -1,1 +1,1 @@
-class App.Collections.Months extends Backbone.Collection
+module.exports = class Months extends Backbone.Collection

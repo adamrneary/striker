@@ -1,2 +1,2 @@
-class App.Collections.ToplineGrowth extends Striker.Collection
+module.exports = class ToplineGrowth extends Striker.Collection
   schema: ['channelId', 'monthId']

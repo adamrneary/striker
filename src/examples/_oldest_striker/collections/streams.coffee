@@ -1,1 +1,1 @@
-class App.Collections.Streams extends Backbone.Collection
+module.exports = class Streams extends Backbone.Collection

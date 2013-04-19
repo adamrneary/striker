@@ -7,4 +7,4 @@ exports.config = defaultConfig
       joinTo:
         'assets/striker.js'    : path('src/striker.coffee')
         'assets/examples.js'   : path('src/examples/*')
-        'assets/unit_tests.js' : path('test/*')
+        'assets/unit_tests.js' : path('test/examples/*', 'test/striker_test.coffee')

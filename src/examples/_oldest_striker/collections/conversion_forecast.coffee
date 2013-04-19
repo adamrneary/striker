@@ -1,4 +1,4 @@
-class App.Collections.ConversionForecast extends Striker.Collection
+module.exports = class ConversionForecast extends Striker.Collection
   schema: ['stageId', 'channelId', 'segmentId', 'monthId']
 
   triggers:
