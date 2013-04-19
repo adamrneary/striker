@@ -162,20 +162,18 @@ class Striker.Collection
   # Note: Pass no data if the collection will be populated by calcuations
   #   In this case, the collection will be initialized with 0 values until
   #   observers are turned on and values can be calculated.
-  constructor: (options = {})->
-    @inputs      = options.inputs || []
+  constructor: (@inputs = [])->
     @collections = _.map(@schema, schemaMap)
     @values      = @_initValues({}, @inputs, 0)
-    @_enableObserversAndBuild() if @calculate
+    @_enableObserversAndBuild() unless @inputs.length
 
-  # calculate: (args...) ->
-  #
   # Raw method for calculating a forecast value.
   # CRITICAL: Override this in each subclass.
   #
   # args - One or more attributes from @schema
   #
   # Returns value to cache (type may vary based on what you wish to cache)
+  calculate: (args...) ->
 
   # Check that collection has period_id attribute
   #

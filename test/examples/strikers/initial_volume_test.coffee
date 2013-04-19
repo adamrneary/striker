@@ -1,15 +1,8 @@
-inputs        = require('examples/inputs')
-InitialVolume = require('examples/strikers/initial_volume')
-Segments      = require('examples/collections/segments')
-Channels      = require('examples/collections/segments')
-Stages        = require('examples/collections/segments')
-
 describe 'InitialVolume', ->
   beforeEach ->
-    app.segments      = new Segments(inputs.segments)
-    app.channels      = new Channels(inputs.channels)
-    app.stages        = new Stages(inputs.stages)
-    app.initialVolume = new InitialVolume(inputs: inputs.initialVolume)
+    window.init
+      collections: ['segments', 'channels', 'stages']
+      strikers: ['initial_volume']
 
   it "#get - returns value", ->
     expect(app.initialVolume.get(10292, 2, 6)).equal(12)
