@@ -80,6 +80,20 @@ describe 'reach', ->
         expect(result[0]['plan']).equal 6
         expect(result[0]['variance']).equal (1-6)
 
+    describe 'reversedSchemaValues', ->
+      beforeEach ->
+        @result = app.reach.reversedSchemaValues()
+
+      it 'has periodIds at the top key of the returned collection', ->
+        expect(_.size(@result)).equal 4
+        _.map _.pluck(app.periods.models, 'id'), (pId) =>
+          expect(@result[pId]).to.be.an('object')
+
+      it 'has channelId as the lowest level key', ->
+        expect(@result['this-month'].channel1.actual).equal 3
+        expect(@result['this-month'].channel1.plan).equal 8
+        expect(@result['this-month'].channel2.period_id).equal "this-month"
+
     describe 'triggers', ->
       it 'responds to changes in conversionSummary', ->
         model = app.conversionSummary.findWhere(
