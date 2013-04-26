@@ -1,3 +1,11 @@
+describe 'conversion forecast', ->
+  beforeEach -> init
+    collections: ['channels', 'segments', 'periods']
+    strikers: ['churn_rates']
+
+  it "#get - returns value", ->
+    expect(app.churnRates.get(7, 16)).equal(0.42)
+
 describe 'ConversionForecast', ->
   collection = app.conversionForecast
 

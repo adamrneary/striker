@@ -49,7 +49,7 @@ module.exports =
     {id: 31}, {id: 32}, {id: 33},
     {id: 34}, {id: 35}, {id: 36}
   ]
-  # [channel_index][segment_index] is a percentage
+  # [channel_id][segment_id] is a percentage
   channelSegmentMix: [
     [100,0,0],
     [25,25,50],
@@ -57,7 +57,7 @@ module.exports =
     [20,40,40],
     [30,5,65]
   ]
-  # [stage_index][channel_index][segment_index] is an integer
+  # [stage_id][channel_id][segment_id] is an integer
   initialVolume: [
     [
       [4,14,15],
@@ -81,7 +81,7 @@ module.exports =
       [8,14,4]
     ]
   ]
-  # [channel_index][monthId] is an integer
+  # [channel_id][period_id] is an integer
   toplineGrowth: [
     [4,4,4,17,17,7,7,4,12,18,4,1,15,3,18,18,16,8,14,
      20,4,17,11,18,17,20,13,12,1,12,16,0,3,13,2,0]
@@ -94,7 +94,7 @@ module.exports =
     [5,6,1,16,3,16,6,8,3,12,17,12,15,8,15,12,3,14,
      15,18,0,9,0,17,17,13,3,0,15,3,10,5,7,17,9,9]
   ]
-  # [stage_index][channel_index][monthId] is a percentage
+  # [stage_id][channel_id][period_id] is a percentage
   conversionRates: [
     [
       [46,66,47,21,4,68,44,43,20,43,63,71,0,7,78,69,67,
@@ -121,7 +121,7 @@ module.exports =
        86,57,77,7,91,93,31,14,90,1,49,78,17,3,6,33,11,72,99,79]
     ]
   ]
-  # [segment_index][monthId] is a percentage
+  # [segment_id][period_id] is a percentage
   churnRates: [
     [100,76,64,87,83,16,35,38,41,80,86,66,36,11,61,42,
      58,28,58,82,64,73,24,23,66,97,43,40,39,100,79,96,85,71,15,47]

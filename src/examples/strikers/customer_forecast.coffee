@@ -1,5 +1,5 @@
 module.exports = class CustomerForecast extends Striker.Collection
-  schema: ['channelId', 'segmentId', 'monthId']
+  schema: ['channel_id', 'segment_id', 'period_id']
 
   triggers:
     churnForecast: (args) ->
