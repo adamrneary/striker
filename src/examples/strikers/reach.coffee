@@ -11,7 +11,7 @@ module.exports = class Reach extends Striker.Collection
 
   indexes:
     'conversionForecast': ['stage_id', 'channel_id', 'period_id']
-    'conversionSummary':  ['stage_id', 'channel_id', 'period_id']
+    'conversionSummary':  ['stage_id', 'period_id', 'channel_id']
 
   observers:
     conversionSummary:  observer('customer_volume')
@@ -20,7 +20,7 @@ module.exports = class Reach extends Striker.Collection
   calculate: (channelId, periodId) ->
     toplineId          = app.channels.toplineId()
     isFuture           = app.periods.isFuture(periodId)
-    conversionSummary  = Striker.query('conversionSummary',  stage_id: toplineId, channel_id: channelId, period_id: periodId)
+    conversionSummary  = Striker.query('conversionSummary',  stage_id: toplineId, period_id: periodId, channel_id: channelId)
     conversionForecast = Striker.query('conversionForecast', stage_id: toplineId, channel_id: channelId, period_id: periodId)
 
     result = {}

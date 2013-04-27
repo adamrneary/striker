@@ -372,7 +372,7 @@ Striker.getKeys = (attrs) ->
   keys = [[]]
   for value in _.values(attrs)
     if _.isArray(value)
-      # dublicate current keys to newKeys
+      # double current keys to newKeys and add subValue
       newKeys = []
       for key in keys
         for subValue in value
