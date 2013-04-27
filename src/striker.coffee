@@ -25,6 +25,9 @@ Striker.setSchemaMap = (cb) ->
 # Setup with Striker.setIndex
 Striker.index = {}
 
+# Redefine this method in production
+Striker.warn = _.bind(console.warn, console)
+
 # Striker.Collection
 # ------------------
 #
@@ -170,12 +173,15 @@ class Striker.Collection
   # Note: Pass no data if the collection will be populated by calcuations
   #   In this case, the collection will be initialized with 0 values until
   #   observers are turned on and values can be calculated.
-  constructor: (options = {})->
+  constructor: (options = {}) ->
+    startTime    = moment()
     @inputs      = options.inputs || []
     @collections = _.map @schema, schemaMap
     @values      = @_initValues()
     @_initIndexes()
     @_enableObserversAndBuild()
+    if (endTime = moment() - startTime) > 100
+      Striker.warn("Striker: #{@constructor.name} init #{endTime}ms")
 
   # Raw method for calculating a forecast value.
   # CRITICAL: Override this in each subclass.
@@ -324,7 +330,7 @@ class Striker.Collection
   _initIndexes: (indexName, collectionName, schema) ->
     _.forEach @indexes, (schema, collectionName) ->
       name  = collectionName + ':' + schema.join('_')
-      console.warn("Striker: index #{name} is already exists") if Striker.index[name]
+      return if Striker.index[name]
 
       index = app[collectionName].groupBy (item) ->
         _.map schema, (key) -> item.get(key)
