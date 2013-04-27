@@ -20,8 +20,8 @@ module.exports = class Reach extends Striker.Collection
   calculate: (channelId, periodId) ->
     toplineId          = app.channels.toplineId()
     isFuture           = app.periods.isFuture(periodId)
-    conversionSummary  = Striker.query('conversionSummary',  stage_id: toplineId, period_id: periodId, channel_id: channelId)
-    conversionForecast = Striker.query('conversionForecast', stage_id: toplineId, channel_id: channelId, period_id: periodId)
+    conversionSummary  = Striker.where('conversionSummary',  stage_id: toplineId, period_id: periodId, channel_id: channelId)
+    conversionForecast = Striker.where('conversionForecast', stage_id: toplineId, channel_id: channelId, period_id: periodId)
 
     result = {}
     result.actual   = Striker.sum(conversionSummary, 'customer_volume') unless isFuture

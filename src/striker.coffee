@@ -11,7 +11,7 @@ else
   Striker = window.Striker = {}
 
 # Current version of the library.
-Striker.VERSION = '0.5.0'
+Striker.VERSION = '0.5.1'
 
 # Setup schema mapping in order to work
 # with Striker.Collection.prototype.schema
@@ -22,7 +22,6 @@ Striker.setSchemaMap = (cb) ->
   schemaMap = cb
 
 # Group-by indexes for Backbone.Collections
-# Setup with Striker.setIndex
 Striker.index = {}
 
 # Redefine this method in production
@@ -349,7 +348,17 @@ Striker.addAnalysis = (Model, methodName, options = {}) ->
     else
       analysis.flat(1, [@id])
 
-# Use this method for fast filtering
+# Super fast linear filter,
+# same semantic as Backbone.Collection.prototype.where
+Striker.where = (collectionName, attrs) ->
+  indexName = Striker.getIndexName(collectionName, _.keys(attrs))
+  if Striker.index[indexName]
+    key = _.values(attrs).join()
+    Striker.index[indexName][key] ? []
+  else
+    app[collectionName].where(attrs)
+
+# Use this method for query with arrays
 Striker.query = (collectionName, attrs) ->
   indexName = Striker.getIndexName(collectionName, _.keys(attrs))
   if Striker.index[indexName]
@@ -357,7 +366,13 @@ Striker.query = (collectionName, attrs) ->
     values = _.map keys, (key) -> Striker.index[indexName][key]
     _.flatten(_.compact(values))
   else
-    Striker.where(app[collectionName], attrs)
+    app[collectionName].filter (model) ->
+      for key of attrs
+        if _.isArray(attrs[key])
+          return false unless _.include(attrs[key], model.get(key))
+        else
+          return false unless attrs[key] is model.get(key)
+      true
 
 # Calculate sum of array by field
 Striker.sum = (array, field) ->
@@ -383,12 +398,3 @@ Striker.getKeys = (attrs) ->
       key.push(value) for key in keys
 
   (key.join() for key in keys)
-
-Striker.where = (collection, attrs) ->
-  collection.filter (model) ->
-    for key of attrs
-      if _.isArray(attrs[key])
-        return false unless _.include(attrs[key], model.get(key))
-      else
-        return false unless attrs[key] is model.get(key)
-    true
