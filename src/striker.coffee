@@ -11,7 +11,7 @@ else
   Striker = window.Striker = {}
 
 # Current version of the library.
-Striker.VERSION = '0.3.2'
+Striker.VERSION = '0.4.0'
 
 # Setup schema mapping in order to work
 # with Striker.Collection.prototype.schema
@@ -125,14 +125,22 @@ class Striker.Collection
   #
   schema: []
 
+  # Observers and event handling
+  # ============================
   # Object with functions which called when object was changed.
   # CRITICAL: Override this in each subclass.
   #
   # key   - collection name
   # value - function taking filter args Object as param
-  #
-  # Example
   observers: {}
+
+  # Indexes
+  # =======
+  # Useful to improve performance of Striker.where
+  #
+  #     indexes:
+  #       'financialSummary': ['period_id', 'customer_id', 'account_id']
+  indexes: {}
 
   # Builds striker based on inputs (optionally) and schema
   #
@@ -166,6 +174,7 @@ class Striker.Collection
     @inputs      = options.inputs || []
     @collections = _.map @schema, schemaMap
     @values      = @_initValues()
+    @_initIndexes()
     @_enableObserversAndBuild()
 
   # Raw method for calculating a forecast value.
@@ -248,8 +257,8 @@ class Striker.Collection
   update: (args...) ->
     @set @calculate(args...), args...
 
-  # bulk return
-  # ------------------
+  # Bulk return
+  # ===========
   flat: (level = 0, args = [], result = []) ->
     for item in @collections[level]
       args[level] = item.id
@@ -261,8 +270,8 @@ class Striker.Collection
         result.push _.extend(object, @get.apply(@, args))
     result
 
-  # observers and event handling
-  # ------------------
+  # Internal methods
+  # ----------------
 
   # Setup collection observers based on @observers property.
   # Name `this` uses for self reference
@@ -303,7 +312,6 @@ class Striker.Collection
         @_build(level + 1, args)
 
   # Private: pass changed attributes to observer
-  #
   # Returns trigger function
   _wrapCallback: (defaultCallback) ->
     (model, args, value) ->
@@ -311,6 +319,17 @@ class Striker.Collection
         defaultCallback.call(@, model, model.changed)
       else
         defaultCallback.call(@, model, args, value)
+
+  # Add observable index to Striker.index
+  _initIndexes: (indexName, collectionName, schema) ->
+    _.forEach @indexes, (schema, collectionName) ->
+      name  = collectionName + ':' + schema.join('_')
+      console.warn("Striker: index #{name} is already exists") if Striker.index[name]
+
+      index = app[collectionName].groupBy (item) ->
+        _.map schema, (key) -> item.get(key)
+
+      Striker.index[name] = index
 
 # Extend model with existing analysis
 Striker.addAnalysis = (Model, methodName, options = {}) ->
@@ -321,25 +340,16 @@ Striker.addAnalysis = (Model, methodName, options = {}) ->
     else
       analysis.flat(1, [@id])
 
-# Add observable index to Striker.index
-# Useful to improve performance of Striker.where
-#
-# Examples:
-#
-#     Striker.setIndex 'financialSummary', ['period_id', 'customer_id', 'account_id']
-Striker.setIndex = (collectionName, schema) ->
-  index = app[collectionName].groupBy (item) ->
-    _.map schema, (key) -> item.get(key)
-
-  Striker.index[collectionName] = index
-
+# Use this method for fast filtering
 Striker.where = (collectionName, attrs) ->
-  if Striker.index[collectionName]
+  indexName = collectionName + ':' + _.keys(attrs).join('_')
+  if Striker.index[indexName]
     key = _.values(attrs).join()
-    Striker.index[collectionName][key] ? []
+    Striker.index[indexName][key] ? []
   else
     app[collectionName].where(attrs)
 
+# Calculate sum of array by field
 Striker.sum = (array, field) ->
   _.reduce array, (memo, item) ->
     memo += item.get(field)

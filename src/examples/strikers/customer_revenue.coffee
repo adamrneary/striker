@@ -1,6 +1,9 @@
 module.exports = class Revenue extends Striker.Collection
   schema: ['customer_id', 'period_id']
 
+  indexes:
+    'financialSummary': ['period_id', 'customer_id', 'account_id']
+
   observers:
     financialSummary: (model, changed) ->
       # see only updates for revenue accounts

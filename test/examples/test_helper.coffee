@@ -15,4 +15,5 @@ Striker.setSchemaMap (key) ->
     when 'period_id'   then app.periods.models
 
 beforeEach ->
-  window.app = {}
+  window.app    = {}
+  Striker.index = {}

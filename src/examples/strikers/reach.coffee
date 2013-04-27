@@ -9,6 +9,10 @@ observer = (value) ->
 module.exports = class Reach extends Striker.Collection
   schema: ['channel_id', 'period_id']
 
+  indexes:
+    'conversionForecast': ['stage_id', 'channel_id', 'period_id']
+    'conversionSummary':  ['stage_id', 'channel_id', 'period_id']
+
   observers:
     conversionSummary:  observer('customer_volume')
     conversionForecast: observer('value')
