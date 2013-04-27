@@ -11,7 +11,7 @@ else
   Striker = window.Striker = {}
 
 # Current version of the library.
-Striker.VERSION = '0.4.0'
+Striker.VERSION = '0.5.0'
 
 # Setup schema mapping in order to work
 # with Striker.Collection.prototype.schema
@@ -329,13 +329,16 @@ class Striker.Collection
   # Add observable index to Striker.index
   _initIndexes: (indexName, collectionName, schema) ->
     _.forEach @indexes, (schema, collectionName) ->
-      name  = collectionName + ':' + schema.join('_')
+      name = Striker.getIndexName(collectionName, schema)
       return if Striker.index[name]
 
       index = app[collectionName].groupBy (item) ->
         _.map schema, (key) -> item.get(key)
 
       Striker.index[name] = index
+
+# Calculate helpers
+# -----------------
 
 # Extend model with existing analysis
 Striker.addAnalysis = (Model, methodName, options = {}) ->
@@ -347,16 +350,45 @@ Striker.addAnalysis = (Model, methodName, options = {}) ->
       analysis.flat(1, [@id])
 
 # Use this method for fast filtering
-Striker.where = (collectionName, attrs) ->
-  indexName = collectionName + ':' + _.keys(attrs).join('_')
+Striker.query = (collectionName, attrs) ->
+  indexName = Striker.getIndexName(collectionName, _.keys(attrs))
   if Striker.index[indexName]
-    key = _.values(attrs).join()
-    Striker.index[indexName][key] ? []
+    keys   = Striker.getKeys(attrs)
+    values = _.map keys, (key) -> Striker.index[indexName][key]
+    _.flatten(_.compact(values))
   else
-    app[collectionName].where(attrs)
+    Striker.where(app[collectionName], attrs)
 
 # Calculate sum of array by field
 Striker.sum = (array, field) ->
   _.reduce array, (memo, item) ->
     memo += item.get(field)
   , 0
+
+Striker.getIndexName = (name, attrs) ->
+  name + ':' + attrs.join('_')
+
+Striker.getKeys = (attrs) ->
+  keys = [[]]
+  for value in _.values(attrs)
+    if _.isArray(value)
+      # dublicate current keys to newKeys
+      newKeys = []
+      for key in keys
+        for subValue in value
+          newKeys.push _.clone(key)
+          _.last(newKeys).push(subValue)
+      keys = newKeys
+    else
+      key.push(value) for key in keys
+
+  (key.join() for key in keys)
+
+Striker.where = (collection, attrs) ->
+  collection.filter (model) ->
+    for key of attrs
+      if _.isArray(attrs[key])
+        return false unless _.include(attrs[key], model.get(key))
+      else
+        return false unless attrs[key] is model.get(key)
+    true
