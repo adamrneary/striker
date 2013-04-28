@@ -24,8 +24,12 @@ Striker.setSchemaMap = (cb) ->
 # Group-by indexes for Backbone.Collections
 Striker.index = {}
 
+# Show striker warnings
 # Redefine this method in production
-Striker.warn = _.bind(console.warn, console)
+warnings = {}
+Striker.warn = (text) ->
+  console.warn(text) unless warnings[text]
+  warnings[text] = true
 
 # Striker.Collection
 # ------------------
@@ -179,6 +183,7 @@ class Striker.Collection
     @values      = @_initValues()
     @_initIndexes()
     @_enableObserversAndBuild()
+
     if (endTime = moment() - startTime) > 100
       Striker.warn("Striker: #{@constructor.name} init #{endTime}ms")
 
@@ -332,7 +337,7 @@ class Striker.Collection
       return if Striker.index[name]
 
       index = app[collectionName].groupBy (item) ->
-        _.map schema, (key) -> item.get(key)
+        _.map schema.sort(), (key) -> item.get(key)
 
       Striker.index[name] = index
 
@@ -356,6 +361,7 @@ Striker.where = (collectionName, attrs) ->
     key = Striker.getValues(attrs).join()
     Striker.index[indexName][key] ? []
   else
+    Striker.warn("Striker: no index for #{indexName}")
     app[collectionName].where(attrs)
 
 # Use this method for query with arrays
@@ -366,6 +372,7 @@ Striker.query = (collectionName, attrs) ->
     values = _.map keys, (key) -> Striker.index[indexName][key]
     _.flatten(_.compact(values))
   else
+    Striker.warn("Striker: no index for #{indexName}")
     app[collectionName].filter (model) ->
       for key of attrs
         if _.isArray(attrs[key])
