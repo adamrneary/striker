@@ -24,6 +24,8 @@ module.exports = class Reach extends Striker.Collection
     conversionForecast = Striker.where('conversionForecast', stage_id: toplineId, channel_id: channelId, period_id: periodId)
 
     result = {}
+    result.period_id  = periodId # just for convenience
+    result.channel_id = channelId
     result.actual   = Striker.sum(conversionSummary, 'customer_volume') unless isFuture
     result.plan     = Striker.sum(conversionForecast, 'value')
     result.variance = result.actual - result.plan unless isFuture

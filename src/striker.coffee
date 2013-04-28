@@ -1,5 +1,4 @@
 # Bad-ass, greasy-fast, cached calculated collections
-#
 # (c) 2013 Adam Neary & Aleksey Kulikov, Profitably Inc.
 
 # The top-level namespace. All public Striker classes and modules will
@@ -18,6 +17,8 @@ Striker.VERSION = '0.5.3'
 schemaMap = ->
   throw new Error('Setup your striker mapping with Striker.setSchemaMap')
 
+# Setup schema mapping in order to work
+# with Striker.Collection.prototype.schema
 Striker.setSchemaMap = (cb) ->
   schemaMap = cb
 
@@ -54,60 +55,59 @@ Striker.setCache = (cb) ->
 #
 # Examples
 #
-#     class ConversionRates extends Striker.Collection
-#       schema: ['stage_id', 'channel_id', 'period_id']
-#       multiplier: 100
-#       triggers:
-#         toplineGrowth: (args) ->
-#           l("toplineGrowth changed with channel: #{args.channel_id}")
+#   class ConversionRates extends Striker.Collection
+#     schema: ['stage_id', 'channel_id', 'period_id']
+#     multiplier: 100
+#     triggers:
+#       toplineGrowth: (args) ->
+#         l("toplineGrowth changed with channel: #{args.channel_id}")
 #
-#     conversionRates = new ConversionRates()
-#     conversionRates.collections
-#     => [
-#          Array[stages.length]
-#          Array[channels.length]
-#          Array[months.length]
-#        ]
+#   conversionRates = new ConversionRates()
+#   conversionRates.collections
+#   # =>  [
+#           Array[stages.length]
+#           Array[channels.length]
+#           Array[months.length]
+#         ]
 #
-#     conversionRates.values
-#     => object with data
-#     2: # stage id
-#       1: # channel id, contains values for every month
-#         1:  70 # first month id with value
-#         2:  17 # second month id with value
-#         #   ...
-#         36: 27 # last month id with value
-#       2:
-#         1:  46
-#         2:  66
-#         #   ...
-#         36: 14
-#       # other channels with data for stage with id = 2
-#     3: # another stage id
-#       1: # channels for another stage
-#         1:  16
-#         #   ...
-#         36: 34
-#       # other channels with data for stage with id = 3
-#     # other stages...
+#   conversionRates.values
+#   # => object with data
+#   2: # stage id
+#     1: # channel id, contains values for every month
+#       1:  70 # first month id with value
+#       2:  17 # second month id with value
+#       #   ...
+#       36: 27 # last month id with value
+#     2:
+#       1:  46
+#       2:  66
+#       #   ...
+#       36: 14
+#     # other channels with data for stage with id = 2
+#   3: # another stage id
+#     1: # channels for another stage
+#       1:  16
+#       #   ...
+#       36: 34
+#     # other channels with data for stage with id = 3
+#   # other stages...
 #
-#     # Get value for stage_id = 2 and channel_id = 1 and period_id = 36
-#     conversionRates.get(2, 1, 36)
-#     => 27
+#   # Get value for stage_id = 2 and channel_id = 1 and period_id = 36
+#   conversionRates.get(2, 1, 36)
+#   # => 27
 #
-#     # Set 75% for stage_id = 3, channel_id = 1 and period_id = 1
-#     conversionRates.set(75, 3, 1, 1)
+#   # Set 75% for stage_id = 3, channel_id = 1 and period_id = 1
+#   conversionRates.set(75, 3, 1, 1)
 #
-#     conversionRates.isTimeSeries()
-#     => true
+#   conversionRates.isTimeSeries()
+#   # => true
 #
-#     conversionForecast.enableTriggers()
-#     app.toplineGrowth.set(5, 1, 2, 3)
-#     => 'toplineGrowth changed with channel: 2'
-
+#   conversionForecast.enableTriggers()
+#   app.toplineGrowth.set(5, 1, 2, 3)
+#   # => 'toplineGrowth changed with channel: 2'
 class Striker.Collection
 
-  # Include methods from Backbone.Events for binding support
+# Include methods from Backbone.Events for binding support
   _.extend(@::, Backbone.Events)
 
   # Set default multiplier to 1 to avoid altering data unless requested
@@ -121,21 +121,21 @@ class Striker.Collection
   #
   # Example
   #
-  #     Striker.setSchemaMap (key) ->
-  #       stage_id:   app.stages
-  #       channel_id: app.channels
-  #       period_id:  app.months
+  #   Striker.setSchemaMap (key) ->
+  #     stage_id:   app.stages
+  #     channel_id: app.channels
+  #     period_id:  app.months
   #
-  #     class ConversionRates extends Striker.Collection
-  #       schema: ['stage_id', 'channel_id', 'period_id']
+  #   class ConversionRates extends Striker.Collection
+  #     schema: ['stage_id', 'channel_id', 'period_id']
   #
-  #     conversionRates = new ConversionRates()
-  #     conversionRates.collections
-  #     => [
-  #          Array[stages.length]
-  #          Array[channels.length]
-  #          Array[months.length]
-  #        ]
+  #   conversionRates = new ConversionRates()
+  #   conversionRates.collections
+  #   # =>  [
+  #           Array[stages.length]
+  #           Array[channels.length]
+  #           Array[months.length]
+  #         ]
   #
   schema: []
 
@@ -164,22 +164,22 @@ class Striker.Collection
   #
   # Examples
   #
-  #     class ChannelSegmentMix extends Striker.Collection
-  #       schema: ['channel_id', 'segment_id']
+  #   class ChannelSegmentMix extends Striker.Collection
+  #     schema: ['channel_id', 'segment_id']
   #
-  #     app.channels.length
-  #     => 5
-  #     app.segments.length
-  #     => 3
+  #   app.channels.length
+  #   # => 5
+  #   app.segments.length
+  #   # => 3
   #
-  #     data: [
-  #       [100,0,0]
-  #       [25,25,50]
-  #       [0,100,0]
-  #       [20,40,40]
-  #       [30,5,65]
-  #     ]
-  #     channelSegmentMix = new ChannelSegmentMix(data)
+  #   data: [
+  #     [100,0,0]
+  #     [25,25,50]
+  #     [0,100,0]
+  #     [20,40,40]
+  #     [30,5,65]
+  #   ]
+  #   channelSegmentMix = new ChannelSegmentMix(data)
   #
   # Note: Pass no data if the collection will be populated by calcuations
   #   In this case, the collection will be initialized with 0 values until
@@ -203,9 +203,9 @@ class Striker.Collection
   # Returns value to cache (type may vary based on what you wish to cache)
   calculate: (args...) ->
 
-  # Check that collection has period_id attribute
-  #
-  # Returns true or false
+    # Check that collection has period_id attribute
+    #
+    # Returns true or false
   isTimeSeries: ->
     _.last(@schema) is @timeSeriesIdentifier
 
@@ -220,11 +220,11 @@ class Striker.Collection
   #
   # Examples
   #
-  #     conversionRates.get(2, 1, 1)
-  #     => 70
+  #   conversionRates.get(2, 1, 1)
+  #   # => 70
   #
-  #     conversionRates.get(2, 1)
-  #     => {1: 70, 2: 17, ..., 36: 27}
+  #   conversionRates.get(2, 1)
+  #   # => {1: 70, 2: 17, ..., 36: 27}
   #
   # Returns value or object with group of values
   get: (args...) ->
@@ -241,9 +241,9 @@ class Striker.Collection
   #
   # Examples
   #
-  #     conversionRates.set(45, 2, 1, 1)
-  #     conversionRates.get(2, 1, 1)
-  #     => 45
+  #   conversionRates.set(45, 2, 1, 1)
+  #   conversionRates.get(2, 1, 1)
+  #   # => 45
   #
   # Returns nothing.
   set: (value, args...) ->
@@ -263,13 +263,13 @@ class Striker.Collection
   #
   # Examples
   #
-  #     conversionRates.get(2, 1)
-  #     => 10
-  #     conversionRates.calculate(2, 1)
-  #     => 12
-  #     conversionRates.update(2, 1)
-  #     conversionRates.get(2, 1)
-  #     => 12
+  #   conversionRates.get(2, 1)
+  #   # => 10
+  #   conversionRates.calculate(2, 1)
+  #   # => 12
+  #   conversionRates.update(2, 1)
+  #   conversionRates.get(2, 1)
+  #   # => 12
   #
   # Returns nothing
   update: (args...) ->
@@ -354,6 +354,31 @@ class Striker.Collection
             @_initValues(values[item.id], value, level + 1)
     values
 
+  # Returns same thing as .get() would but with reversed schema
+  # This doesn't modify any of existing instance values and doesn't call `calculate` or `set`
+  # If schema was [channel_id, period_id] it will now return values in reversed order:
+  # period_1:
+  #   channel1:
+  #   channel2:
+  #
+  # period2:
+  #   channel1:
+  #   channel2:
+  #   #... and so on
+  reversedSchemaValues: (result = {}, values = _.toArray(@values), level = 0)  ->
+    for item in values
+      break unless item?
+      if level is @schema.length - 1
+        key = @schema[level]
+        pKey = @schema[level - 1]
+        if _.isUndefined(result[item[key]])
+          result[item[key]] = {}
+        result[item[key]][item[pKey]] = item
+      else
+        @reversedSchemaValues(result, _.toArray(item), level + 1)
+    result
+
+
   # Builds values for every element
   _build: (level = 0, args = []) ->
     for item in @collections[level]
@@ -371,6 +396,8 @@ class Striker.Collection
         defaultCallback.call(@, model, model.changed)
       else
         defaultCallback.call(@, model, args, value)
+
+      @trigger('updateCompleted', @, args)
 
   # Add observable index to Striker.index
   _initIndexes: (indexName, collectionName, schema) ->
