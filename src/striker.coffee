@@ -399,11 +399,11 @@ Striker.query = (collectionName, attrs) ->
           return false unless attrs[key] is model.get(key)
       true
 
-# Calculate sum of array by field
-Striker.sum = (array, field) ->
-  _.reduce array, (memo, item) ->
-    memo += item.get(field)
-  , 0
+# Calculate sum of collection with Backbone.Model
+Striker.sum = (collection, field) ->
+  sum = 0
+  sum += item.get(field) for item in collection
+  sum
 
 Striker.getIndexName = (name, attrs) ->
   name + ':' + attrs.sort().join('_')
