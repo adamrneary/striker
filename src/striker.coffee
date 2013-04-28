@@ -10,7 +10,7 @@ else
   Striker = window.Striker = {}
 
 # Current version of the library.
-Striker.VERSION = '0.5.3'
+Striker.VERSION = '0.5.4'
 
 # Setup schema mapping in order to work
 # with Striker.Collection.prototype.schema
