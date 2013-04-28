@@ -11,7 +11,7 @@ else
   Striker = window.Striker = {}
 
 # Current version of the library.
-Striker.VERSION = '0.5.1'
+Striker.VERSION = '0.5.2'
 
 # Setup schema mapping in order to work
 # with Striker.Collection.prototype.schema
@@ -353,7 +353,7 @@ Striker.addAnalysis = (Model, methodName, options = {}) ->
 Striker.where = (collectionName, attrs) ->
   indexName = Striker.getIndexName(collectionName, _.keys(attrs))
   if Striker.index[indexName]
-    key = _.values(attrs).join()
+    key = Striker.getValues(attrs).join()
     Striker.index[indexName][key] ? []
   else
     app[collectionName].where(attrs)
@@ -362,7 +362,7 @@ Striker.where = (collectionName, attrs) ->
 Striker.query = (collectionName, attrs) ->
   indexName = Striker.getIndexName(collectionName, _.keys(attrs))
   if Striker.index[indexName]
-    keys   = Striker.getKeys(attrs)
+    keys   = Striker.getKeys(Striker.getValues(attrs))
     values = _.map keys, (key) -> Striker.index[indexName][key]
     _.flatten(_.compact(values))
   else
@@ -381,11 +381,14 @@ Striker.sum = (array, field) ->
   , 0
 
 Striker.getIndexName = (name, attrs) ->
-  name + ':' + attrs.join('_')
+  name + ':' + attrs.sort().join('_')
 
-Striker.getKeys = (attrs) ->
+Striker.getValues = (attrs) ->
+  _.map _.keys(attrs).sort(), (attr) -> attrs[attr]
+
+Striker.getKeys = (values) ->
   keys = [[]]
-  for value in _.values(attrs)
+  for value in values
     if _.isArray(value)
       # double current keys to newKeys and add subValue
       newKeys = []

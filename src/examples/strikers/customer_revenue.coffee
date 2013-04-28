@@ -2,7 +2,7 @@ module.exports = class Revenue extends Striker.Collection
   schema: ['customer_id', 'period_id']
 
   indexes:
-    'financialSummary': ['customer_id', 'period_id', 'account_id']
+    'financialSummary': ['account_id', 'customer_id', 'period_id']
 
   observers:
     financialSummary: (model, changed) ->

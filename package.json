@@ -1,6 +1,6 @@
 {
   "name": "striker",
-  "version": "0.5.1",
+  "version": "0.5.2",
   "private": true,
   "scripts": {
     "test": "npm run build && ./node_modules/testem/testem.js ci",
