@@ -11,7 +11,7 @@ else
   Striker = window.Striker = {}
 
 # Current version of the library.
-Striker.VERSION = '0.5.2'
+Striker.VERSION = '0.5.3'
 
 # Setup schema mapping in order to work
 # with Striker.Collection.prototype.schema
@@ -30,6 +30,14 @@ warnings = {}
 Striker.warn = (text) ->
   console.warn(text) unless warnings[text]
   warnings[text] = true
+
+# Cache common calculations
+cacheMap = ->
+  throw new Error('Setup striker cache with Striker.setCache')
+
+Striker.cache = {}
+Striker.setCache = (cb) ->
+  cacheMap = cb
 
 # Striker.Collection
 # ------------------
@@ -279,6 +287,16 @@ class Striker.Collection
         object[@schema[index]] = value for value, index in args
         result.push _.extend(object, @get.apply(@, args))
     result
+
+  # Use cache for common operations
+  cache: (key) ->
+    return Striker.cache[key] if Striker.cache[key]
+
+    [collection, cb] = cacheMap(key)
+    throw new Error("Not valid Striker cache key: #{key}") if !collection or !cb
+
+    collection.on 'all', -> Striker.cache[key] = cb()
+    Striker.cache[key] = cb()
 
   # Internal methods
   # ----------------

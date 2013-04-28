@@ -6,14 +6,13 @@ module.exports = class Revenue extends Striker.Collection
 
   observers:
     financialSummary: (model, changed) ->
-      # see only updates for revenue accounts
-      return unless _.include(_.pluck(app.accounts.revenue(), 'id'), model.get('account_id'))
+      return unless _.include(@cache('revenue'), model.get('account_id'))
 
       if _.has(changed, 'amount_cents')
         @update(model.get('customer_id'), model.get('period_id'))
 
   calculate: (customerId, periodId) ->
-    accounts  = _.pluck(app.accounts.revenue(), 'id')
+    accounts  = @cache('revenue')
     summaries = Striker.query('financialSummary', customer_id: customerId, period_id: periodId, account_id: accounts)
 
     object = {}

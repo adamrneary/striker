@@ -14,6 +14,10 @@ Striker.setSchemaMap (key) ->
     when 'customer_id' then app.customers.models
     when 'period_id'   then app.periods.models
 
+Striker.setCache (key) ->
+  switch key
+    when 'revenue' then [app.accounts, -> _.pluck(app.accounts.revenue(), 'id')]
+
 beforeEach ->
   window.app    = {}
   Striker.index = {}
