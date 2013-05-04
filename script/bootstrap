@@ -5,7 +5,8 @@
 # Checks for dependencies so you can get rolling with ActiveCell straight away
 
 echo ""
-echo "  striker"
+echo "  Striker"
+echo "  Bad-ass, greasy-fast, cached calculated collections"
 echo ""
 
 #
@@ -17,6 +18,18 @@ if test ! $(which node); then
   exit
 else
   echo "  + node found."
+fi
+
+#
+# Check node version
+#
+NODE_VERSION=$(node -v)
+if ! [[ $NODE_VERSION == v0.10* ]]; then
+  echo "  x You need to update node to 0.10.x. If you use Homebrew, you can run:"
+  echo "    brew update && brew upgrade node"
+  exit
+else
+  echo "  + node >= 0.10."
 fi
 
 #
@@ -44,6 +57,7 @@ fi
 #
 # Install from packages
 #
-echo "Installing from package.json"
+echo ""
+echo "  Installing from package.json"
+echo ""
 npm install
-npm install -g grunt-cli testem mocha coffee-script
