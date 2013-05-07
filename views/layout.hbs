@@ -5,7 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
     <title>Striker: Bad-ass, greasy-fast, cached calculated collections</title>
     <link href="/vendor/css/bootstrap.css" rel="stylesheet" type="text/css">
-    <link href="/vendor/tablestakes/tablestakes.css" rel="stylesheet" type="text/css">
+    <link href="/vendor/css/jquery-ui.css" rel="stylesheet" type="text/css">
+    <link href="/vendor/rainbow/theme.css" rel="stylesheet" type="text/css">
+    <link href="/vendor/css/styleguide.css" rel="stylesheet" type="text/css">
     <link rel="icon" type="image/vnd.microsoft.icon" href="/img/favicon.ico">
   </head>
 
@@ -20,7 +22,7 @@
           </a>
 
           <div class="dropdown">
-            <a href="#" data-toggle="dropdown" class="span2 dropdown-toggle brand">Striker.js<i class="icon-chevron-down icon-white pull-right"></i></a>
+            <a href="#" data-toggle="dropdown" class="span2 dropdown-toggle brand">Striker.js <i class="icon-arrow-down"></i></a>
 
             <ul role="menu" aria-labelledby="drop2" style="top: 40px;" class="dropdown-menu">
               <li><a href="http://launchpad.activecell.com/admin">Activecell admin (rails)</a></li>
@@ -34,27 +36,34 @@
 
           <div class="nav-collapse">
             <ul class="nav">
-              <li><a href="/"><i class="icon-white icon-home"></i> Home</a></li>
-              <li><a href="/performance"><i class="icon-white icon-time"></i> Performance</a></li>
-              <li><a href="/documentation"><i class="icon-white icon-list-alt"></i> Documentation</a></li>
-              <li><a href="/tests"><i class="icon-white icon-ok"></i> Tests</a></li>
-              <li><a href="https://github.com/activecell/striker"><i class="icon-white icon-book"></i> Source</a></li>
+              <li><a href="/"><i class="icon-home"></i> Home</a></li>
+              <li><a href="/performance"><i class="icon-time"></i> Performance</a></li>
+              <li><a href="/documentation"><i class="con-list-alt"></i> Documentation</a></li>
+              <li><a href="/tests"><i class="icon-ok"></i> Tests</a></li>
+              <li><a href="https://github.com/activecell/striker"><i class="icon-book"></i> Source</a></li>
             </ul>
           </div>
         </div>
       </div>
     </div>
 
-    <div id="content" style="margin-top: 60px">{{{body}}}</div>
-    <hr>
+    <div class="page-wrapper textured-with-border">
+      <div class="main-content">
+        {{{body}}}
+      </div>
+    </div>
 
-    <script src="/vendor/js/commonjs.js"></script>
     <script src="/vendor/js/jquery.js"></script>
     <script src="/vendor/js/underscore.js"></script>
     <script src="/vendor/js/backbone.js"></script>
     <script src="/vendor/js/d3.js"></script>
     <script src="/vendor/js/bootstrap.js"></script>
-    <script src="/vendor/tablestakes/tablestakes.js"></script>
+    <script src="/vendor/js/coffee-script.js"></script>
+    <script src="/vendor/js/jquery-ui.js"></script>
+    <script src="/vendor/rainbow/rainbow.js"></script>
+    <script src="/vendor/rainbow/language/generic.js"></script>
+    <script src="/vendor/rainbow/language/coffeescript.js"></script>
+    
 
     <script src="/assets/striker.js" defer></script>
     <script src="/assets/examples.js" defer></script>
