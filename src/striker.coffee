@@ -334,12 +334,12 @@ class Striker.Collection
   # We can build values in constructor because we need initialize all necessary collections
   # Often calculate method refer recursively.
   _enableObserversAndBuild: ->
-    @_build()
     for collectionName, callback of @observers
       # TODO: don't use app as a global namespace
       collection = if collectionName is 'this' then @ else app[collectionName]
       collection.on('change', @_wrapCallback(callback), @)
-
+    @_build()
+    
   # Recursive function which uses @inputs and @collections for builds @values
   # Attributes used for recursive callbacks
   #
