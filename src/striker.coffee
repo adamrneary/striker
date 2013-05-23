@@ -247,7 +247,7 @@ class Striker.Collection
   #
   # Returns nothing.
   set: (value, args...) ->
-    return if @get(args...) is value
+    return if _.isEqual @get(args...), value
 
     result = @values
     result = result[key] for key in args.slice(0, -1)
