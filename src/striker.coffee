@@ -247,6 +247,8 @@ class Striker.Collection
   #
   # Returns nothing.
   set: (value, args...) ->
+    return if @get(args...) is value
+
     result = @values
     result = result[key] for key in args.slice(0, -1)
     result[_.last(args)] = value
@@ -332,11 +334,11 @@ class Striker.Collection
   # We can build values in constructor because we need initialize all necessary collections
   # Often calculate method refer recursively.
   _enableObserversAndBuild: ->
+    @_build()
     for collectionName, callback of @observers
       # TODO: don't use app as a global namespace
       collection = if collectionName is 'this' then @ else app[collectionName]
       collection.on('change', @_wrapCallback(callback), @)
-    @_build()
 
   # Recursive function which uses @inputs and @collections for builds @values
   # Attributes used for recursive callbacks
@@ -377,7 +379,6 @@ class Striker.Collection
       else
         @reversedSchemaValues(result, _.toArray(item), level + 1)
     result
-
 
   # Builds values for every element
   _build: (level = 0, args = []) ->
