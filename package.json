@@ -13,7 +13,7 @@
   },
   "dependencies": {
     "showcase": "0.3.4",
-    "coffee-script": "~1.6.2",
+    "coffee-script": "~1.6.3",
     "brunch": "~1.6.3",
     "javascript-brunch": "~1.5.1",
     "coffee-script-brunch": "~1.5.1"
