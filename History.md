@@ -1,3 +1,4 @@
-## 0.6.0 / 2013-06-..
+## 0.5.5 / 2013-07-14
 
-  * improved Readme
+  * add bower config
+  * start history log
