@@ -1,6 +1,10 @@
 # Striker
 
-  Bad-ass, greasy-fast, cached calculated collections
+  Bad-ass, greasy-fast, cached, calculated collections.
+
+## Installation
+
+    $ bower install git@github.com:activecell/striker.git#x.x.x --save
 
 ## The five-minute setup
 
