@@ -4,7 +4,6 @@ describe('Striker', function() {
 
   it('exists', function() {
     expect(Striker).exists;
-    expect(Striker.Collection).exists;
   });
 
   it('.getKeys', function() {

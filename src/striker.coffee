@@ -107,7 +107,7 @@ Striker.setCache = (cb) ->
 #   # => 'toplineGrowth changed with channel: 2'
 class Striker.Collection
 
-# Include methods from Backbone.Events for binding support
+  # Include methods from Backbone.Events for binding support
   _.extend(@::, Backbone.Events)
 
   # Set default multiplier to 1 to avoid altering data unless requested
@@ -203,16 +203,16 @@ class Striker.Collection
   # Returns value to cache (type may vary based on what you wish to cache)
   calculate: (args...) ->
 
-    # Check that collection has period_id attribute
-    #
-    # Returns true or false
+  # Check that collection has period_id attribute
+  #
+  # Returns true or false
   isTimeSeries: ->
     _.last(@schema) is @timeSeriesIdentifier
 
   # get/set/update
   # ------------------
 
-  # Get value by params
+  # Get values by params
   #
   # args - Arguments split by commas and bases on schema.
   #        If schema is ['channel_id', 'period_id']
@@ -339,7 +339,7 @@ class Striker.Collection
       collection = if collectionName is 'this' then @ else app[collectionName]
       collection.on('change', @_wrapCallback(callback), @)
     @_build()
-    
+
   # Recursive function which uses @inputs and @collections for builds @values
   # Attributes used for recursive callbacks
   #
