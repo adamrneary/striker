@@ -58,12 +58,24 @@ _.extend(Striker.prototype, Backbone.Events, {
 Striker.extend = Backbone.Model.extend;
 
 // Setup schema mapping
-Striker.setSchemaMap = override;
+Striker.schemaMap = override;
+
+// Calculate sum for collection of Backbone.Model
+Striker.sum = function(collection, field) {
+  return collection.reduce(function(memo, item){
+    return memo + item.get(field);
+  }, 0);
+};
+
+/**
+ * Helpers
+ */
 
 function override() {
-  throw new Error('CRITICAL: Override this in each subclass');
+  throw new Error('CRITICAL: Override this');
 }
 
 // export to window namespace
 window.Striker = Striker;
+
 }).call(this, _, Backbone, Indexed);

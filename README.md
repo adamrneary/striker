@@ -6,6 +6,8 @@
 
     $ bower install git@github.com:activecell/striker.git#0.7.0 --save
 
+  or copy [striker/index.js] to vendors folder.
+
 ## Development setup
 
   * `npm install` - install dependenciese;
@@ -17,13 +19,29 @@
 ```coffee
 Reach = Striker.extend
   schema: ['channel_id', 'period_id']
+  calculate: (channelId, periodId) ->
+
+reach = new Reach()
 ```
 
-## API
+## Instance API
 
 ### new Striker()
 
   Create new Striker instance.
+
+### striker.calculate
+
+  `CRITICAL`: Override this in each subclass.
+
+### striker.schema
+
+  `CRITICAL`: Override this in each subclass.
+  Array with collection IDs that setups with Striker.setSchemaMap
+
+### striker.indexes
+
+### striker.observers
 
 ### striker.get([args...])
 
@@ -39,7 +57,8 @@ conversionRates.get(2)
 
 ### striker.update([args...])
 
-  Recalculate value and trigger `change` event, if value changed. Make sure that `args.length is @schema.length`.
+  Recalculate value and trigger `change` event, if value changed.
+  Make sure that `args.length is @schema.length`.
 
 ```coffee
 conversionRates.get(2, 1) # => 10
@@ -48,8 +67,25 @@ conversionRates.update(2, 1)
 reach.get(2, 1) # => 12
 ```
 
+### striker.flat()
+
+### striker.reversedSchemaValues()
+
 ### Build-in Events
 
-  Striker extends [Backbone.Events](http://documentcloud.github.io/backbone/#Events), it means you can trigger and listen different events.
+  Striker extends [Backbone.Events](http://documentcloud.github.io/backbone/#Events),
+  it means you can trigger and listen different events.
 
   * **change**(striker, arguments, value) - force on every update.
+
+## Static API
+
+  Striker provides a few useful methods, which helps make calculations faster
+
+### Striker.sum(collection, field)
+
+### Striker.where(collectionName, condition)
+
+### Striker.query(collectionName, condition)
+
+### Striker.addAnalysis(Model, methodName, [options])
