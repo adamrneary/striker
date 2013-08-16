@@ -4,10 +4,17 @@
 
 ## Installation
 
-    $ bower install git@github.com:activecell/striker.git#x.x.x --save
+    $ bower install git@github.com:activecell/striker.git#0.7.0 --save
 
-## The five-minute setup
+## Development setup
 
-  * `badass bootstrap` - check your system for local requirements (run until it passes!);
+  * `npm install` - install dependenciese;
   * `npm test` - run tests to ensure that all pass;
-  * `npm start` - run the project locally on http://localhost:5000.
+  * `npm start` - run watch server locally on http://localhost:7357.
+
+## Example
+
+```coffee
+```
+
+## API

@@ -1,22 +1,20 @@
 {
   "name": "striker",
-  "version": "0.5.5",
-  "main": "src/striker.coffee",
+  "version": "0.7.0",
+  "main": "index.js",
+  "private": true,
   "dependencies": {
-    "jquery": "~1.10.1",
-    "underscore": "~1.5.1",
-    "backbone": "~1.0.0"
+    "jquery": "~1.10.x",
+    "underscore": "~1.5.x",
+    "backbone": "~1.0.0",
+    "indexed": "0.5.0"
+  },
+  "devDependencies": {
+    "chai": "~1.7.x"
   },
   "ignore": [
     "**/.*",
-    "public",
     "test",
-    "views",
-    "app.coffee",
-    "badass.conf",
-    "circle.yml",
-    "config.coffee",
-    "index.js",
     "package.json"
   ]
 }
