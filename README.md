@@ -36,3 +36,20 @@ conversionRates.get(2, 1)
 conversionRates.get(2)
 # => channel_id=2, returns object, like {1: 70, 2: 17, ..., 36: 27}
 ```
+
+### striker.update([args...])
+
+  Recalculate value and trigger `change` event, if value changed. Make sure that `args.length is @schema.length`.
+
+```coffee
+conversionRates.get(2, 1) # => 10
+conversionRates.calculate(2, 1) # => 12
+conversionRates.update(2, 1)
+reach.get(2, 1) # => 12
+```
+
+### Build-in Events
+
+  Striker extends [Backbone.Events](http://documentcloud.github.io/backbone/#Events), it means you can trigger and listen different events.
+
+  * **change**(striker, arguments, value) - force on every update.
