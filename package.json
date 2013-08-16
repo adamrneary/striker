@@ -1,24 +1,12 @@
 {
-  "name": "striker",
-  "version": "0.5.5",
-  "private": true,
   "scripts": {
-    "test": "npm run build && ./node_modules/testem/testem.js -f test/testem.json ci",
-    "testem": "./node_modules/testem/testem.js -f test/testem.json",
-    "start": "node index.js",
-    "build": "./node_modules/brunch/bin/brunch build"
-  },
-  "engines": {
-    "node": "0.10.x"
-  },
-  "dependencies": {
-    "showcase": "0.3.6",
-    "coffee-script": "~1.6.3",
-    "brunch": "~1.6.3",
-    "javascript-brunch": "~1.5.1",
-    "coffee-script-brunch": "~1.5.1"
+    "postinstall": "bower install --quiet",
+    "test": "testem -f test/testem.json ci",
+    "start": "testem -f test/testem.json",
+    "stat": "cloc index.js --quiet && cloc test/*.js --quiet"
   },
   "devDependencies": {
-    "testem": "0.2.83"
+    "bower": "1.1.x",
+    "testem": "0.3.x"
   }
 }

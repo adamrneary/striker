@@ -1,8 +1,14 @@
 {
-  "test_page": "public/test_runner.html",
+  "framework": "mocha",
   "launch_in_ci": ["phantomjs"],
   "launch_in_dev": ["phantomjs"],
   "source_files": [
-    "public/assets/*.js"
+    "bower_components/jquery/jquery.js",
+    "bower_components/underscore/underscore.js",
+    "bower_components/backbone/backbone.js",
+    "bower_components/indexed/dist/indexed.js",
+    "bower_components/chai/chai.js",
+    "index.js",
+    "test/index-test.js"
   ]
 }
