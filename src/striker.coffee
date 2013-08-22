@@ -185,13 +185,46 @@ class Striker.Collection
   #   In this case, the collection will be initialized with 0 values until
   #   observers are turned on and values can be calculated.
   constructor: (options = {}) ->
-    startTime    = moment()
     @inputs      = options.inputs || []
     @collections = _.map @schema, schemaMap
     @values      = @_initValues()
     @_initIndexes()
-    @_enableObserversAndBuild()
 
+    # For performance, there's no need to trigger strikers that are not yet 
+    # built. So tag the Striker accordingly and then use this attribute in the
+    # wrapped callback
+    @built = false 
+    
+    # The "careful" option is used to avoid problems with circular trigger 
+    # references. That is, if Striker A relies on Striker B and Striker B 
+    # relies on Striker A, there is no correct order in which to initialize
+    # them.
+    #
+    # In these cases, by initializing in careful mode, you can initialize all
+    # strikers, then enable triggers for all strikers, then build all strikers.
+    # 
+    # In this way, your triggers will behave as expected, even in circular 
+    # cases.
+    unless options.careful
+      @enableObservers()
+      @build()
+
+  # Setup collection observers based on @observers property.
+  # Name `this` is used for self reference
+  enableObservers: ->
+    for collectionName, callback of @observers
+      # TODO: don't use app as a global namespace
+      collection = if collectionName is 'this' then @ else app[collectionName]
+      collection.on('change', @_wrapCallback(callback), @)
+
+  # Build all values with the `calculate` method
+  # Unless we are in careful mode, we can build values in constructor because
+  # we need initialize all necessary collections. Often, Strikers will use the 
+  # calculate method recursively.
+  build: ->
+    startTime = moment()
+    @_build()
+    @built = true
     if (endTime = moment() - startTime) > 100
       Striker.warn("Striker: #{@constructor.name} init #{endTime}ms")
 
@@ -327,19 +360,6 @@ class Striker.Collection
   # Internal methods
   # ----------------
 
-  # Setup collection observers based on @observers property.
-  # Name `this` uses for self reference
-  # And than build values with `calculate` method
-  #
-  # We can build values in constructor because we need initialize all necessary collections
-  # Often calculate method refer recursively.
-  _enableObserversAndBuild: ->
-    for collectionName, callback of @observers
-      # TODO: don't use app as a global namespace
-      collection = if collectionName is 'this' then @ else app[collectionName]
-      collection.on('change', @_wrapCallback(callback), @)
-    @_build()
-    
   # Recursive function which uses @inputs and @collections for builds @values
   # Attributes used for recursive callbacks
   #
@@ -393,6 +413,7 @@ class Striker.Collection
   # Returns trigger function
   _wrapCallback: (defaultCallback) ->
     (model, args, value) ->
+      return unless @built
       if model instanceof Backbone.Model
         defaultCallback.call(@, model, model.changed)
       else
