@@ -4,10 +4,14 @@ window.entries = {}
 # Stub collections
 entries.Periods            = Backbone.Collection.extend({})
 entries.Channels           = Backbone.Collection.extend({})
-entries.Stages             = Backbone.Collection.extend({})
 entries.Scenario           = Backbone.Collection.extend({})
 entries.ConversionSummary  = Backbone.Collection.extend({})
 entries.ConversionForecast = Backbone.Collection.extend({})
+
+entries.Stages = Backbone.Collection.extend({
+  topline: ->
+    @max (stage) -> stage.get('position')
+})
 
 entries.Reach = Striker.extend
   schema: ['channel_id', 'period_id']

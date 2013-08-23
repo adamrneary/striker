@@ -3,7 +3,7 @@
 'use strict';
 
 /**
- * Base `Striker` object
+ * `Striker` instance
  */
 
 function Striker(inputs) {
@@ -65,6 +65,19 @@ Striker.sum = function(collection, field) {
   return collection.reduce(function(memo, item){
     return memo + item.get(field);
   }, 0);
+};
+
+// Cache values between strikers
+var cache = {};
+
+Striker.get = function(key) {
+  if (cache[key]) return cache[key];
+  throw new Error('Not valid Striker cache key: ' + key);
+};
+
+Striker.set = function(key, collection, cb) {
+  collection.on('all', function() { cache[key] = cb() });
+  cache[key] = cb();
 };
 
 /**

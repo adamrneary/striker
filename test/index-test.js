@@ -18,4 +18,6 @@ describe('Striker - static methods', function() {
   describe('.where', function() {});
   describe('.query', function() {});
   describe('.addAnalysis', function() {});
+  describe('.get', function() {});
+  describe('.set', function() {});
 });
