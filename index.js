@@ -6,8 +6,9 @@
  * Base `Striker` object
  */
 
-function Striker() {
-  this.values = {};
+function Striker(inputs) {
+  if (!inputs) inputs = [];
+  this.values = initValues(getCollections(this), {}, inputs, 0);
 }
 
 _.extend(Striker.prototype, Backbone.Events, {
@@ -15,7 +16,7 @@ _.extend(Striker.prototype, Backbone.Events, {
   multiplier: 1,
 
   // Array with collection IDs which map with Striker.setSchemaMap
-  schema: override,
+  schema: [],
 
   // Raw method to calculate value
   calculate: override,
@@ -74,8 +75,20 @@ function override() {
   throw new Error('CRITICAL: Override this');
 }
 
-// backward compatibility with striker < 0.6
-Striker.Collection = Striker;
+function initValues(collections, values, inputs, level) {
+  if (!collections[level]) return values;
+  for (var i = 0, len = collections[level].length, item, value; i < len; i++) {
+    value = inputs[i] || {};
+    item  = collections[level][i];
+    values[item.id] = value;
+    initValues(collections, values[item.id], value, level + 1);
+  }
+  return values;
+}
+
+function getCollections(striker) {
+  return _.map(striker.schema, Striker.schemaMap);
+}
 
 // export to window namespace
 window.Striker = Striker;
