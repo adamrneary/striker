@@ -2,15 +2,22 @@
 window.entries = {}
 
 # Stub collections
-entries.Periods            = Backbone.Collection.extend({})
+entries.Scenario           = Backbone.Model.extend({})
 entries.Channels           = Backbone.Collection.extend({})
-entries.Scenario           = Backbone.Collection.extend({})
 entries.ConversionSummary  = Backbone.Collection.extend({})
 entries.ConversionForecast = Backbone.Collection.extend({})
 
 entries.Stages = Backbone.Collection.extend({
   topline: ->
     @max (stage) -> stage.get('position')
+})
+
+entries.Periods = Backbone.Collection.extend({
+  idToUnix: (periodId) ->
+    moment(@get(periodId).get('first_day')).add('days', 1).unix() * 1000
+
+  notFuture: (periodId) ->
+    moment(@get(periodId).get('first_day')) <= @_startOfMonth()
 })
 
 entries.Reach = Striker.extend

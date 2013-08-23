@@ -57,6 +57,12 @@ _.extend(Striker.prototype, Backbone.Events, {
  * Static methods
  */
 
+// Setup schema mapping, to transform keys to real models
+Striker.schemaMap = new Error('CRITICAL: Override this');
+
+// Change namespace to window.app
+Striker.namespace = window;
+
 // Copy extend method for inheritance
 Striker.extend = Backbone.Model.extend;
 
@@ -67,7 +73,43 @@ Striker.sum = function(collection, field) {
   }, 0);
 };
 
-// Cache values between strikers
+var index = {};
+Striker.where = function(name, args) {
+  var keys      = _.keys(args).sort();
+  var indexName = getIndexName(name, keys);
+  if (index[indexName]) {
+    // function getIndexKey(args, keys) {
+    //   return _.map(keys, function(key) { return args[key] }).join();
+    // }
+    // return index[indexName][getIndexKey(args, keys)] || [];
+  } else {
+    warn('Striker does not have index for ' + indexName);
+    return Striker.namespace[name].where(args);
+  }
+};
+
+Striker.query = function(name, args) {
+  var keys      = _.keys(args).sort();
+  var indexName = getIndexName(name, keys);
+  if (index[indexName]) {
+    // keys   = Striker.getKeys(Striker.getValues(attrs))
+    // values = _.map keys, (key) -> Striker.index[indexName][key]
+    // _.flatten(_.compact(values))
+  } else {
+    warn('Striker does not have index for ' + indexName);
+    Striker.namespace[name].filter(function(model) {
+      for (var key in args) {
+        if (_.isArray(args[key]))
+          if (!~args[key].indexOf(model.get(key))) return false;
+        else
+          if (args[key] !== model.get(key)) return false;
+      }
+      return true;
+    });
+  }
+};
+
+// Setup global cache for shared values
 var cache = {};
 
 Striker.get = function(key) {
@@ -102,7 +144,7 @@ function build(striker, collections, level, args) {
     item = collections[level][i];
     args[level] = item.id;
     if (level >= collections.length - 1)
-      striker.update.call(striker, args);
+      striker.update.apply(striker, args);
     else
       build(striker, collections, level + 1, args);
   }
@@ -111,6 +153,20 @@ function build(striker, collections, level, args) {
 // map schema to Backbone.Collections with Striker.schemaMap
 function getCollections(striker) {
   return _.map(striker.schema, Striker.schemaMap);
+}
+
+// Show warnings only once
+var warnings = {};
+
+function warn(text) {
+  if (!warnings[text]) {
+    console.warn(text);
+    warnings[text] = true;
+  }
+}
+
+function getIndexName(name, keys) {
+  return name + ':' + keys.join('_');
 }
 
 // export to window namespace

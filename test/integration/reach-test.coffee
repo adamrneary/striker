@@ -11,8 +11,8 @@
 #   plan     => an Integer from conversionForecast
 #   variance => an Integer (actual - plan) (null for future periods)
 
+window.app = {}
 describe 'Reach integration test', ->
-  app = {}
   expect = chai.expect
 
   initCache = ->
@@ -24,8 +24,11 @@ describe 'Reach integration test', ->
         when 'period_id'  then app.periods.models
         when 'channel_id' then app.channels.models
 
+    Striker.namespace = window.app
+
   beforeEach ->
-    # stubCurrentDate '2012-02-14'
+    entries.Periods::_startOfMonth = -> moment('2012-02-14')
+
     app.periods = new entries.Periods([
       { id: 'last-month',    first_day: '2012-01-01T00:00:00.000Z' }
       { id: 'this-month',    first_day: '2012-02-01T00:00:00.000Z' }
@@ -63,6 +66,7 @@ describe 'Reach integration test', ->
   describe 'overall', ->
     describe 'get', ->
       it 'calculates values for a single channel and period', ->
+        console.log app.reach
         result = app.reach.get('channel1', 'last-month')
         expect(result.actual).equal(1)
         expect(result.plan).equal(6)

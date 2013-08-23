@@ -21,10 +21,18 @@ Reach = Striker.extend
   schema: ['channel_id', 'period_id']
   calculate: (channelId, periodId) ->
 
+# setup schema mapping, to transform 'channel_id' to real models
 Striker.schemaMap = (key) ->
   switch key
     when 'period_id'  then app.periods.models
     when 'channel_id' then app.channels.models
+
+# setup namespace, it will use in where/query and indexes
+Striker.namespace = app
+
+# setup global caching
+Striker.set 'topline-id', app.stages, ->
+  app.stages.topline().id
 
 reach = new Reach()
 ```
@@ -87,11 +95,11 @@ reach.get(2, 1) # => 12
 
   Striker provides a few useful methods, which helps make calculations faster
 
-### Striker.sum(collection, field)
-
 ### Striker.where(collectionName, condition)
 
 ### Striker.query(collectionName, condition)
+
+### Striker.sum(collection, field)
 
 ### Striker.addAnalysis(Model, methodName, [options])
 
