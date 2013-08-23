@@ -13,6 +13,12 @@
 
 describe 'Reach integration test', ->
   app = {}
+  expect = chai.expect
+  Striker.schemaMap = (key) ->
+    switch key
+      when 'period_id'  then app.periods.models
+      when 'channel_id' then app.channels.models
+
   beforeEach ->
     # stubCurrentDate '2012-02-14'
     app.periods = new entries.Periods([
@@ -47,6 +53,7 @@ describe 'Reach integration test', ->
       { period_id: 'this-month', channel_id: 'channel1', stage_id: 'customer', value: 12, scenario_id: 'scenario1' }
     ])
     app.reach = new entries.Reach()
+    console.log app.reach
 
   describe 'overall', ->
     describe 'get', ->
