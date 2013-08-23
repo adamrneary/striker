@@ -1,6 +1,4 @@
 .DS_Store
 /bower_components
 /node_modules
-/public/assets
-/public/docs
-.idea
+/tmp
