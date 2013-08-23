@@ -69,7 +69,7 @@ reach.get(2, 1) # => 12
 
 ### striker.flat()
 
-### striker.reversedSchemaValues()
+### striker.reverse()
 
 ### Build-in Events
 

@@ -6,7 +6,7 @@
     "stat": "cloc index.js --quiet && cloc test/*.js --quiet"
   },
   "devDependencies": {
-    "bower": "1.1.x",
-    "testem": "0.3.x"
+    "bower": "1.2.x",
+    "testem": "0.4.x"
   }
 }

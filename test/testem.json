@@ -1,14 +1,21 @@
 {
   "framework": "mocha",
+  "before_tests": "coffee -o tmp/integration -c test/integration/*",
   "launch_in_ci": ["phantomjs"],
   "launch_in_dev": ["phantomjs"],
   "src_files": [
+    "index.js",
+    "test/*.js",
+    "test/integration/*.coffee"
+  ],
+  "serve_files": [
     "bower_components/jquery/jquery.js",
     "bower_components/underscore/underscore.js",
     "bower_components/backbone/backbone.js",
     "bower_components/indexed/dist/indexed.js",
     "bower_components/chai/chai.js",
     "index.js",
-    "test/index-test.js"
+    "test/*.js",
+    "tmp/integration/*.js"
   ]
 }

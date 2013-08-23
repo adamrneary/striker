@@ -38,9 +38,8 @@ _.extend(Striker.prototype, Backbone.Events, {
   //
   // @param {Anything} value
   // @param {Anything} args... - navigate to specific value
-  // @returns nothing.
   update: function() {
-    var value = this.calculate.apply(this, arguments);
+    var value     = this.calculate.apply(this, arguments);
     var prevValue = this.get.apply(this, arguments);
     if (value === prevValue) return;
 
@@ -74,6 +73,9 @@ Striker.sum = function(collection, field) {
 function override() {
   throw new Error('CRITICAL: Override this');
 }
+
+// backward compatibility with striker < 0.6
+Striker.Collection = Striker;
 
 // export to window namespace
 window.Striker = Striker;
