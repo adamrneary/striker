@@ -8,7 +8,9 @@
 
 function Striker(inputs) {
   if (!inputs) inputs = [];
-  this.values = initValues(getCollections(this), {}, inputs, 0);
+  var collections = getCollections(this);
+  this.values = initValues(collections, {}, inputs, 0);
+  build(this, collections, 0, []);
 }
 
 _.extend(Striker.prototype, Backbone.Events, {
@@ -18,8 +20,9 @@ _.extend(Striker.prototype, Backbone.Events, {
   // Array with collection IDs which map with Striker.setSchemaMap
   schema: [],
 
-  // Raw method to calculate value
-  calculate: override,
+  // Raw method to calculate value, it calls on every `update`
+  // Override it with striker's specific calculations
+  calculate: function() { return 0 },
 
   // Get value by arguments
   //
@@ -57,9 +60,6 @@ _.extend(Striker.prototype, Backbone.Events, {
 // Copy extend method for inheritance
 Striker.extend = Backbone.Model.extend;
 
-// Setup schema mapping
-Striker.schemaMap = override;
-
 // Calculate sum for collection of Backbone.Model
 Striker.sum = function(collection, field) {
   return collection.reduce(function(memo, item){
@@ -71,10 +71,7 @@ Striker.sum = function(collection, field) {
  * Helpers
  */
 
-function override() {
-  throw new Error('CRITICAL: Override this');
-}
-
+// Generate values based on schema
 function initValues(collections, values, inputs, level) {
   if (!collections[level]) return values;
   for (var i = 0, len = collections[level].length, item, value; i < len; i++) {
@@ -86,6 +83,19 @@ function initValues(collections, values, inputs, level) {
   return values;
 }
 
+// Update values
+function build(striker, collections, level, args) {
+  for (var i = 0, len = collections[level].length, item; i < len; i++) {
+    item = collections[level][i];
+    args[level] = item.id;
+    if (level >= collections.length - 1)
+      striker.update.call(striker, args);
+    else
+      build(striker, collections, level + 1, args);
+  }
+}
+
+// map schema to Backbone.Collections with Striker.schemaMap
 function getCollections(striker) {
   return _.map(striker.schema, Striker.schemaMap);
 }

@@ -27,7 +27,7 @@ entries.Reach = Striker.extend
 
   calculate: (channelId, periodId) ->
     summaryConditions =
-      stage_id:   @cache('toplineId')
+      stage_id:   Striker.get('toplineId')
       channel_id: channelId
       period_id:  periodId
 
