@@ -14,10 +14,15 @@
 describe 'Reach integration test', ->
   app = {}
   expect = chai.expect
-  Striker.schemaMap = (key) ->
-    switch key
-      when 'period_id'  then app.periods.models
-      when 'channel_id' then app.channels.models
+
+  initCache = ->
+    Striker.set 'toplineId', app.stages, ->
+      app.stages.topline().id
+
+    Striker.schemaMap = (key) ->
+      switch key
+        when 'period_id'  then app.periods.models
+        when 'channel_id' then app.channels.models
 
   beforeEach ->
     # stubCurrentDate '2012-02-14'
@@ -52,6 +57,7 @@ describe 'Reach integration test', ->
       { period_id: 'next-month', channel_id: 'channel2', stage_id: 'topline',  value: 11, scenario_id: 'scenario1' }
       { period_id: 'this-month', channel_id: 'channel1', stage_id: 'customer', value: 12, scenario_id: 'scenario1' }
     ])
+    initCache()
     app.reach = new entries.Reach()
 
   describe 'overall', ->
