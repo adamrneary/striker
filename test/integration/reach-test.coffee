@@ -53,7 +53,6 @@ describe 'Reach integration test', ->
       { period_id: 'this-month', channel_id: 'channel1', stage_id: 'customer', value: 12, scenario_id: 'scenario1' }
     ])
     app.reach = new entries.Reach()
-    console.log app.reach
 
   describe 'overall', ->
     describe 'get', ->

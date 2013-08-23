@@ -21,6 +21,11 @@ Reach = Striker.extend
   schema: ['channel_id', 'period_id']
   calculate: (channelId, periodId) ->
 
+Striker.schemaMap = (key) ->
+  switch key
+    when 'period_id'  then app.periods.models
+    when 'channel_id' then app.channels.models
+
 reach = new Reach()
 ```
 
@@ -89,3 +94,7 @@ reach.get(2, 1) # => 12
 ### Striker.query(collectionName, condition)
 
 ### Striker.addAnalysis(Model, methodName, [options])
+
+### Striker.get(key)
+
+### Striker.set(key, collection, method)
