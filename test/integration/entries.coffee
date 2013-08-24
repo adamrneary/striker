@@ -16,6 +16,9 @@ entries.Periods = Backbone.Collection.extend({
   comparator: (period) ->
     moment(period.get('first_day')).unix()
 
+  ids: ->
+    @pluck('id')
+
   idToUnix: (periodId) ->
     moment(@get(periodId).get('first_day')).add('days', 1).unix() * 1000
 
