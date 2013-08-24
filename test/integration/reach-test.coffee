@@ -65,3 +65,20 @@ describe 'Reach integration test', ->
         expect(result.actual).equal(1)
         expect(result.plan).equal(6)
         expect(result.variance).equal(1-6)
+
+      it 'contains no "actual" or "variance" for future months', ->
+        result = app.reach.get('channel1', 'next-month')
+        expect(result['actual']).undefined
+        expect(result['plan']).equal 10
+        expect(result['variance']).undefined
+
+      it 'returns an array of objects (all periods) by default', ->
+        result = app.reach.flat()
+        expect(_.isArray(result)).true
+        expect(_.size(result)).equal 8
+
+        expect(result[1]['channel_id']).equal 'channel1'
+        expect(result[1]['period_id']).equal 'last-month'
+        expect(result[1]['actual']).equal 1
+        expect(result[1]['plan']).equal 6
+        expect(result[1]['variance']).equal (1-6)

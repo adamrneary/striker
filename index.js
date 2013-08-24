@@ -10,9 +10,9 @@ window.Striker = Striker;
 
 function Striker(inputs) {
   if (!inputs) inputs = [];
-  var collections = _.map(this.schema, Striker.schemaMap);
-  this.values = initValues(collections, inputs, {}, 0);
-  build(collections, this, [], 0);
+  this.collections = _.map(this.schema, Striker.schemaMap);
+  this.values = initValues(this.collections, inputs, {}, 0);
+  build(this.collections, this, [], 0);
 }
 
 _.extend(Striker.prototype, Backbone.Events, {
@@ -52,7 +52,12 @@ _.extend(Striker.prototype, Backbone.Events, {
     var partValue = this.get.apply(this, _.initial(arguments));
     partValue[_.last(arguments)] = value;
     this.trigger('change', this, _.toArray(arguments), value);
-  }
+  },
+
+  // transform `this.values` to array
+  flat: function() { return flat(this.collections, this, [], [], 0) },
+
+  reverse: function() {},
 });
 
 /**
@@ -75,8 +80,8 @@ Striker.extend = Backbone.Model.extend;
 function initValues(collections, inputs, values, level) {
   if (!collections[level]) return values;
   for (var i = 0, len = collections[level].length, item, value; i < len; i++) {
-    value = inputs[i] || {};
     item  = collections[level][i];
+    value = inputs[i] || {};
     values[item.id] = value;
     initValues(collections, value, values[item.id], level + 1);
   }
@@ -93,6 +98,21 @@ function build(collections, striker, args, level) {
     else
       build(collections, striker, args, level + 1);
   }
+}
+
+function flat(collections, striker, result, args, level) {
+  for (var i = 0, len = collections[level].length, item, object; i < len; i++) {
+    item = collections[level][i];
+    args[level] = item.id;
+    if (level === collections.length - 1) {
+      object = {};
+      for (var j = 0, len2 = args.length; j < len2; j++) object[striker.schema[j]] = args[j];
+      result.push(_.extend(object, striker.get.apply(striker, args)));
+    } else {
+      flat(collections, striker, result, args, level + 1);
+    }
+  }
+  return result;
 }
 
 }).call(this, _, Backbone);
