@@ -68,6 +68,8 @@ _.extend(Striker.prototype, Backbone.Events, {
     return reverse(this.schema, _.toArray(this.values), {}, 0);
   },
 
+  // Setup collection observers based on `this.observers`
+  // Name `this` uses for self reference
   enableObservers: function() {
     if (_.isEmpty(this.observers)) return;
     for (var name in this.observers) {
