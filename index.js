@@ -12,6 +12,7 @@ function Striker(inputs) {
   if (!inputs) inputs = [];
   this.collections = _.map(this.schema, Striker.schemaMap);
   this.values = initValues(this.collections, inputs, {}, 0);
+  this.enableObservers();
   build(this.collections, this, [], 0);
 }
 
@@ -21,6 +22,9 @@ _.extend(Striker.prototype, Backbone.Events, {
 
   // Array with collection IDs which map with Striker.schemaMap
   schema: [],
+
+  // Observers and event handling
+  observers: {},
 
   // Raw method to calculate value, it calls on every `update`
   // Override it with striker's specific calculations
@@ -62,6 +66,15 @@ _.extend(Striker.prototype, Backbone.Events, {
   // return values in reversed schema order
   reverse: function() {
     return reverse(this.schema, _.toArray(this.values), {}, 0);
+  },
+
+  enableObservers: function() {
+    if (_.isEmpty(this.observers)) return;
+    for (var name in this.observers) {
+      var callback   = this.observers[name];
+      var collection = name === 'this' ? this : Striker.namespace[name];
+      collection.on('change', wrapCallback(callback), this);
+    }
   }
 });
 
@@ -69,10 +82,15 @@ _.extend(Striker.prototype, Backbone.Events, {
  * Static methods
  */
 
+Striker.addAnalysis = function(Klass, options) {};
+
 // Setup schema mapping, to transform keys to real models
 Striker.schemaMap = function() {
   throw new Error('CRITICAL: Override this');
 };
+
+// Define default namespace for observers
+Striker.namespace = window;
 
 // Copy extend method for inheritance
 Striker.extend = Backbone.Model.extend;
@@ -133,6 +151,16 @@ function reverse(schema, values, result, level) {
     }
   }
   return result;
+}
+
+function wrapCallback(cb) {
+  return function(model, args, value) {
+    if (model instanceof Backbone.Model)
+      cb.call(this, model, model.changed);
+    else
+      cb.call(this, model, args, value);
+    this.trigger('updated', this, args);
+  };
 }
 
 }).call(this, _, Backbone);
