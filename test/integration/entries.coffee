@@ -3,9 +3,12 @@ window.entries = {}
 
 # Stub collections
 entries.Scenario           = Backbone.Model.extend({})
-entries.Channels           = Backbone.Collection.extend({})
+entries.Channel            = Backbone.Model.extend({})
+entries.Channels           = Backbone.Collection.extend({ model: entries.Channel });
 entries.ConversionSummary  = Backbone.Collection.extend({})
 entries.ConversionForecast = Backbone.Collection.extend({})
+
+Striker.addAnalysis(entries.Channel, 'reach')
 
 entries.Stages = Backbone.Collection.extend({
   topline: ->
@@ -37,11 +40,11 @@ entries.Reach = Striker.extend
 
   observers:
     conversionSummary:  (model, changed) ->
-      return unless model.get('stage_id') is @cache('toplineId')
+      return unless model.get('stage_id') is app.stages.topline().id
       @update(model.get('channel_id'), model.get('period_id'))
 
     conversionForecast: (model, changed) ->
-      return unless model.get('stage_id') is @cache('toplineId')
+      return unless model.get('stage_id') is app.stages.topline().id
       @update(model.get('channel_id'), model.get('period_id'))
 
   calculate: (channelId, periodId) ->
