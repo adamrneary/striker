@@ -82,7 +82,16 @@ _.extend(Striker.prototype, Backbone.Events, {
  * Static methods
  */
 
-Striker.addAnalysis = function(Klass, options) {};
+Striker.addAnalysis = function(Model, methodName, options) {
+  if (!options) options = {};
+  Model.prototype[methodName] = function() {
+    var striker = Striker.namespace[options.analysis || methodName];
+    var args    = _.toArray(arguments);
+    return args.length > 0 ?
+      striker.get.apply(striker, [this.id].concat(args)) :
+      flat(striker.collections, striker, [], [this.id], 1);
+  };
+};
 
 // Setup schema mapping, to transform keys to real models
 Striker.schemaMap = function() {
