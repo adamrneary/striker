@@ -16,15 +16,10 @@ describe 'Reach integration test', ->
   expect = chai.expect
 
   initCache = ->
-    Striker.set 'toplineId', app.stages, ->
-      app.stages.topline().id
-
     Striker.schemaMap = (key) ->
       switch key
         when 'period_id'  then app.periods.models
         when 'channel_id' then app.channels.models
-
-    Striker.namespace = window.app
 
   beforeEach ->
     entries.Periods::_startOfMonth = -> moment('2012-02-14')
@@ -66,7 +61,6 @@ describe 'Reach integration test', ->
   describe 'overall', ->
     describe 'get', ->
       it 'calculates values for a single channel and period', ->
-        console.log app.reach
         result = app.reach.get('channel1', 'last-month')
         expect(result.actual).equal(1)
         expect(result.plan).equal(6)

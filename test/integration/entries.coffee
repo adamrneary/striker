@@ -20,12 +20,14 @@ entries.Periods = Backbone.Collection.extend({
     moment(@get(periodId).get('first_day')) <= @_startOfMonth()
 })
 
+Striker.sum = `function(collection, field) {
+  return collection.reduce(function(memo, item){
+    return memo + item.get(field);
+  }, 0);
+};`
+
 entries.Reach = Striker.extend
   schema: ['channel_id', 'period_id']
-
-  indexes:
-    'conversionForecast': ['stage_id', 'channel_id', 'period_id']
-    'conversionSummary':  ['stage_id', 'channel_id', 'period_id']
 
   observers:
     conversionSummary:  (model, changed) ->
@@ -38,13 +40,13 @@ entries.Reach = Striker.extend
 
   calculate: (channelId, periodId) ->
     summaryConditions =
-      stage_id:   Striker.get('toplineId')
+      stage_id:   app.stages.topline().id
       channel_id: channelId
       period_id:  periodId
 
-    conversionSummary  = Striker.where('conversionSummary',  summaryConditions)
+    conversionSummary  = app.conversionSummary.where(summaryConditions)
     forecastConditions = _.extend(summaryConditions, { scenario_id: app.scenario.id })
-    conversionForecast = Striker.where('conversionForecast', forecastConditions)
+    conversionForecast = app.conversionForecast.where(forecastConditions)
 
     actual    = Striker.sum(conversionSummary, 'customer_volume')
     plan      = Striker.sum(conversionForecast, 'value')
