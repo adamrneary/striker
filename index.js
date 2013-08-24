@@ -55,9 +55,14 @@ _.extend(Striker.prototype, Backbone.Events, {
   },
 
   // transform `this.values` to array
-  flat: function() { return flat(this.collections, this, [], [], 0) },
+  flat: function() {
+    return flat(this.collections, this, [], [], 0);
+  },
 
-  reverse: function() {},
+  // return values in reversed schema order
+  reverse: function() {
+    return reverse(this.schema, _.toArray(this.values), {}, 0);
+  }
 });
 
 /**
@@ -110,6 +115,21 @@ function flat(collections, striker, result, args, level) {
       result.push(_.extend(object, striker.get.apply(striker, args)));
     } else {
       flat(collections, striker, result, args, level + 1);
+    }
+  }
+  return result;
+}
+
+function reverse(schema, values, result, level) {
+  for (var i = 0, len = values.length, item; i < len; i++) {
+    item = values[i];
+    if (level === schema.length - 1) {
+      var key  = schema[level];
+      var pKey = schema[level - 1];
+      if (_.isUndefined(result[item[key]])) result[item[key]] = {};
+      result[item[key]][item[pKey]] = item;
+    } else {
+      reverse(schema, _.toArray(item), result, level + 1);
     }
   }
   return result;
