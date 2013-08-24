@@ -13,6 +13,9 @@ entries.Stages = Backbone.Collection.extend({
 })
 
 entries.Periods = Backbone.Collection.extend({
+  comparator: (period) ->
+    moment(period.get('first_day')).unix()
+
   idToUnix: (periodId) ->
     moment(@get(periodId).get('first_day')).add('days', 1).unix() * 1000
 
