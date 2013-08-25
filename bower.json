@@ -6,11 +6,12 @@
   "dependencies": {
     "jquery": "~1.10.x",
     "underscore": "~1.5.x",
-    "backbone": "~1.0.0",
-    "indexed": "0.5.0",
-    "moment": "~2.1.0"
+    "backbone": "~1.0.0"
   },
   "devDependencies": {
+    "backbone-index": "~0.1.0",
+    "backbone-memoize": "~0.1.0",
+    "moment": "~2.1.0",
     "chai": "~1.7.x"
   },
   "ignore": [
