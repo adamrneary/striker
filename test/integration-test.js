@@ -89,6 +89,12 @@ describe('Reach integration test', function() {
     this.update(model.get('channel_id'), model.get('period_id'));
   }
 
+  // apply plugins to improve performance
+  Backbone.Memoize(Stages, ['topline']);
+  Backbone.Memoize(Periods, ['ids', 'idToUnix', 'notFuture']);
+  Backbone.Index(ConversionSummary);
+  Backbone.Index(ConversionForecast);
+
   before(function() {
     // Setup Striker
     Striker.namespace = app;
