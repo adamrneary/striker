@@ -51,8 +51,6 @@ describe('Reach integration test', function() {
 
   var Reach = Striker.extend({
     schema: ['channel_id', 'period_id'],
-    attributes: ['periodUnix', 'actual', 'plan', 'variance'],
-
     observers: {
       conversionSummary: observer,
       conversionForecast: observer
