@@ -17,8 +17,20 @@ describe('Striker', function() {
     var striker, periods, channels;
     var Collection = Backbone.Collection.extend({});
 
+    var fakeValues = {
+      'channel1-last-month' : { actual: 5, plan: 4 },
+      'channel1-this-month' : { actual: 3, plan: 8 },
+      'channel1-next-month' : { actual: undefined, plan: 7 },
+      'channel2-last-month' : { actual: 2, plan: 3 },
+      'channel2-this-month' : { actual: 6, plan: 2 },
+      'channel2-next-month' : { actual: undefined, plan: 9 }
+    };
+
     var Reach = Striker.extend({
-      schema: ['channel_id', 'period_id']
+      schema: ['channel_id', 'period_id'],
+      calculate: function(channelId, periodId) {
+        return fakeValues[channelId + '-' + periodId];
+      }
     });
 
     beforeEach(function() {
@@ -35,10 +47,6 @@ describe('Striker', function() {
       striker  = new Reach();
     });
 
-    it('has default options', function() {
-      expect(striker.lazy).true;
-    });
-
     it('maps `this.collections` with Striker.schemaMap', function() {
       expect(striker.collections).length(2);
       expect(striker.collections[0]).length(2);
@@ -47,11 +55,18 @@ describe('Striker', function() {
 
     it('defines lazy entries based on schema', function() {
       expect(striker.entries).length(6);
-      var entry = _.find(striker.entries, function(entry) {
-        return entry.channel_id === 'channel2' && entry.period_id === 'this-month';
+      striker.forEach(function(entry) {
+        expect(entry.isLazy).true;
+        expect(_.keys(entry.attributes)).length(2);
       });
-      expect(entry).exist;
-      expect(_.keys(entry)).length(2, 'it does not define addition attributes');
+    });
+
+    it('#get returns entry based on schema', function() {
+      var entry = striker.get('channel2', 'next-month').all();
+      expect(entry).an('object');
+      expect(_.keys(entry)).length(4);
+      expect(entry.actual).undefined;
+      expect(entry.plan).equal(9);
     });
   });
 });
