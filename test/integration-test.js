@@ -171,7 +171,6 @@ describe('Reach integration test', function() {
 
     describe('triggers', function() {
       it('responds to changes in conversionSummary', function() {
-        app.reach.get('channel1', 'last-month').all(); // force calculations
         getModel(app.conversionSummary).set({ customer_volume: 2 });
 
         result = app.reach.get('channel1', 'last-month');
@@ -181,7 +180,6 @@ describe('Reach integration test', function() {
       });
 
       it('responds to changes in conversionForecast', function() {
-        app.reach.get('channel1', 'last-month').all(); // force calculations
         getModel(app.conversionForecast).set({ value: 9 });
 
         result = app.reach.get('channel1', 'last-month');
@@ -198,26 +196,26 @@ describe('Reach integration test', function() {
     describe('get', function() {
       it('calculates values for a single period', function() {
         result = channel.reach('last-month');
-        expect(result.actual).equal(1);
-        expect(result.plan).equal(6);
-        expect(result.variance).equal(1 - 6);
+        expect(result.get('actual')).equal(1);
+        expect(result.get('plan')).equal(6);
+        expect(result.get('variance')).equal(1 - 6);
       });
 
       it('contains no "actuals" for a future month', function() {
         result = channel.reach('next-month');
-        expect(result.actual).undefined;
-        expect(result.plan).equal(10);
-        expect(result.variance).undefined;
+        expect(result.get('actual')).undefined;
+        expect(result.get('plan')).equal(10);
+        expect(result.get('variance')).undefined;
       });
 
       it('returns an array of objects (all periods) by default', function() {
         result = channel.reach();
         expect(_.isArray(result)).true;
         expect(_.size(result)).equal(4);
-        expect(result[1].period_id).equal('last-month');
-        expect(result[1].actual).equal(1);
-        expect(result[1].plan).equal(6);
-        expect(result[1].variance).equal(1 - 6);
+        expect(result[1].get('period_id')).equal('last-month');
+        expect(result[1].get('actual')).equal(1);
+        expect(result[1].get('plan')).equal(6);
+        expect(result[1].get('variance')).equal(1 - 6);
       });
     });
 
@@ -226,23 +224,26 @@ describe('Reach integration test', function() {
         getModel(app.conversionSummary).set({ customer_volume: 2 });
 
         result = channel.reach('last-month');
-        expect(result.actual).equal(2);
-        expect(result.plan).equal(6);
-        expect(result.variance).equal(2 - 6);
+        expect(result.get('actual')).equal(2);
+        expect(result.get('plan')).equal(6);
+        expect(result.get('variance')).equal(2 - 6);
       });
 
       it('responds to changes in conversionForecast', function() {
         getModel(app.conversionForecast).set({ value: 9 });
 
         result = channel.reach('last-month');
-        expect(result.actual).equal(1);
-        expect(result.plan).equal(9);
-        expect(result.variance).equal(1 - 9);
+        expect(result.get('actual')).equal(1);
+        expect(result.get('plan')).equal(9);
+        expect(result.get('variance')).equal(1 - 9);
       });
     });
   });
 
   function getModel(collection) {
+    var prevItem = app.reach.get('channel1', 'last-month');
+    expect(prevItem.get('actual')).equal(1); // force calculations
+
     return collection.findWhere({
       period_id: 'last-month', stage_id: 'topline', channel_id: 'channel1'
     });

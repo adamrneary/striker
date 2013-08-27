@@ -123,7 +123,20 @@ Entry.prototype.get = function(key) {
  */
 
 // Add striker(analysis) to Backbone.Model
-Striker.addAnalysis = function() {};
+Striker.addAnalysis = function(Model, methodName, options) {
+  if (!options) options = {};
+  Model.prototype[methodName] = function() {
+    var striker = Striker.namespace[options.analysis || methodName];
+    var args    = _.toArray(arguments);
+
+    if (args.length > 0) {
+      return striker.get.apply(striker, [this.id].concat(args));
+    } else {
+      var attrs = _.object([[_.first(striker.schema), this.id]]);
+      return striker.where(attrs);
+    }
+  };
+};
 
 // expose `Entry`
 Striker.Entry = Entry;
