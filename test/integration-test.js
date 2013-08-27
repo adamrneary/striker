@@ -68,9 +68,7 @@ describe('Reach integration test', function() {
       var notFuture          = app.periods.notFuture(periodId);
 
       return {
-        period_id:  periodId,
         periodUnix: app.periods.idToUnix(periodId),
-        channel_id: channelId,
         actual:     notFuture ? actual : undefined,
         plan:       plan,
         variance:   notFuture ? actual - plan : undefined
@@ -146,63 +144,50 @@ describe('Reach integration test', function() {
     describe('get and flat', function() {
       it('calculates values for a single channel and period', function() {
         result = app.reach.get('channel1', 'last-month');
-        expect(result.actual).equal(1);
-        expect(result.plan).equal(6);
-        expect(result.variance).equal(1 - 6);
+        expect(result.get('actual')).equal(1);
+        expect(result.get('plan')).equal(6);
+        expect(result.get('variance')).equal(1 - 6);
       });
 
       it('contains no "actual" or "variance" for future months', function() {
         result = app.reach.get('channel1', 'next-month');
-        expect(result.actual).undefined;
-        expect(result.plan).equal(10);
-        expect(result.variance).undefined;
+        expect(result.get('actual')).undefined;
+        expect(result.get('plan')).equal(10);
+        expect(result.get('variance')).undefined;
       });
 
       it('returns an array of objects (all periods) by default', function() {
-        result = app.reach.flat();
+        result = app.reach.entries;
         expect(_.isArray(result)).true;
         expect(_.size(result)).equal(8);
 
-        expect(result[1].channel_id).equal('channel1');
-        expect(result[1].period_id).equal('last-month');
-        expect(result[1].actual).equal(1);
-        expect(result[1].plan).equal(6);
-        expect(result[1].variance).equal(1 - 6);
-      });
-    });
-
-    describe('reverse', function() {
-      beforeEach(function() { result = app.reach.reverse() });
-
-      it('has periodIds at the top key of the returned collection', function() {
-        expect(_.size(result)).equal(4);
-        app.periods.ids().forEach(function(pId) { expect(result[pId]).exist });
-      });
-
-      it('has channelId as the lowest level key', function() {
-        expect(result['this-month'].channel1.actual).equal(3);
-        expect(result['this-month'].channel1.plan).equal(8);
-        expect(result['this-month'].channel2.period_id).equal('this-month');
+        expect(result[1].get('channel_id')).equal('channel1');
+        expect(result[1].get('period_id')).equal('last-month');
+        expect(result[1].get('actual')).equal(1);
+        expect(result[1].get('plan')).equal(6);
+        expect(result[1].get('variance')).equal(1 - 6);
       });
     });
 
     describe('triggers', function() {
       it('responds to changes in conversionSummary', function() {
+        app.reach.get('channel1', 'last-month').all(); // force calculations
         getModel(app.conversionSummary).set({ customer_volume: 2 });
 
         result = app.reach.get('channel1', 'last-month');
-        expect(result.actual).equal(2);
-        expect(result.plan).equal(6);
-        expect(result.variance).equal(2 - 6);
+        expect(result.get('actual')).equal(2);
+        expect(result.get('plan')).equal(6);
+        expect(result.get('variance')).equal(2 - 6);
       });
 
       it('responds to changes in conversionForecast', function() {
+        app.reach.get('channel1', 'last-month').all(); // force calculations
         getModel(app.conversionForecast).set({ value: 9 });
 
         result = app.reach.get('channel1', 'last-month');
-        expect(result.actual).equal(1);
-        expect(result.plan).equal(9);
-        expect(result.variance).equal(1 - 9);
+        expect(result.get('actual')).equal(1);
+        expect(result.get('plan')).equal(9);
+        expect(result.get('variance')).equal(1 - 9);
       });
     });
   });
