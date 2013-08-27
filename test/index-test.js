@@ -62,11 +62,25 @@ describe('Striker', function() {
     });
 
     it('#get returns entry based on schema', function() {
-      var entry = striker.get('channel2', 'next-month').all();
-      expect(entry).an('object');
-      expect(_.keys(entry)).length(4);
-      expect(entry.actual).undefined;
-      expect(entry.plan).equal(9);
+      var entry = striker.get('channel2', 'next-month');
+      expect(entry instanceof Striker.Entry).true;
+      expect(_.keys(entry.all())).length(4);
+      expect(entry.get('actual')).undefined;
+      expect(entry.get('plan')).equal(9);
+    });
+
+    it('has underscore\'s methods', function() {
+      expect(striker.isEmpty()).false;
+      expect(striker.size()).equal(6);
+
+      var totalPlan = striker.reduce(function(memo, entry) {
+        return memo += entry.get('plan');
+      }, 0);
+      expect(totalPlan).equal(4 + 8 + 7 + 3 + 2 + 9);
+
+      var entry = striker.get('channel1', 'this-month');
+      expect(striker.include(entry)).true;
+      expect(striker.indexOf(entry)).equal(1);
     });
   });
 });

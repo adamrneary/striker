@@ -16,8 +16,9 @@ function Striker() {
 
 // Convinient methods to get one value based on schema
 Striker.prototype.get = function() {
+  var args   = _.toArray(arguments);
   var params = _.object(_.map(this.schema, function(schemaId, index) {
-    return [schemaId, arguments[index]];
+    return [schemaId, args[index]];
   }));
   return this.where(params, true);
 };
@@ -56,7 +57,7 @@ Backbone.Index(Striker);
 // Apply more relevant underscore's methods
 var methods = ['forEach', 'map', 'reduce', 'reduceRight', 'find', 'filter',
   'every', 'some', 'include', 'invoke', 'groupBy', 'countBy', 'sortBy',
-  'max', 'min', 'toArray', 'size', 'indexOf', 'isEmpty'];
+  'max', 'min', 'size', 'indexOf', 'isEmpty'];
 
 // Mix in each Underscore method as a proxy to `striker#entries`.
 _.each(methods, function(method) {
@@ -66,7 +67,6 @@ _.each(methods, function(method) {
     return _[method].apply(_, args);
   };
 });
-
 
 /**
  * Define `Entry`
@@ -82,7 +82,8 @@ function Entry(attrs, striker) {
 Entry.prototype.all = function() {
   if (this.isLazy) {
     var params = _.values(this.attributes);
-    _.extend(this.attributes, this.striker.calculate(params));
+    var values = this.striker.calculate.apply(this.striker, params);
+    _.extend(this.attributes, values);
     this.isLazy = false;
   }
   return this.attributes;
