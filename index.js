@@ -43,7 +43,7 @@ Striker.prototype._initCollections = function() {
     });
 
     coll.on('add', function(model) {
-      var collections = _.without(that.collections, coll.models);
+      var collections = _.without(that.collections, that.collections[index]);
       var item        = _.object([[key, model.id]]);
       that._initEntries(collections, item, 0, true);
     });
@@ -74,7 +74,10 @@ Striker.prototype._enableObservers = function() {
 
   _.forEach(this.observers, function(callback, name) {
     var collection = name === 'this' ? this : Striker.namespace[name];
-    collection.on('change', callback, this);
+    collection.on('change', function() {
+      callback.apply(this, arguments);
+      this.trigger('updateCompleted', this, arguments);
+    }, this);
   }, this);
 };
 

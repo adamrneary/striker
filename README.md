@@ -1,25 +1,23 @@
 # Striker
 
-  Bad-ass, greasy-fast, cached, calculated collections.
+  Bad-ass, greasy-fast, lazy calculated collections.
 
 ## Installation
 
-    $ bower install git@github.com:activecell/striker.git#0.7.0 --save
+    $ bower install git@github.com:activecell/striker.git --save
 
   or copy [striker/index.js] to vendors folder.
-
-## Development setup
-
-  * `npm install` - install dependenciese;
-  * `npm test` - run tests to ensure that all pass;
-  * `npm start` - run watch server locally on http://localhost:7357.
 
 ## Example
 
 ```coffee
 Reach = Striker.extend
   schema: ['channel_id', 'period_id']
+
+  # simplest possible calculations
   calculate: (channelId, periodId) ->
+    actual: channelId
+    plan:   periodId
 
 # setup schema mapping, to transform 'channel_id' to real models
 Striker.schemaMap = (key) ->
@@ -30,33 +28,31 @@ Striker.schemaMap = (key) ->
 # setup namespace, it will use in where/query and indexes
 Striker.namespace = app
 
-# setup global caching
-Striker.set 'topline-id', app.stages, ->
-  app.stages.topline().id
+app.periods  = new Periods([{ id: 1 }, { id: 2 }, { id: 3 }]);
+app.channels = new Channels([{ id: 1 }, { id: 2 }]);
+app.reach    = new Reach() # initialize our striker
 
-reach = new Reach()
+# it has some useful methods
+app.reach.size() # => 6
+app.reach.isEmpty() # => false
+
+# all entries are lazy: it means, value does not calculated before you call get/all
+entry = app.reach.get(1, 3) # => Striker.Entry()
+entry.get('channel_id') # => 1
+entry.get('plan') # => 3
+
+# search methods from Backbone.Index
+app.reach.query(period_id: [1, 2], channel_id: 1) # => Array(4)
+app.reach.where(period_id: 3) # => Array(2)
 ```
 
-## Instance API
+## API
 
 ### new Striker()
 
   Create new Striker instance.
 
-### striker.calculate
-
-  `CRITICAL`: Override this in each subclass.
-
-### striker.schema
-
-  `CRITICAL`: Override this in each subclass.
-  Array with collection IDs that setups with Striker.setSchemaMap
-
-### striker.indexes
-
-### striker.observers
-
-### striker.get([args...])
+### striker#get(args...)
 
   Convinient way to get access to `@values`.
 
@@ -68,41 +64,47 @@ conversionRates.get(2)
 # => channel_id=2, returns object, like {1: 70, 2: 17, ..., 36: 27}
 ```
 
-### striker.update([args...])
+### striker#update(args...)
 
-  Recalculate value and trigger `change` event, if value changed.
-  Make sure that `args.length is @schema.length`.
+### striker#calculate(args...)
 
-```coffee
-conversionRates.get(2, 1) # => 10
-conversionRates.calculate(2, 1) # => 12
-conversionRates.update(2, 1)
-reach.get(2, 1) # => 12
-```
+  `CRITICAL`: Override this in each subclass.
 
-### striker.flat()
+### striker#schema
 
-### striker.reverse()
+  `CRITICAL`: Override this in each subclass.
+  Array with collection IDs that setups with Striker.setSchemaMap
+
+### striker#observers
+
+### striker#where(collectionName, condition)
+
+### striker#query(collectionName, condition)
+
+### Underscore's methods
 
 ### Build-in Events
 
   Striker extends [Backbone.Events](http://documentcloud.github.io/backbone/#Events),
   it means you can trigger and listen different events.
 
-  * **change**(striker, arguments, value) - force on every update.
+  * **change**(entry) - force on every update.
+  * **add**
+  * **remove**
+  * **updateCompleted**
 
-## Static API
+### Striker.schemaMap(key)
 
-  Striker provides a few useful methods, which helps make calculations faster
+  `CRITICAL`: Override this once
 
-### Striker.where(collectionName, condition)
-
-### Striker.query(collectionName, condition)
-
-### Striker.sum(collection, field)
+### Striker.namespace
 
 ### Striker.addAnalysis(Model, methodName, [options])
 
-### Striker.get(key)
+### Striker.extend(methods)
 
-### Striker.set(key, collection, method)
+## Development setup
+
+  * `npm install` - install dependenciese;
+  * `npm test` - run tests to ensure that all pass;
+  * `npm start` - run watch server locally on http://localhost:7357.
