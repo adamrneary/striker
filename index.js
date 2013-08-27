@@ -1,21 +1,18 @@
 ;(function(_, Backbone) {
 'use strict';
 
-// expose to global namespace
-window.Striker = Striker;
-
 /**
  * Define `Striker` constructor
  */
 
 function Striker() {
-  this.collections = _.map(this.schema, Striker.schemaMap);
-  this.entries     = [];
-  this._initEntries({}, 0);
+  this.entries = [];
+  this._initCollections();
+  this._initEntries(this.collections, {}, 0);
   this._enableObservers();
 }
 
-// Convinient methods to get one value based on schema
+// Convenient method to get one value based on schema
 Striker.prototype.get = function() {
   var args   = _.toArray(arguments);
   var params = _.object(_.map(this.schema, function(schemaId, index) {
@@ -24,21 +21,49 @@ Striker.prototype.get = function() {
   return this.where(params, true);
 };
 
+// Convenient method to trigger `change` event and force lazy calculations
 Striker.prototype.update = function() {
   var entry = this.get.apply(this, arguments);
   if (!entry.isLazy) this.trigger('change', this, _.toArray(arguments), entry);
   entry.isLazy = true;
 };
 
+// Enable collections observers for `add`&`remove` events
+Striker.prototype._initCollections = function() {
+  var that = this;
+  this.collections = _.map(this.schema, Striker.schemaMap);
+  _.forEach(this.schema, function(key, index) {
+    var coll = _.first(that.collections[index]).collection;
+
+    coll.on('remove', function(model) {
+      var attrs    = _.object([[key, model.id]]);
+      var entries  = that.where(attrs);
+      that.entries = _.difference(that.entries, entries);
+      _.forEach(entries, function(entry) { that.trigger('remove', entry) });
+    });
+
+    coll.on('add', function(model) {
+      var collections = _.without(that.collections, coll.models);
+      var item        = _.object([[key, model.id]]);
+      that._initEntries(collections, item, 0, true);
+    });
+  });
+};
+
 // Initialize entries based on schema
-Striker.prototype._initEntries = function(item, level) {
+Striker.prototype._initEntries = function(collections, item, level, trigger) {
   var key    = this.schema[level];
-  var models = this.collections[level];
+  var models = collections[level];
 
   for (var i = 0, len = models.length; i < len; i++) {
     item[key] = models[i].id;
-    if (this.schema.length === level + 1) this.entries.push(new Entry(item, this));
-    else this._initEntries(item, level + 1);
+    if (collections.length === level + 1) {
+      var entry = new Entry(item, this);
+      this.entries.push(entry);
+      if (trigger) this.trigger('add', entry);
+    } else {
+      this._initEntries(collections, item, level + 1);
+    }
   }
 };
 
@@ -127,14 +152,14 @@ Striker.extend = Backbone.Model.extend;
 
 function Entry(attrs, striker) {
   this.attributes = _.clone(attrs);
-  this.striker    = striker;
+  this.collection = striker;
   this.isLazy     = true;
 }
 
 Entry.prototype.all = function() {
   if (this.isLazy) {
     var params = _.values(this.attributes);
-    var values = this.striker.calculate.apply(this.striker, params);
+    var values = this.collection.calculate.apply(this.collection, params);
     _.extend(this.attributes, values);
     this.isLazy = false;
   }
@@ -144,5 +169,8 @@ Entry.prototype.all = function() {
 Entry.prototype.get = function(key) {
   return this.all()[key];
 };
+
+// expose to global namespace
+window.Striker = Striker;
 
 }).call(this, _, Backbone);

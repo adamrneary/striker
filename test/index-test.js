@@ -89,4 +89,20 @@ describe('Striker', function() {
     expect(striker.include(entry)).true;
     expect(striker.indexOf(entry)).equal(1);
   });
+
+  it('handles `remove` event', function() {
+    channels.remove([channels.get('channel1')]);
+    expect(striker.size()).equal(3);
+    expect(striker.get('channel1', 'this-month')).undefined;
+    expect(striker.get('channel2', 'this-month')).exist;
+  });
+
+  it('handles `add` event', function() {
+    striker.get('channel2', 'this-month').all();
+    periods.add([{ id: 'two-years-ago' }]);
+
+    expect(striker.size()).equal(8);
+    expect(striker.get('channel2', 'this-month').isLazy).false;
+    expect(striker.get('channel2', 'two-years-ago')).exist;
+  });
 });
