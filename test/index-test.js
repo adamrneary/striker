@@ -16,7 +16,6 @@ describe('Striker', function() {
 
   var Reach = Striker.extend({
     schema: ['channel_id', 'period_id'],
-    attributes: ['actual', 'plan'],
     calculate: function(channelId, periodId) {
       return fakeValues[channelId + '-' + periodId];
     }

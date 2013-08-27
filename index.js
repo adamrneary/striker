@@ -7,7 +7,6 @@
 
 function Striker() {
   this.entries = [];
-  this.Entry   = buildEntry(this);
   this._initCollections();
   this._initEntries(this.collections, {}, 0);
   this._enableObservers();
@@ -25,8 +24,10 @@ Striker.prototype.get = function() {
 // Convenient method to trigger `change` event and force lazy calculations
 Striker.prototype.update = function() {
   var entry = this.get.apply(this, arguments);
-  if (!entry.isLazy) this.trigger('change', this, _.toArray(arguments), entry);
-  entry.isLazy = true;
+  if (!entry.isLazy) {
+    this.trigger('change', this, _.toArray(arguments), entry);
+    entry.isLazy = true;
+  }
 };
 
 // Enable collections observers for `add`&`remove` events
@@ -59,6 +60,7 @@ Striker.prototype._initEntries = function(collections, item, level, trigger) {
   for (var i = 0, len = models.length; i < len; i++) {
     item[key] = models[i].id;
     if (collections.length === level + 1) {
+      if (!this.Entry) this.Entry = defineEntry(this, entry, item);
       var entry = new this.Entry(item, this);
       this.entries.push(entry);
       if (trigger) this.trigger('add', entry);
@@ -172,15 +174,16 @@ Entry.prototype.get = function(key) {
 // An ES5 magic:
 // in order to define nice API and avoid constant `get`,
 // we define CustomEntry for every striker, which contains necessary getters
-// based on striker.schema and striker.attributes
-function buildEntry(striker) {
-  var getters = striker.schema.concat(striker.attributes);
+// based on first not lazy calculation
+function defineEntry(striker, entry, item) {
   var CustomEntry = Entry.extend({});
+  var fakeEntry   = new CustomEntry(item, striker);
+  var getters     = _.uniq(_.keys(fakeEntry.all()));
 
   _.forEach(getters, function(name) {
     Object.defineProperty(CustomEntry.prototype, name, {
       // Getter proxies to Entry#get()...
-      get: function() { return this.get(name); },
+      get: function() { return this.get(name) },
       // Make it configurable and enumerable so it's easy to override...
       configurable: true,
       enumerable: true
