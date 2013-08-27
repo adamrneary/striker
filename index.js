@@ -12,6 +12,7 @@ function Striker() {
   this.collections = _.map(this.schema, Striker.schemaMap);
   this.entries     = [];
   this._initEntries({}, 0);
+  this._enableObservers();
 }
 
 // Convinient methods to get one value based on schema
@@ -21,6 +22,12 @@ Striker.prototype.get = function() {
     return [schemaId, args[index]];
   }));
   return this.where(params, true);
+};
+
+Striker.prototype.update = function() {
+  var entry = this.get.apply(this, arguments);
+  if (!entry.isLazy) this.trigger('change', this, _.toArray(arguments), entry);
+  entry.isLazy = true;
 };
 
 // Initialize entries based on schema
@@ -33,6 +40,24 @@ Striker.prototype._initEntries = function(item, level) {
     if (this.schema.length === level + 1) this.entries.push(new Entry(item, this));
     else this._initEntries(item, level + 1);
   }
+};
+
+// Setup collection observers based on `this.observers`
+// Name `this` uses for self reference
+Striker.prototype._enableObservers = function() {
+  if (_.isEmpty(this.observers)) return;
+
+  _.forEach(this.observers, function(callback, name) {
+    var collection = name === 'this' ? this : Striker.namespace[name];
+    collection.on('change', function(model, args, value) {
+      // FIXME: simplify this logic
+      if (model instanceof Backbone.Model)
+        callback.call(this, model, model.changed);
+      else
+        callback.call(this, model, args, value);
+      this.trigger('updated', this, args);
+    }, this);
+  }, this);
 };
 
 // Apply EventEmitter pattern and set default values
@@ -52,7 +77,7 @@ _.extend(Striker.prototype, Backbone.Events, {
 });
 
 // Apply methods of Backbone.Index - where, query
-Backbone.Index(Striker);
+Backbone.Index(Striker, { ignoreChange: true });
 
 // Apply more relevant underscore's methods
 var methods = ['forEach', 'map', 'reduce', 'reduceRight', 'find', 'filter',
@@ -70,7 +95,7 @@ _.each(methods, function(method) {
 
 /**
  * Define `Entry`
- * It uses to define lazy evaluations
+ * It uses to perform lazy evaluations
  */
 
 function Entry(attrs, striker) {
