@@ -107,4 +107,4 @@ conversionRates.get(2)
 
   * `npm install` - install dependenciese;
   * `npm test` - run tests to ensure that all pass;
-  * `npm start` - run watch server locally on http://localhost:7357.
+  * `npm start` - run watch server locally on http://localhost:7357
