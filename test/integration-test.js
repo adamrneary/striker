@@ -141,7 +141,7 @@ describe('Reach integration test', function() {
   });
 
   describe('overall', function() {
-    describe('get and flat', function() {
+    describe('get', function() {
       it('calculates values for a single channel and period', function() {
         result = app.reach.get('channel1', 'last-month');
         expect(result.get('actual')).equal(1);
@@ -169,7 +169,7 @@ describe('Reach integration test', function() {
       });
     });
 
-    describe('triggers', function() {
+    describe('observers', function() {
       it('responds to changes in conversionSummary', function() {
         getModel(app.conversionSummary).set({ customer_volume: 2 });
 
@@ -219,7 +219,7 @@ describe('Reach integration test', function() {
       });
     });
 
-    describe('triggers', function() {
+    describe('observers', function() {
       it('responds to changes in conversionSummary', function() {
         getModel(app.conversionSummary).set({ customer_volume: 2 });
 

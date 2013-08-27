@@ -49,14 +49,7 @@ Striker.prototype._enableObservers = function() {
 
   _.forEach(this.observers, function(callback, name) {
     var collection = name === 'this' ? this : Striker.namespace[name];
-    collection.on('change', function(model, args, value) {
-      // FIXME: simplify this logic
-      if (model instanceof Backbone.Model)
-        callback.call(this, model, model.changed);
-      else
-        callback.call(this, model, args, value);
-      this.trigger('updated', this, args);
-    }, this);
+    collection.on('change', callback, this);
   }, this);
 };
 
@@ -94,31 +87,6 @@ _.each(methods, function(method) {
 });
 
 /**
- * Define `Entry`
- * It uses to perform lazy evaluations
- */
-
-function Entry(attrs, striker) {
-  this.attributes = _.clone(attrs);
-  this.striker    = striker;
-  this.isLazy     = true;
-}
-
-Entry.prototype.all = function() {
-  if (this.isLazy) {
-    var params = _.values(this.attributes);
-    var values = this.striker.calculate.apply(this.striker, params);
-    _.extend(this.attributes, values);
-    this.isLazy = false;
-  }
-  return this.attributes;
-};
-
-Entry.prototype.get = function(key) {
-  return this.all()[key];
-};
-
-/**
  * Static methods
  */
 
@@ -151,5 +119,30 @@ Striker.namespace = window;
 
 // Copy extend method for inheritance
 Striker.extend = Backbone.Model.extend;
+
+/**
+ * Define `Entry`
+ * It uses to perform lazy evaluations
+ */
+
+function Entry(attrs, striker) {
+  this.attributes = _.clone(attrs);
+  this.striker    = striker;
+  this.isLazy     = true;
+}
+
+Entry.prototype.all = function() {
+  if (this.isLazy) {
+    var params = _.values(this.attributes);
+    var values = this.striker.calculate.apply(this.striker, params);
+    _.extend(this.attributes, values);
+    this.isLazy = false;
+  }
+  return this.attributes;
+};
+
+Entry.prototype.get = function(key) {
+  return this.all()[key];
+};
 
 }).call(this, _, Backbone);
