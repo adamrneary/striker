@@ -51,6 +51,7 @@ describe('Reach integration test', function() {
 
   var Reach = Striker.extend({
     schema: ['channel_id', 'period_id'],
+    attributes: ['periodUnix', 'actual', 'plan', 'variance'],
 
     observers: {
       conversionSummary: observer,
@@ -144,16 +145,16 @@ describe('Reach integration test', function() {
     describe('get', function() {
       it('calculates values for a single channel and period', function() {
         result = app.reach.get('channel1', 'last-month');
-        expect(result.get('actual')).equal(1);
-        expect(result.get('plan')).equal(6);
-        expect(result.get('variance')).equal(1 - 6);
+        expect(result.actual).equal(1);
+        expect(result.plan).equal(6);
+        expect(result.variance).equal(1 - 6);
       });
 
       it('contains no "actual" or "variance" for future months', function() {
         result = app.reach.get('channel1', 'next-month');
-        expect(result.get('actual')).undefined;
-        expect(result.get('plan')).equal(10);
-        expect(result.get('variance')).undefined;
+        expect(result.actual).undefined;
+        expect(result.plan).equal(10);
+        expect(result.variance).undefined;
       });
 
       it('returns an array of objects (all periods) by default', function() {
@@ -174,18 +175,18 @@ describe('Reach integration test', function() {
         getModel(app.conversionSummary).set({ customer_volume: 2 });
 
         result = app.reach.get('channel1', 'last-month');
-        expect(result.get('actual')).equal(2);
-        expect(result.get('plan')).equal(6);
-        expect(result.get('variance')).equal(2 - 6);
+        expect(result.actual).equal(2);
+        expect(result.plan).equal(6);
+        expect(result.variance).equal(2 - 6);
       });
 
       it('responds to changes in conversionForecast', function() {
         getModel(app.conversionForecast).set({ value: 9 });
 
         result = app.reach.get('channel1', 'last-month');
-        expect(result.get('actual')).equal(1);
-        expect(result.get('plan')).equal(9);
-        expect(result.get('variance')).equal(1 - 9);
+        expect(result.actual).equal(1);
+        expect(result.plan).equal(9);
+        expect(result.variance).equal(1 - 9);
       });
     });
   });
@@ -196,16 +197,16 @@ describe('Reach integration test', function() {
     describe('get', function() {
       it('calculates values for a single period', function() {
         result = channel.reach('last-month');
-        expect(result.get('actual')).equal(1);
-        expect(result.get('plan')).equal(6);
-        expect(result.get('variance')).equal(1 - 6);
+        expect(result.actual).equal(1);
+        expect(result.plan).equal(6);
+        expect(result.variance).equal(1 - 6);
       });
 
       it('contains no "actuals" for a future month', function() {
         result = channel.reach('next-month');
-        expect(result.get('actual')).undefined;
-        expect(result.get('plan')).equal(10);
-        expect(result.get('variance')).undefined;
+        expect(result.actual).undefined;
+        expect(result.plan).equal(10);
+        expect(result.variance).undefined;
       });
 
       it('returns an array of objects (all periods) by default', function() {
@@ -224,18 +225,18 @@ describe('Reach integration test', function() {
         getModel(app.conversionSummary).set({ customer_volume: 2 });
 
         result = channel.reach('last-month');
-        expect(result.get('actual')).equal(2);
-        expect(result.get('plan')).equal(6);
-        expect(result.get('variance')).equal(2 - 6);
+        expect(result.actual).equal(2);
+        expect(result.plan).equal(6);
+        expect(result.variance).equal(2 - 6);
       });
 
       it('responds to changes in conversionForecast', function() {
         getModel(app.conversionForecast).set({ value: 9 });
 
         result = channel.reach('last-month');
-        expect(result.get('actual')).equal(1);
-        expect(result.get('plan')).equal(9);
-        expect(result.get('variance')).equal(1 - 9);
+        expect(result.actual).equal(1);
+        expect(result.plan).equal(9);
+        expect(result.variance).equal(1 - 9);
       });
     });
   });

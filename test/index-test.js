@@ -16,6 +16,7 @@ describe('Striker', function() {
 
   var Reach = Striker.extend({
     schema: ['channel_id', 'period_id'],
+    attributes: ['actual', 'plan'],
     calculate: function(channelId, periodId) {
       return fakeValues[channelId + '-' + periodId];
     }
@@ -57,10 +58,9 @@ describe('Striker', function() {
 
   it('#get returns entry based on schema', function() {
     var entry = striker.get('channel2', 'next-month');
-    expect(entry instanceof Striker.Entry).true;
     expect(_.keys(entry.all())).length(4);
-    expect(entry.get('actual')).undefined;
-    expect(entry.get('plan')).equal(9);
+    expect(entry.actual).undefined;
+    expect(entry.plan).equal(9);
   });
 
   it('#update force lazy `change` event', function(done) {
