@@ -5,12 +5,18 @@
  * Define `Striker` constructor
  */
 
-function Striker() {
+function Striker(options) {
+  if (!options) options = {};
+
   this.entries = [];
   this.Entry   = Entry.extend({});
   this._initCollections();
   this._initEntries(this.collections, {}, 0);
-  this._enableObservers();
+
+  defineCustomAttributes(this);
+  options.careful ?
+    Striker.once('enable-observers', this._enableObservers, this) :
+    this._enableObservers();
 }
 
 // Convenient method to get one value based on schema
@@ -119,6 +125,9 @@ _.each(methods, function(method) {
 /**
  * Static methods
  */
+
+// use Striker object to notify existing strikers
+_.extend(Striker, Backbone.Events);
 
 // Add striker(analysis) to Backbone.Model
 Striker.addAnalysis = function(Model, methodName, options) {
