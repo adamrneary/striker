@@ -25,7 +25,7 @@ Striker.prototype.get = function() {
 Striker.prototype.update = function() {
   var entry = this.get.apply(this, arguments);
   if (!entry.isLazy) {
-    this.trigger('change', this, _.toArray(arguments), entry);
+    this.trigger('change', entry);
     entry.isLazy = true;
   }
 };
@@ -77,8 +77,8 @@ Striker.prototype._enableObservers = function() {
 
   _.forEach(this.observers, function(callback, name) {
     var collection = name === 'this' ? this : Striker.namespace[name];
-    collection.on('change', function() {
-      callback.apply(this, arguments);
+    collection.on('change', function(model) {
+      callback.call(this, model, model.changedAttributes());
       this.trigger('updateCompleted', this, arguments);
     }, this);
   }, this);
@@ -103,7 +103,7 @@ _.extend(Striker.prototype, Backbone.Events, {
 // Apply methods of Backbone.Index - where, query
 Backbone.Index(Striker, { ignoreChange: true });
 
-// Apply more relevant underscore's methods
+// Apply relevant underscore's methods
 var methods = ['forEach', 'map', 'reduce', 'reduceRight', 'find', 'filter',
   'every', 'some', 'include', 'invoke', 'groupBy', 'countBy', 'sortBy',
   'max', 'min', 'size', 'indexOf', 'isEmpty'];
@@ -169,6 +169,10 @@ Entry.prototype.all = function() {
 
 Entry.prototype.get = function(key) {
   return this.all()[key];
+};
+
+Entry.prototype.changedAttributes = function() {
+  return { message: 'Striker does nos support changedAttributes' };
 };
 
 // An ES5 magic:
