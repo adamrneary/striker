@@ -22,11 +22,15 @@ function Striker(options) {
 
 // Convenient method to get one value based on schema
 Striker.prototype.get = function() {
-  var args   = _.toArray(arguments);
-  var result = this.values;
+  try {
+    var args   = _.toArray(arguments);
+    var result = this.values;
 
-  for (var i = 0, len = args.length; i < len; i++) result = result[args[i]];
-  return result;
+    for (var i = 0, len = args.length; i < len; i++) result = result[args[i]];
+    return result;
+  } catch (err) {
+    console.log('FIX IT:', err.message, _.toArray(arguments), this);
+  }
 };
 
 // Convenient method to trigger `change` event and force lazy calculations
