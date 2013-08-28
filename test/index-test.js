@@ -49,7 +49,8 @@ describe('Striker', function() {
 
   it('defines lazy entries based on schema', function() {
     expect(striker.entries).length(6);
-    striker.forEach(function(entry) {
+    striker.forEach(function(entry, index) {
+      if (index === 0) return;
       expect(entry.isLazy).true;
       expect(_.keys(entry.attributes)).length(2);
     });
