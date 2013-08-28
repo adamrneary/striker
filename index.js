@@ -8,10 +8,11 @@
 function Striker(options) {
   if (!options) options = {};
 
+  this.values  = {};
   this.entries = [];
   this.Entry   = Entry.extend({});
   this._initCollections();
-  this._initEntries(this.collections, {}, 0);
+  this._initEntries(this.collections, this.values, {}, 0);
 
   defineCustomAttributes(this);
   options.careful ?
@@ -22,10 +23,10 @@ function Striker(options) {
 // Convenient method to get one value based on schema
 Striker.prototype.get = function() {
   var args   = _.toArray(arguments);
-  var params = _.object(_.map(this.schema, function(schemaId, index) {
-    return [schemaId, args[index]];
-  }));
-  return this.where(params, true);
+  var result = this.values;
+
+  for (var i = 0, len = args.length; i < len; i++) result = result[args[i]];
+  return result;
 };
 
 // Convenient method to trigger `change` event and force lazy calculations
@@ -60,17 +61,21 @@ Striker.prototype._initCollections = function() {
 };
 
 // Initialize entries based on schema
-Striker.prototype._initEntries = function(collections, item, level, trigger) {
+Striker.prototype._initEntries = function(collections, values, item, level, trigger) {
   var key    = this.schema[level];
   var models = collections[level];
-  for (var i = 0, len = models.length; i < len; i++) {
-    item[key] = models[i].id;
+
+  for (var i = 0, len = models.length, modelId; i < len; i++) {
+    modelId   = models[i].id;
+    item[key] = modelId;
     if (collections.length === level + 1) {
       var entry = new this.Entry(item, this);
       this.entries.push(entry);
+      values[modelId] = entry;
       if (trigger) this.trigger('add', entry);
     } else {
-      this._initEntries(collections, item, level + 1);
+      values[modelId] = {};
+      this._initEntries(collections, values[modelId], item, level + 1);
     }
   }
 };
