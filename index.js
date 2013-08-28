@@ -7,6 +7,7 @@
 
 function Striker() {
   this.entries = [];
+  this.Entry   = Entry.extend({});
   this._initCollections();
   this._initEntries(this.collections, {}, 0);
   this._enableObservers();
@@ -56,11 +57,9 @@ Striker.prototype._initCollections = function() {
 Striker.prototype._initEntries = function(collections, item, level, trigger) {
   var key    = this.schema[level];
   var models = collections[level];
-
   for (var i = 0, len = models.length; i < len; i++) {
     item[key] = models[i].id;
     if (collections.length === level + 1) {
-      if (!this.Entry) this.Entry = defineEntry(this, entry, item);
       var entry = new this.Entry(item, this);
       this.entries.push(entry);
       if (trigger) this.trigger('add', entry);
@@ -156,7 +155,6 @@ function Entry(attrs, striker) {
   this.isLazy     = true;
 }
 
-// The party starts here!
 Entry.prototype.all = function() {
   if (this.isLazy) {
     var params = _.values(this.attributes);
@@ -171,35 +169,29 @@ Entry.prototype.get = function(key) {
   return this.all()[key];
 };
 
-Entry.prototype.changedAttributes = function() {
-  return { message: 'Striker does nos support changedAttributes' };
-};
-
 // An ES5 magic:
 // in order to define nice API and avoid constant `get`,
 // we define CustomEntry for every striker, which contains necessary getters
 // based on first not lazy calculation
-function defineEntry(striker, entry, item) {
-  var CustomEntry = Entry.extend({});
-  var fakeEntry   = new CustomEntry(item, striker);
-  var getters     = _.uniq(_.keys(fakeEntry.all()));
+function defineCustomAttributes(striker) {
+  var entry   = _.first(striker.entries);
+  var getters = _.uniq(_.keys(entry.all()));
 
   _.forEach(getters, function(name) {
-    Object.defineProperty(CustomEntry.prototype, name, {
-      // Getter proxies to Entry#get()...
+    Object.defineProperty(striker.Entry.prototype, name, {
+      // getter proxies to Entry#get()
       get: function() { return this.get(name) },
-      // Make it configurable and enumerable so it's easy to override...
+      // make it configurable and enumerable so it's easy to override...
       configurable: true,
       enumerable: true
     });
   });
-
-  return CustomEntry;
 }
 
 // Copy extend method for inheritance
 Striker.extend = Backbone.Model.extend;
 Entry.extend   = Backbone.Model.extend;
+Striker.Entry  = Entry;
 
 // expose to global namespace
 window.Striker = Striker;
