@@ -224,7 +224,6 @@ class Striker.Collection
   build: ->
     startTime = moment()
     @_build()
-    @built = true
     if (endTime = moment() - startTime) > 100
       Striker.warn("Striker: #{@constructor.name} init #{endTime}ms")
 
@@ -402,6 +401,13 @@ class Striker.Collection
 
   # Builds values for every element
   _build: (level = 0, args = []) ->
+
+    # We mark built as true to account for strikers with recursive
+    # dependencies. In other words, if a striker triggers a change to itself
+    # then @built better be true before we get there or the trigger won't fire!
+    @built = true
+    
+    # Then we build all items in the striker
     for item in @collections[level]
       args[level] = item.id
       if level >= @schema.length - 1
