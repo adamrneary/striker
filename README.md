@@ -1,4 +1,4 @@
-# Striker
+# Striker [![Build Status](https://circleci.com/gh/activecell/striker.png?circle-token=e4e94a5aa232fb270ea22a5f32a34e3db5e75b61)](https://circleci.com/gh/activecell/striker)
 
   Bad-ass, greasy-fast, lazy calculated collections.
 
