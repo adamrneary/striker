@@ -195,8 +195,14 @@ Entry.prototype.get = function(key) {
 // we define CustomEntry for every striker, which contains necessary getters
 // based on first not lazy calculation
 function defineCustomAttributes(striker) {
-  var entry   = _.first(striker.entries);
-  var getters = _.uniq(_.keys(entry.all()));
+  var getters, entry;
+
+  if (striker.getters) {
+    getters = striker.getters;
+  } else {
+    entry   = _.first(striker.entries);
+    getters = _.uniq(_.keys(entry.all()));
+  }
 
   _.forEach(getters, function(name) {
     Object.defineProperty(striker.Entry.prototype, name, {

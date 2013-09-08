@@ -1,3 +1,7 @@
+### 0.7.1 / 2013-09-08 - production fixes
+
+  * manual getters
+
 ## 0.7.0 / 2013-08-28 - smaller, faster, simpler, lazy, brand new striker!
 
   * store values as array of entries

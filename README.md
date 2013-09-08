@@ -65,7 +65,6 @@ conversionRates.get(2)
 ```
 
 ### striker#update(args...)
-
 ### striker#calculate(args...)
 
   `CRITICAL`: Override this in each subclass.
@@ -75,10 +74,9 @@ conversionRates.get(2)
   `CRITICAL`: Override this in each subclass.
   Array with collection IDs that setups with Striker.setSchemaMap
 
+### striker#getters
 ### striker#observers
-
 ### striker#where(collectionName, condition)
-
 ### striker#query(collectionName, condition)
 
 ### Underscore's methods
@@ -98,9 +96,7 @@ conversionRates.get(2)
   `CRITICAL`: Override this once
 
 ### Striker.namespace
-
 ### Striker.addAnalysis(Model, methodName, [options])
-
 ### Striker.extend(methods)
 
 ## Development setup
