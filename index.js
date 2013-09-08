@@ -1,4 +1,5 @@
-;(function(_, Backbone) {
+/* globals _, Backbone */
+;(function() {
 'use strict';
 
 /**
@@ -20,21 +21,17 @@ function Striker(options) {
 
 // Convenient method to get one value based on schema
 Striker.prototype.get = function() {
-  try {
-    var args   = _.toArray(arguments);
-    var result = this.values;
+  var args   = _.toArray(arguments);
+  var result = this.values;
 
-    for (var i = 0, len = args.length; i < len; i++) result = result[args[i]];
-    return result;
-  } catch (err) {
-    console.log('FIX IT:', err.message, _.toArray(arguments), this);
-  }
+  for (var i = 0, len = args.length; i < len; i++) result = result[args[i]];
+  return result;
 };
 
 // Convenient method to trigger `change` event and force lazy calculations
 Striker.prototype.update = function() {
   var entry = this.get.apply(this, arguments);
-  if (!entry.isLazy) {
+  if (entry && !entry.isLazy) {
     this.trigger('change', entry, _.toArray(arguments));
     entry.isLazy = true;
   }
@@ -90,6 +87,7 @@ Striker.prototype._enableObservers = function() {
   _.forEach(this.observers, function(callback, name) {
     var collection = name === 'this' ? this : Striker.namespace[name];
     collection.on('change', function(model, attrs) {
+      if (!model) return;
       if (model instanceof Backbone.Model)
         callback.call(this, model, model.changedAttributes());
       else
@@ -229,5 +227,4 @@ Striker.Entry  = Entry;
 
 // expose to global namespace
 window.Striker = Striker;
-
-}).call(this, _, Backbone);
+}).call(this);
