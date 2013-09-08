@@ -48,9 +48,10 @@ app.reach.where(period_id: 3) # => Array(2)
 
 ## API
 
-### new Striker()
+### new Striker([options])
 
   Create new Striker instance.
+  options.careful
 
 ### striker#get(args...)
 

@@ -15,9 +15,7 @@ function Striker(options) {
   this._initEntries(this.collections, this.values, {}, 0);
 
   defineCustomAttributes(this);
-  options.careful ?
-    Striker.once('enable-observers', this._enableObservers, this) :
-    this._enableObservers();
+  enableObservers(this, options);
 }
 
 // Convenient method to get one value based on schema
@@ -213,6 +211,15 @@ function defineCustomAttributes(striker) {
       enumerable: true
     });
   });
+}
+
+// For strikers that trigger themselves
+// we need to enable triggers before any values are calculated.
+function enableObservers(striker, options) {
+  if (striker.observers && striker.observers.this) options.careful = false;
+  options.careful ?
+    Striker.once('enable-observers', striker._enableObservers, striker) :
+    striker._enableObservers();
 }
 
 // Copy extend method for inheritance
