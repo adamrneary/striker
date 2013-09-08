@@ -1,5 +1,4 @@
-/* globals _, Backbone */
-;(function() {
+;(function(_, Backbone) {
 'use strict';
 
 /**
@@ -56,6 +55,7 @@ Striker.prototype._initCollections = function() {
       var item        = _.object([[key, model.id]]);
       that._initEntries(collections, item, 0, true);
     });
+    // FIXME: we need to update this.values too
   });
 };
 
@@ -86,13 +86,13 @@ Striker.prototype._enableObservers = function() {
 
   _.forEach(this.observers, function(callback, name) {
     var collection = name === 'this' ? this : Striker.namespace[name];
+    // FIXME: change has always have same semantic in arguments
     collection.on('change', function(model, attrs) {
-      if (!model) return;
       if (model instanceof Backbone.Model)
         callback.call(this, model, model.changedAttributes());
       else
         callback.call(this, model, attrs);
-      this.trigger('updateCompleted', this, arguments);
+      this.trigger('updateCompleted', this, arguments); // FIXME
     }, this);
   }, this);
 };
@@ -214,7 +214,9 @@ function defineCustomAttributes(striker) {
 // For strikers that trigger themselves
 // we need to enable triggers before any values are calculated.
 function enableObservers(striker, options) {
-  if (striker.observers && striker.observers.this) options.careful = false;
+  if (options.careful && striker.observers && striker.observers.this)
+    options.careful = false;
+
   options.careful ?
     Striker.once('enable-observers', striker._enableObservers, striker) :
     striker._enableObservers();
@@ -227,4 +229,4 @@ Striker.Entry  = Entry;
 
 // expose to global namespace
 window.Striker = Striker;
-}).call(this);
+}).call(this, _, Backbone);
