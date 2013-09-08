@@ -12,7 +12,7 @@ function Striker(options) {
   this.entries = [];
   this.Entry   = Entry.extend({});
   this._initCollections();
-  this._initEntries(this.collections, this.values, {}, 0);
+  this._initEntries(this.values, {}, 0, { collections: this.collections });
 
   defineCustomAttributes(this);
   enableObservers(this, options);
@@ -24,6 +24,25 @@ Striker.prototype.get = function() {
   var result = this.values;
 
   for (var i = 0, len = args.length; i < len; i++) result = result[args[i]];
+  return result;
+};
+
+Striker.prototype.reverseValues = function() {
+  var result    = {};
+  var schema    = _.clone(this.schema).reverse();
+  var schemaLen = schema.length;
+
+  for (var i = 0, len = this.entries.length, entry, item; i < len; i++) {
+    entry = this.entries[i];
+    item  = result;
+    for (var j = 0, schemaId, value; j < schemaLen; j++) {
+      schemaId = schema[j];
+      value    = entry.attributes[schemaId];
+      if (!item[value]) item[value] = {};
+      j + 1 === schemaLen ? (item[value] = entry) : (item = item[value]);
+    }
+  }
+
   return result;
 };
 
@@ -53,28 +72,28 @@ Striker.prototype._initCollections = function() {
     coll.on('add', function(model) {
       var collections = _.without(that.collections, that.collections[index]);
       var item        = _.object([[key, model.id]]);
-      that._initEntries(collections, item, 0, true);
+      that._initEntries({}, item, 0, { trigger: true, collections: collections });
     });
     // FIXME: we need to update this.values too
   });
 };
 
 // Initialize entries based on schema
-Striker.prototype._initEntries = function(collections, values, item, level, trigger) {
+Striker.prototype._initEntries = function(values, item, level, options) {
   var key    = this.schema[level];
-  var models = collections[level];
+  var models = this.collections[level];
 
   for (var i = 0, len = models.length, modelId; i < len; i++) {
     modelId   = models[i].id;
     item[key] = modelId;
-    if (collections.length === level + 1) {
+    if (this.collections.length === level + 1) {
       var entry = new this.Entry(item, this);
-      this.entries.push(entry);
       values[modelId] = entry;
-      if (trigger) this.trigger('add', entry);
+      this.entries.push(entry);
+      if (options.trigger) this.trigger('add', entry);
     } else {
       values[modelId] = {};
-      this._initEntries(collections, values[modelId], item, level + 1);
+      this._initEntries(values[modelId], item, level + 1, options);
     }
   }
 };

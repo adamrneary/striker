@@ -57,11 +57,19 @@ describe('Striker', function() {
     });
   });
 
-  it('#get returns entry based on schema', function() {
+  it('#get returns entry based on schema and this.values', function() {
     var entry = striker.get('channel2', 'next-month');
+    expect(_.size(striker.values)).equal(2);
     expect(_.keys(entry.all())).length(4);
     expect(entry.actual).undefined;
     expect(entry.plan).equal(9);
+  });
+
+  it('returns reverseValues', function() {
+    var values = striker.reverseValues();
+    expect(_.size(values)).equal(3);
+    expect(values['last-month']).exist;
+    expect(values['this-month'].channel1.plan).equal(8);
   });
 
   it('#update force lazy `change` event', function(done) {

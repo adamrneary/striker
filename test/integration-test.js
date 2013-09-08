@@ -168,6 +168,25 @@ describe('Reach integration test', function() {
       });
     });
 
+    describe('reverseValues', function() {
+      beforeEach(function() {
+        result = app.reach.reverseValues();
+      });
+
+      it('has periodIds at the top key of the returned collection', function() {
+        expect(_.size(result)).equal(4);
+        app.periods.ids().forEach(function(pId) {
+          expect(result[pId]).exist;
+        });
+      });
+
+      it('has channelId as the lowest level key', function() {
+        expect(result['this-month'].channel1.actual).equal(3);
+        expect(result['this-month'].channel1.plan).equal(8);
+        expect(result['this-month'].channel2.period_id).equal('this-month');
+      });
+    });
+
     describe('observers', function() {
       it('responds to changes in conversionSummary', function() {
         getModel(app.conversionSummary).set({ customer_volume: 2 });

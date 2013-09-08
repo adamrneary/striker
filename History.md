@@ -1,9 +1,11 @@
-### 0.7.1 / 2013-09-08 - production fixes
+## 0.8.0 / 2013-09-.. - production ready
 
   * manual getters
   * fix options.careful for recursive strikers
-  * add `reverseValues`
-  * add docs
+  * ~ add `reverseValues`
+  * ~ fix observers for `add` and `remove`
+  * ~ standardize events arguments
+  * ~ add docs
 
 ## 0.7.0 / 2013-08-28 - smaller, faster, simpler, lazy, brand new striker!
 
@@ -14,7 +16,7 @@
   * integration with underscore
   * has where/query methods
   * use es5 getters for nice entry API
-  * fast and small
+  * fast, small and lightweight
 
 ### 0.5.5 / 2013-07-14
 
