@@ -67,6 +67,7 @@ For more advanced example check [test/integration-test.js](https://github.com/ac
 
   Base class for Strikers, extend it and add custom logic.
   You can pass { careful: true } to skip enabling of observers, and then run Striker.trigger('enable-observers') when you need it. But it does not apply for recursive strikers, they always enable observers immediately.
+  {stat: true}
 
 ### striker#schema
 

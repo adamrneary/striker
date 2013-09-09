@@ -53,14 +53,14 @@ describe('Striker', function() {
     striker.forEach(function(entry, index) {
       if (index === 0) return;
       expect(entry.isLazy).true;
-      expect(_.keys(entry.attributes)).length(2);
+      expect(_.size(entry.attributes)).equal(2);
     });
   });
 
   it('#get returns entry based on schema and this.values', function() {
     var entry = striker.get('channel2', 'next-month');
     expect(_.size(striker.values)).equal(2);
-    expect(_.keys(entry.all())).length(4);
+    expect(_.size(entry.all())).equal(4);
     expect(entry.actual).undefined;
     expect(entry.plan).equal(9);
   });

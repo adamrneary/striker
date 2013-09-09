@@ -7,6 +7,7 @@
 
 function Striker(options) {
   if (!options) options = {};
+  if (options.stat) this._initStat();
 
   this.Entry = Entry.extend({});
   this._initCollections();
@@ -81,8 +82,8 @@ Striker.prototype._reset = function() {
 
 // Enable collections observers for `add`&`remove` events
 Striker.prototype._initCollections = function() {
-  this.collections = _.map(this.schema, Striker.schemaMap);
-  _.forEach(this.schema, function(key, index) {
+  this.collections = this.schema.map(Striker.schemaMap);
+  this.schema.forEach(function(key, index) {
     var coll = _.first(this.collections[index]).collection;
 
     // reset is simpler than rebuild this.{values|entries} correctly
@@ -121,8 +122,9 @@ Striker.prototype._enableObservers = function(options) {
 
   var that = this;
   function enableObservers() {
-    _.forEach(that.observers, function(callback, name) {
+    _.each(that.observers, function(callback, name) {
       var collection = name === 'this' ? that : Striker.namespace[name];
+
       collection.on('change', function(model) {
         if (_.isUndefined(model)) return;
         callback.call(that, model, model.changedAttributes());
@@ -145,14 +147,44 @@ Striker.prototype._defineCustomAttributes = function() {
 
   if (_.isEmpty(this.getters)) {
     var entry    = _.first(this.entries);
-    this.getters = _.uniq(_.keys(entry.all()));
+    this.getters = _.uniq(Object.keys(entry.all()));
   }
 
-  _.forEach(this.getters, function(name) {
+  this.getters.forEach(function(name) {
     Object.defineProperty(proto, name, {
       get: function() { return this.get(name) } // proxy to Entry#get()
     });
   });
+};
+
+// Special mode to debug strikers.
+// IMPORTANT: don't use it in production, only for development
+// it works only in google chrome, because it has performance.now()
+// Main problem for strikers is a slow `calculate` method, and often observers calls.
+var statistics = {};
+
+Striker.prototype._initStat = function() {
+  var name      = this.name || this.constructor.name;
+  var calculate = this.calculate;
+  var stat      = statistics[name] || [];
+
+  statistics[name] = stat;
+  function now() {
+    return typeof performance === 'undefined' ? Date.now() : performance.now();
+  }
+
+  this.calculate = function() {
+    var start  = now();
+    var result = calculate.apply(this, arguments);
+
+    stat.push({
+      type: 'calculate',
+      time: now() - start,
+      args: _.toArray(arguments)
+    });
+
+    return result;
+  };
 };
 
 // Apply methods of Backbone.Index - where, query
@@ -200,6 +232,11 @@ Striker.schemaMap = function() {
   throw new Error('CRITICAL: Override this');
 };
 
+// Show statistics
+Striker.stat = function() {
+  return statistics;
+};
+
 // Define default namespace for observers
 Striker.namespace = window;
 
@@ -215,7 +252,7 @@ function Entry(attrs, striker) {
 }
 
 Entry.prototype.all = function() {
-  if (this.isLazy && !this.isRemoved) {
+  if (this.isLazy) {
     var params = _.values(this.attributes);
     var values = this.collection.calculate.apply(this.collection, params);
     _.extend(this.attributes, values);
