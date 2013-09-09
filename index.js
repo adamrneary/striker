@@ -11,16 +11,26 @@ function Striker(options) {
   this.Entry = Entry.extend({});
   this._initCollections();
   this._reset();
-
-  defineCustomAttributes(this);
-  enableObservers(this, options);
+  this._defineCustomAttributes();
+  this._enableObservers(options);
 }
 
-Striker.prototype._reset = function() {
-  this.values  = {};
-  this.entries = [];
-  this._initEntries(this.values, {}, 0);
-};
+// Apply EventEmitter pattern and set default values
+_.extend(Striker.prototype, Backbone.Events, {
+  // Array with collection IDs which map with Striker.schemaMap
+  schema: [],
+
+  // Observers and event handling
+  observers: {},
+
+  // optional list of getters, by default striker calculate it automatically,
+  // based on calculate output
+  getters: [],
+
+  // Raw method to calculate value, it calls on every `update`
+  // Override it with striker's specific calculations
+  calculate: function() { return {} },
+});
 
 // Convenient method to get one value based on schema
 Striker.prototype.get = function() {
@@ -58,9 +68,15 @@ Striker.prototype.reverseValues = function() {
 Striker.prototype.update = function() {
   var entry = this.get.apply(this, arguments);
   if (entry && !entry.isLazy) {
-    this.trigger('change', entry, _.toArray(arguments));
+    this.trigger('change', entry);
     entry.isLazy = true;
   }
+};
+
+Striker.prototype._reset = function() {
+  this.values  = {};
+  this.entries = [];
+  this._initEntries(this.values, {}, 0);
 };
 
 // Enable collections observers for `add`&`remove` events
@@ -96,38 +112,48 @@ Striker.prototype._initEntries = function(values, item, level) {
 
 // Setup collection observers based on `this.observers`
 // Name `this` uses for self reference
-Striker.prototype._enableObservers = function() {
+//
+// For strikers that trigger themselves
+// we need to enable triggers before any values are calculated.
+Striker.prototype._enableObservers = function(options) {
   if (_.isEmpty(this.observers)) return;
+  if (options.careful && this.observers.this) options.careful = false;
 
-  _.forEach(this.observers, function(callback, name) {
-    var collection = name === 'this' ? this : Striker.namespace[name];
-    // FIXME: change has always have same semantic in arguments
-    collection.on('change', function(model, attrs) {
-      if (_.isUndefined(model)) return;
-      if (model instanceof Backbone.Model)
-        callback.call(this, model, model.changedAttributes());
-      else
-        callback.call(this, model, attrs);
-      this.trigger('updateCompleted', this, arguments); // FIXME
-    }, this);
-  }, this);
+  var that = this;
+  function enableObservers() {
+    _.forEach(that.observers, function(callback, name) {
+      var collection = name === 'this' ? that : Striker.namespace[name];
+      collection.on('change', function(model) {
+        if (_.isUndefined(model)) return;
+        callback.call(that, model, model.changedAttributes());
+        that.trigger('updateCompleted', model);
+      });
+    });
+  }
+
+  options.careful ?
+    Striker.once('enable-observers', enableObservers) :
+    enableObservers();
 };
 
-// Apply EventEmitter pattern and set default values
-_.extend(Striker.prototype, Backbone.Events, {
-  // Default multiplier is 1, to avoid altering data unless requested
-  multiplier: 1,
+// An ES5 magic:
+// in order to define nice API and avoid constant `get`,
+// we define CustomEntry for every striker, which contains necessary getters
+// based on first not lazy calculation
+Striker.prototype._defineCustomAttributes = function() {
+  var proto = this.Entry.prototype;
 
-  // Array with collection IDs which map with Striker.schemaMap
-  schema: [],
+  if (_.isEmpty(this.getters)) {
+    var entry    = _.first(this.entries);
+    this.getters = _.uniq(_.keys(entry.all()));
+  }
 
-  // Observers and event handling
-  observers: {},
-
-  // Raw method to calculate value, it calls on every `update`
-  // Override it with striker's specific calculations
-  calculate: function() { return {} },
-});
+  _.forEach(this.getters, function(name) {
+    Object.defineProperty(proto, name, {
+      get: function() { return this.get(name) } // proxy to Entry#get()
+    });
+  });
+};
 
 // Apply methods of Backbone.Index - where, query
 Backbone.Index(Striker, { ignoreChange: true });
@@ -202,47 +228,17 @@ Entry.prototype.get = function(key) {
   return this.all()[key];
 };
 
-// An ES5 magic:
-// in order to define nice API and avoid constant `get`,
-// we define CustomEntry for every striker, which contains necessary getters
-// based on first not lazy calculation
-function defineCustomAttributes(striker) {
-  var getters, entry;
-
-  if (striker.getters) {
-    getters = striker.getters;
-  } else {
-    entry   = _.first(striker.entries);
-    getters = _.uniq(_.keys(entry.all()));
-  }
-
-  _.forEach(getters, function(name) {
-    Object.defineProperty(striker.Entry.prototype, name, {
-      // getter proxies to Entry#get()
-      get: function() { return this.get(name) },
-      // make it configurable and enumerable so it's easy to override...
-      configurable: true,
-      enumerable: true
-    });
-  });
-}
-
-// For strikers that trigger themselves
-// we need to enable triggers before any values are calculated.
-function enableObservers(striker, options) {
-  if (options.careful && striker.observers && striker.observers.this)
-    options.careful = false;
-
-  options.careful ?
-    Striker.once('enable-observers', striker._enableObservers, striker) :
-    striker._enableObservers();
-}
+// We can not get changed attributes exactly, but we can
+// say which schema indticator for changed attributes
+Entry.prototype.changedAttributes = function() {
+  return _.pick(this.attributes, this.collection.schema);
+};
 
 // Copy extend method for inheritance
 Striker.extend = Backbone.Model.extend;
 Entry.extend   = Backbone.Model.extend;
-Striker.Entry  = Entry;
 
 // expose to global namespace
 window.Striker = Striker;
+Striker.Entry  = Entry;
 }).call(this, _, Backbone);

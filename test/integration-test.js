@@ -13,7 +13,7 @@
  *   variance => an Integer (actual - plan) (null for future periods)
  */
 
-describe('Reach integration test', function() {
+describe('Integration test', function() {
   var expect  = window.chai.expect, result, channel;
   var Striker = window.Striker, moment = window.moment;
   var app     = {};

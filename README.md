@@ -132,8 +132,8 @@ conversionRates.get(2);
   Striker extends [Backbone.Events](http://documentcloud.github.io/backbone/#Events),
   it means you can trigger and listen different events.
 
-  * **change**(entry, attrs) - force on every update.
-  * **updateCompleted**(striker, [entry, attrs])
+  * **change**(entry, changedAttributes) - force on every update.
+  * **updateCompleted**(entry, changedAttributes)
 
 ### Striker.schemaMap(key)
 
