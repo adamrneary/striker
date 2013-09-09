@@ -69,7 +69,7 @@ Striker.prototype.reverseValues = function() {
 Striker.prototype.update = function() {
   var entry = this.get.apply(this, arguments);
   if (entry && !entry.isLazy) {
-    this.trigger('change', entry);
+    this.trigger('change', entry, _.toArray(arguments));
     entry.isLazy = true;
   }
 };
@@ -125,9 +125,12 @@ Striker.prototype._enableObservers = function(options) {
     _.each(that.observers, function(callback, name) {
       var collection = name === 'this' ? that : Striker.namespace[name];
 
-      collection.on('change', function(model) {
+      collection.on('change', function(model, attrs) {
         if (_.isUndefined(model)) return;
-        callback.call(that, model, model.changedAttributes());
+        if (model instanceof Backbone.Model)
+          callback.call(that, model, model.changedAttributes());
+        else
+          callback.call(that, model, attrs);
         that.trigger('updateCompleted', model);
       });
     });
@@ -234,7 +237,16 @@ Striker.schemaMap = function() {
 
 // Show statistics
 Striker.stat = function() {
-  return statistics;
+  _.forEach(statistics, function(values, name) {
+    var time  = _.pluck(values, 'time');
+    var total = values.length;
+    var sum   = _.sum(time);
+    var avr   = sum / total;
+    var color = total > 10 && avr > 0.6 ? (avr > 1 ? 'red' : 'purple') : 'black';
+
+    console.log('%c%s: total %d, average %sms, time %sms',
+      'color: ' + color, name, total, avr.toFixed(2), sum.toFixed(2));
+  });
 };
 
 // Define default namespace for observers
