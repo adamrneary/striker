@@ -162,9 +162,13 @@ Striker.prototype._defineCustomAttributes = function() {
 
 // Special mode to debug strikers.
 // IMPORTANT: don't use it in production, only for development
-// it works only in google chrome, because it has performance.now()
-// Main problem for strikers is a slow `calculate` method, and often observers calls.
+// it works best in google chrome, because it uses performance.now()
+// Main problem for strikers is a slow `calculate` method.
 var statistics = {};
+
+function now() {
+  return typeof performance === 'undefined' ? Date.now() : performance.now();
+}
 
 Striker.prototype._initStat = function() {
   var name      = this.name || this.constructor.name;
@@ -172,20 +176,10 @@ Striker.prototype._initStat = function() {
   var stat      = statistics[name] || [];
 
   statistics[name] = stat;
-  function now() {
-    return typeof performance === 'undefined' ? Date.now() : performance.now();
-  }
-
   this.calculate = function() {
     var start  = now();
     var result = calculate.apply(this, arguments);
-
-    stat.push({
-      type: 'calculate',
-      time: now() - start,
-      args: _.toArray(arguments)
-    });
-
+    stat.push(now() - start);
     return result;
   };
 };
@@ -238,9 +232,8 @@ Striker.schemaMap = function() {
 // Show statistics
 Striker.stat = function() {
   _.forEach(statistics, function(values, name) {
-    var time  = _.pluck(values, 'time');
     var total = values.length;
-    var sum   = _.sum(time);
+    var sum   = _.sum(values);
     var avr   = sum / total;
     var color = total > 10 && avr > 0.6 ? (avr > 1 ? 'red' : 'purple') : 'black';
 
@@ -275,12 +268,6 @@ Entry.prototype.all = function() {
 
 Entry.prototype.get = function(key) {
   return this.all()[key];
-};
-
-// We can not get changed attributes exactly, but we can
-// say which schema indticator for changed attributes
-Entry.prototype.changedAttributes = function() {
-  return _.pick(this.attributes, this.collection.schema);
 };
 
 // Copy extend method for inheritance
