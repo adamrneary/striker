@@ -1,11 +1,12 @@
-## 0.8.0 / 2013-09-.. - production ready
+## 0.8.0 / 2013-09-09 - production ready
 
   * manual getters
   * fix options.careful for recursive strikers
-  * ~ add `reverseValues`
-  * ~ fix observers for `add` and `remove`
-  * ~ standardize events arguments
-  * ~ add docs
+  * add `reverseValues`
+  * fix observers for `add` and `remove`
+  * standardize events arguments
+  * `{ stat: true }` and `Striker.stat()`
+  * add docs
 
 ## 0.7.0 / 2013-08-28 - smaller, faster, simpler, lazy, brand new striker!
 
