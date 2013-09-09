@@ -12,7 +12,6 @@ function Striker(options) {
   this.Entry = Entry.extend({});
   this._initCollections();
   this._reset();
-  this._defineCustomAttributes();
   this._enableObservers(options);
 }
 
@@ -117,11 +116,12 @@ Striker.prototype._initEntries = function(values, item, level) {
 // For strikers that trigger themselves
 // we need to enable triggers before any values are calculated.
 Striker.prototype._enableObservers = function(options) {
-  if (_.isEmpty(this.observers)) return;
   if (options.careful && this.observers.this) options.careful = false;
 
   var that = this;
   function enableObservers() {
+    that._defineCustomAttributes();
+    if (_.isEmpty(that.observers)) return;
     _.each(that.observers, function(callback, name) {
       var collection = name === 'this' ? that : Striker.namespace[name];
 
