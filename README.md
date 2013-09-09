@@ -66,8 +66,11 @@ For more advanced example check [test/integration-test.js](https://github.com/ac
 ### new Striker([options])
 
   Base class for Strikers, extend it and add custom logic.
-  You can pass { careful: true } to skip enabling of observers, and then run Striker.trigger('enable-observers') when you need it. But it does not apply for recursive strikers, they always enable observers immediately.
-  {stat: true}
+
+  Options:
+
+  * { careful: true } to skip enabling of observers, and then run Striker.trigger('enable-observers') when you need it. But it does not apply for recursive strikers, they always enable observers immediately.
+  * {stat: true} to start collect statistic for every `calculate` call. Use Striker.stat() to see it.
 
 ### striker#schema
 
@@ -113,13 +116,24 @@ conversionRates.get(2);
   It has to return **object** with fixed amount of attributes.
 
 ### striker#observers
+
+  Object with functions which call when object was changed.
+
+  * key - collection name, maped to Striker.namespace
+  * cb  - calls with 2 arguments: entry or model and changed attributes.
+
 ### striker#getters
-### striker#where(collectionName, condition)
-### striker#query(collectionName, condition)
+
+  Optional list of getters for Entry, by default striker calculate it automatically based on calculate output.
+
+### striker#where & striker#query
+
+  Striker extends with [where](https://github.com/activecell/backbone-index#collectionwhereattributes) and [query](https://github.com/activecell/backbone-index#collectionqueryattributes) from [backbone-index](https://github.com/activecell/backbone-index), it allows to do fast filtering.
 
 ### Underscore's methods
 
   Thanks to `@entries` striker has underscore's collections methods, similar to [Backbone.Collection](http://documentcloud.github.io/backbone/#Collection-Underscore-Methods).
+
   List of methods:
 
 ```js
@@ -139,14 +153,36 @@ conversionRates.get(2);
 ### Striker.schemaMap(key)
 
   `CRITICAL`: Override this once.
+  Setup schema mapping in order to work, `this.schema`.
 
 ### Striker.namespace
 
   `CRITICAL`: Override this once.
-  Namespace helps to understand observers property,
-  `window` by default, change it to `window.app` or another object,
-  which contains required collections.
+  Namespace helps to understand observers property, `window` by default, change it to `window.app` or another object, which contains required collections.
+
+### Striker.stat()
+
+  Display statistic in nice coloured form.
+
+```
+AccountTotal: total 1679, average 0.15ms, time 249.44ms
+AccountBalance: total 156, average 5.55ms, time 865.69ms
+ProfitLossStriker: total 73, average 1.26ms, time 92.07ms
+CashOnHand: total 73, average 21.70ms, time 1584.11ms
+CustomerCountStriker: total 1, average 0.05ms, time 0.05ms
+```
 
 ### Striker.addAnalysis(Model, methodName, [options])
+
+  Extend model with anaylisis. Use `options.analysis` to set name for Striker.namespace.
+
 ### Striker.extend(options)
+
+  Convinient way to [implement inheritance](http://jashkenas.github.io/backbone/#Model-extend) in backbone.
+
 ### Striker.Entry
+
+  Base class for all entries. The core of laziness. It has 2 methods:
+
+  * `get` - get property by name
+  * `all` - get all properties in once.
