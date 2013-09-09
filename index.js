@@ -8,22 +8,30 @@
 function Striker(options) {
   if (!options) options = {};
 
-  this.values  = {};
-  this.entries = [];
-  this.Entry   = Entry.extend({});
+  this.Entry = Entry.extend({});
   this._initCollections();
-  this._initEntries(this.values, {}, 0, { collections: this.collections });
+  this._reset();
 
   defineCustomAttributes(this);
   enableObservers(this, options);
 }
+
+Striker.prototype._reset = function() {
+  this.values  = {};
+  this.entries = [];
+  this._initEntries(this.values, {}, 0);
+};
 
 // Convenient method to get one value based on schema
 Striker.prototype.get = function() {
   var args   = _.toArray(arguments);
   var result = this.values;
 
-  for (var i = 0, len = args.length; i < len; i++) result = result[args[i]];
+  for (var i = 0, len = args.length; i < len; i++) {
+    if (!result) break;
+    result = result[args[i]];
+  }
+
   return result;
 };
 
@@ -57,29 +65,18 @@ Striker.prototype.update = function() {
 
 // Enable collections observers for `add`&`remove` events
 Striker.prototype._initCollections = function() {
-  var that = this;
   this.collections = _.map(this.schema, Striker.schemaMap);
   _.forEach(this.schema, function(key, index) {
-    var coll = _.first(that.collections[index]).collection;
+    var coll = _.first(this.collections[index]).collection;
 
-    coll.on('remove', function(model) {
-      var attrs    = _.object([[key, model.id]]);
-      var entries  = that.where(attrs);
-      that.entries = _.difference(that.entries, entries);
-      _.forEach(entries, function(entry) { that.trigger('remove', entry) });
-    });
-
-    coll.on('add', function(model) {
-      var collections = _.without(that.collections, that.collections[index]);
-      var item        = _.object([[key, model.id]]);
-      that._initEntries({}, item, 0, { trigger: true, collections: collections });
-    });
-    // FIXME: we need to update this.values too
-  });
+    // reset is simpler than rebuild this.{values|entries} correctly
+    coll.on('remove', this._reset, this);
+    coll.on('add', this._reset, this);
+  }, this);
 };
 
 // Initialize entries based on schema
-Striker.prototype._initEntries = function(values, item, level, options) {
+Striker.prototype._initEntries = function(values, item, level) {
   var key    = this.schema[level];
   var models = this.collections[level];
 
@@ -90,10 +87,9 @@ Striker.prototype._initEntries = function(values, item, level, options) {
       var entry = new this.Entry(item, this);
       values[modelId] = entry;
       this.entries.push(entry);
-      if (options.trigger) this.trigger('add', entry);
     } else {
       values[modelId] = {};
-      this._initEntries(values[modelId], item, level + 1, options);
+      this._initEntries(values[modelId], item, level + 1);
     }
   }
 };
@@ -107,6 +103,7 @@ Striker.prototype._enableObservers = function() {
     var collection = name === 'this' ? this : Striker.namespace[name];
     // FIXME: change has always have same semantic in arguments
     collection.on('change', function(model, attrs) {
+      if (_.isUndefined(model)) return;
       if (model instanceof Backbone.Model)
         callback.call(this, model, model.changedAttributes());
       else
@@ -192,7 +189,7 @@ function Entry(attrs, striker) {
 }
 
 Entry.prototype.all = function() {
-  if (this.isLazy) {
+  if (this.isLazy && !this.isRemoved) {
     var params = _.values(this.attributes);
     var values = this.collection.calculate.apply(this.collection, params);
     _.extend(this.attributes, values);

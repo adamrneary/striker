@@ -133,8 +133,6 @@ conversionRates.get(2);
   it means you can trigger and listen different events.
 
   * **change**(entry, attrs) - force on every update.
-  * **add**(entry)
-  * **remove**(entry)
   * **updateCompleted**(striker, [entry, attrs])
 
 ### Striker.schemaMap(key)

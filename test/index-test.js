@@ -65,7 +65,7 @@ describe('Striker', function() {
     expect(entry.plan).equal(9);
   });
 
-  it('returns reverseValues', function() {
+  it('#reverseValues - returns reversed this.values', function() {
     var values = striker.reverseValues();
     expect(_.size(values)).equal(3);
     expect(values['last-month']).exist;
@@ -99,19 +99,23 @@ describe('Striker', function() {
     expect(striker.indexOf(entry)).equal(1);
   });
 
-  xit('handles `remove` event', function() {
+  it('handles `remove` event', function() {
+    periods.remove([periods.get('last-month')]);
+    expect(striker.size()).equal(4);
+    expect(striker.get('channel2', 'last-month')).undefined;
+    expect(striker.get('channel2', 'this-month')).exist;
+
     channels.remove([channels.get('channel1')]);
-    expect(striker.size()).equal(3);
+    expect(striker.size()).equal(2);
     expect(striker.get('channel1', 'this-month')).undefined;
     expect(striker.get('channel2', 'this-month')).exist;
   });
 
-  xit('handles `add` event', function() {
-    striker.get('channel2', 'this-month').all();
+  it('handles `add` event', function() {
     periods.add([{ id: 'two-years-ago' }]);
 
     expect(striker.size()).equal(8);
-    expect(striker.get('channel2', 'this-month').isLazy).false;
+    expect(striker.get('channel2', 'this-month')).exist;
     expect(striker.get('channel2', 'two-years-ago')).exist;
   });
 });
