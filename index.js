@@ -122,6 +122,7 @@ Striker.prototype._enableObservers = function(options) {
   function enableObservers() {
     that._defineCustomAttributes();
     if (_.isEmpty(that.observers)) return;
+
     _.each(that.observers, function(callback, name) {
       var collection = name === 'this' ? that : Striker.namespace[name];
 
