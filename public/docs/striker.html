@@ -1,0 +1,443 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+  <title>striker.coffee</title>
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <link rel="stylesheet" media="all" href="public/stylesheets/normalize.css" />
+  <link rel="stylesheet" media="all" href="docco.css" />
+</head>
+<body>
+  <div class="container">
+    <div class="page">
+
+      <div class="header">
+        
+          <h1>striker.coffee</h1>
+        
+
+        
+      </div>
+
+      
+        
+        <p>Bad-ass, greasy-fast, cached calculated collections</p>
+<p>(c) 2013 Adam Neary &amp; Aleksey Kulikov, Profitably Inc.</p>
+<p>The top-level namespace. All public Striker classes and modules will
+be attached to this. Exported for both CommonJS and the browser.</p>
+
+        
+          <div class='highlight'><pre>Striker = <span class="literal">undefined</span>
+<span class="keyword">if</span> <span class="keyword">typeof</span> exports <span class="keyword">isnt</span> <span class="string">'undefined'</span>
+  Striker = exports
+<span class="keyword">else</span>
+  Striker = window.Striker = {}</pre></div>
+        
+      
+        
+        <p>Current version of the library.</p>
+
+        
+          <div class='highlight'><pre>Striker.VERSION = <span class="string">'0.3.2'</span></pre></div>
+        
+      
+        
+        <p>Setup schema mapping in order to work
+with Striker.Collection.prototype.schema</p>
+
+        
+          <div class='highlight'><pre><span class="function"><span class="title">schemaMap</span></span> = -&gt;
+  <span class="keyword">throw</span> <span class="keyword">new</span> Error(<span class="string">'Setup your striker mapping with Striker.setSchemaMap'</span>)
+
+Striker.<span class="function"><span class="title">setSchemaMap</span></span> = (cb) -&gt;
+  schemaMap = cb</pre></div>
+        
+      
+        
+        <p>Group-by indexes for Backbone.Collections
+Setup with Striker.setIndex</p>
+
+        
+          <div class='highlight'><pre>Striker.index = {}</pre></div>
+        
+      
+        
+        <h2>Striker.Collection</h2>
+
+        
+      
+        
+        <p>Wrapper for multidimensional arrays. Since in javascript, arrays are
+objects (with specific keys), it will not hamper perfomance to store
+data as an object rather than an array.</p>
+<p>schema     - Sets order and type nested attributes (required)
+             data save based on this attribute
+multiplier - For percentage data equal 100, by default 1
+triggers   - Object with functions which called when object was changed
+             use short versions of variables from app</p>
+<p>Examples</p>
+<pre><code>class ConversionRates extends Striker.Collection
+  schema: [&#39;stage_id&#39;, &#39;channel_id&#39;, &#39;period_id&#39;]
+  multiplier: 100
+  triggers:
+    toplineGrowth: (args) -&gt;
+      l(&quot;toplineGrowth changed with channel: #{args.channel_id}&quot;)
+
+conversionRates = new ConversionRates()
+conversionRates.collections
+=&gt; [
+     Array[stages.length]
+     Array[channels.length]
+     Array[months.length]
+   ]
+
+conversionRates.values
+=&gt; object with data
+2: # stage id
+  1: # channel id, contains values for every month
+    1:  70 # first month id with value
+    2:  17 # second month id with value
+    #   ...
+    36: 27 # last month id with value
+  2:
+    1:  46
+    2:  66
+    #   ...
+    36: 14
+  # other channels with data for stage with id = 2
+3: # another stage id
+  1: # channels for another stage
+    1:  16
+    #   ...
+    36: 34
+  # other channels with data for stage with id = 3
+# other stages...
+
+# Get value for stage_id = 2 and channel_id = 1 and period_id = 36
+conversionRates.get(2, 1, 36)
+=&gt; 27
+
+# Set 75% for stage_id = 3, channel_id = 1 and period_id = 1
+conversionRates.set(75, 3, 1, 1)
+
+conversionRates.isTimeSeries()
+=&gt; true
+
+conversionForecast.enableTriggers()
+app.toplineGrowth.set(5, 1, 2, 3)
+=&gt; &#39;toplineGrowth changed with channel: 2&#39;</code></pre>
+
+        
+          <div class='highlight'><pre><span class="class"><span class="keyword">class</span> <span class="title">Striker</span>.<span class="title">Collection</span></span></pre></div>
+        
+      
+        
+        <p>Include methods from Backbone.Events for binding support</p>
+
+        
+          <div class='highlight'><pre>  _.extend(@::, Backbone.Events)</pre></div>
+        
+      
+        
+        <p>Set default multiplier to 1 to avoid altering data unless requested</p>
+
+        
+          <div class='highlight'><pre>  multiplier: <span class="number">1</span></pre></div>
+        
+      
+        
+        <p>Collections with schemas ending with this are treated as time series</p>
+
+        
+          <div class='highlight'><pre>  timeSeriesIdentifier: <span class="string">'period_id'</span></pre></div>
+        
+      
+        
+        <p>Array with collection IDs that setups with Striker.setSchemaMap
+CRITICAL: Override this in each subclass.</p>
+<p>Example</p>
+<pre><code>Striker.setSchemaMap (key) -&gt;
+  stage_id:   app.stages
+  channel_id: app.channels
+  period_id:  app.months
+
+class ConversionRates extends Striker.Collection
+  schema: [&#39;stage_id&#39;, &#39;channel_id&#39;, &#39;period_id&#39;]
+
+conversionRates = new ConversionRates()
+conversionRates.collections
+=&gt; [
+     Array[stages.length]
+     Array[channels.length]
+     Array[months.length]
+   ]</code></pre>
+
+        
+          <div class='highlight'><pre>  schema: []</pre></div>
+        
+      
+        
+        <p>Object with functions which called when object was changed.
+CRITICAL: Override this in each subclass.</p>
+<p>key   - collection name
+value - function taking filter args Object as param</p>
+<p>Example</p>
+
+        
+          <div class='highlight'><pre>  observers: {}</pre></div>
+        
+      
+        
+        <p>Builds striker based on inputs (optionally) and schema</p>
+<p>@inputs - optional mechanism for loading collection with data
+  Note: data should be in nested Arrays matching schema and schema
+  collections</p>
+<p>Examples</p>
+<pre><code>class ChannelSegmentMix extends Striker.Collection
+  schema: [&#39;channel_id&#39;, &#39;segment_id&#39;]
+
+app.channels.length
+=&gt; 5
+app.segments.length
+=&gt; 3
+
+data: [
+  [100,0,0]
+  [25,25,50]
+  [0,100,0]
+  [20,40,40]
+  [30,5,65]
+]
+channelSegmentMix = new ChannelSegmentMix(data)</code></pre>
+<p>Note: Pass no data if the collection will be populated by calcuations
+  In this case, the collection will be initialized with 0 values until
+  observers are turned on and values can be calculated.</p>
+
+        
+          <div class='highlight'><pre>  constructor: (<span class="property">@inputs</span> = [])-&gt;
+    <span class="property">@collections</span> = _.map(<span class="property">@schema</span>, schemaMap)
+    <span class="property">@values</span>      = <span class="property">@_initValues</span>({}, <span class="property">@inputs</span>, <span class="number">0</span>)
+    <span class="property">@_enableObserversAndBuild</span>() <span class="keyword">unless</span> <span class="property">@inputs</span>.length</pre></div>
+        
+      
+        
+        <p>Raw method for calculating a forecast value.
+CRITICAL: Override this in each subclass.</p>
+<p>args - One or more attributes from @schema</p>
+<p>Returns value to cache (type may vary based on what you wish to cache)</p>
+
+        
+          <div class='highlight'><pre>  calculate: (args...) -&gt;</pre></div>
+        
+      
+        
+        <p>Check that collection has period_id attribute</p>
+<p>Returns true or false</p>
+
+        
+          <div class='highlight'><pre>  isTimeSeries: -&gt;
+    _.last(<span class="property">@schema</span>) <span class="keyword">is</span> <span class="property">@timeSeriesIdentifier</span></pre></div>
+        
+      
+        
+        <h2>get/set/update</h2>
+
+        
+      
+        
+        <p>Get value by params</p>
+<p>args - Arguments split by commas and bases on schema.
+       If schema is [&#39;channel_id&#39;, &#39;period_id&#39;]
+       then get(1,2) will be equal channel_id=1 and period_id=2</p>
+<p>Examples</p>
+<pre><code>conversionRates.get(2, 1, 1)
+=&gt; 70
+
+conversionRates.get(2, 1)
+=&gt; {1: 70, 2: 17, ..., 36: 27}</code></pre>
+<p>Returns value or object with group of values</p>
+
+        
+          <div class='highlight'><pre>  get: (args...) -&gt;
+    result = <span class="property">@values</span>
+    result = result[key] <span class="keyword">for</span> key <span class="keyword">in</span> args
+    result = result / <span class="property">@multiplier</span> <span class="keyword">if</span> _.isNumber(result)
+    result</pre></div>
+        
+      
+        
+        <p>Changes value and fire trigger <code>change</code></p>
+<p>value - New value
+args  - Arguments split a comma and bases on schema
+        for navigation to specifically value.</p>
+<p>Examples</p>
+<pre><code>conversionRates.set(45, 2, 1, 1)
+conversionRates.get(2, 1, 1)
+=&gt; 45</code></pre>
+<p>Returns nothing.</p>
+
+        
+          <div class='highlight'><pre>  set: (value, args...) -&gt;
+    result = <span class="property">@values</span>
+    result = result[key] <span class="keyword">for</span> key <span class="keyword">in</span> args.slice(<span class="number">0</span>, -<span class="number">1</span>)
+    result[_.last(args)] = value
+    <span class="property">@trigger</span>(<span class="string">'change'</span>, @, args, value)</pre></div>
+        
+      
+        
+        <p>Triggers a set for the collection&#39;s item as filtered by args</p>
+<p>args - Arguments split by commas and bases on schema.
+       If schema is [&#39;channel_id&#39;, &#39;period_id&#39;]
+       then get(1,2) will be equal channel_id=1 and period_id=2</p>
+<p>Note: This acts to refresh the cached data and is generally called
+      proactively by a trigger after making a change to underlying data</p>
+<p>Examples</p>
+<pre><code>conversionRates.get(2, 1)
+=&gt; 10
+conversionRates.calculate(2, 1)
+=&gt; 12
+conversionRates.update(2, 1)
+conversionRates.get(2, 1)
+=&gt; 12</code></pre>
+<p>Returns nothing</p>
+
+        
+          <div class='highlight'><pre>  update: (args...) -&gt;
+    <span class="property">@set</span> <span class="property">@calculate</span>(args...), args...</pre></div>
+        
+      
+        
+        <h2>bulk return</h2>
+
+        
+      
+        
+        
+        
+          <div class='highlight'><pre>  flat: (level = <span class="number">0</span>, args = [], result = []) -&gt;
+    <span class="keyword">for</span> item <span class="keyword">in</span> <span class="property">@collections</span>[level]
+      args[level] = item.id
+      <span class="keyword">if</span> level &lt; <span class="property">@schema</span>.length - <span class="number">1</span>
+        <span class="property">@flat</span>(level + <span class="number">1</span>, args, result)
+      <span class="keyword">else</span>
+        object = {}
+        object[<span class="property">@schema</span>[index]] = value <span class="keyword">for</span> value, index <span class="keyword">in</span> args
+        result.push _.extend(object, <span class="property">@get</span>.apply(@, args))
+    result</pre></div>
+        
+      
+        
+        <h2>observers and event handling</h2>
+
+        
+      
+        
+        <p>Setup collection observers based on @observers property.
+Name <code>this</code> uses for self reference
+And than build values with <code>calculate</code> method</p>
+<p>We can build values in constructor because we need initialize all necessary collections
+Often calculate method refer recursively.</p>
+
+        
+          <div class='highlight'><pre>  _enableObserversAndBuild: -&gt;
+    <span class="keyword">for</span> collectionName, callback <span class="keyword">of</span> <span class="property">@observers</span></pre></div>
+        
+      
+        
+        <p>TODO: don&#39;t use app as a global namespace</p>
+
+        
+          <div class='highlight'><pre>      collection = <span class="keyword">if</span> collectionName <span class="keyword">is</span> <span class="string">'this'</span> <span class="keyword">then</span> @ <span class="keyword">else</span> app[collectionName]
+      collection.<span class="literal">on</span>(<span class="string">'change'</span>, <span class="property">@_wrapCallback</span>(callback), @)
+    <span class="property">@_build</span>()</pre></div>
+        
+      
+        
+        <p>Recursive function which uses @inputs and @collections for builds @values
+Attributes used for recursive callbacks</p>
+<p>Returns object with structured data</p>
+
+        
+          <div class='highlight'><pre>  _initValues: (values, inputs, level) -&gt;
+    <span class="keyword">return</span> <span class="keyword">unless</span> <span class="property">@collections</span>[level]
+
+    <span class="keyword">for</span> item, order <span class="keyword">in</span> <span class="property">@collections</span>[level]
+      value = inputs[order] ? <span class="number">0</span>
+      <span class="keyword">if</span> level <span class="keyword">is</span> <span class="property">@schema</span>.length - <span class="number">1</span>
+        values[item.id] = value
+      <span class="keyword">else</span>
+        values[item.id] = {}
+        <span class="property">@_initValues</span>(values[item.id], value, level + <span class="number">1</span>)
+    values</pre></div>
+        
+      
+        
+        <p>Builds values for every element</p>
+
+        
+          <div class='highlight'><pre>  _build: (level = <span class="number">0</span>, args = []) -&gt;
+    <span class="keyword">for</span> item <span class="keyword">in</span> <span class="property">@collections</span>[level]
+      args[level] = item.id
+      <span class="keyword">if</span> level &gt;= <span class="property">@schema</span>.length - <span class="number">1</span>
+        <span class="property">@update</span>(args...)
+      <span class="keyword">else</span>
+        <span class="property">@_build</span>(level + <span class="number">1</span>, args)</pre></div>
+        
+      
+        
+        <p>Private: pass changed attributes to observer</p>
+<p>Returns trigger function</p>
+
+        
+          <div class='highlight'><pre>  _wrapCallback: (defaultCallback) -&gt;
+    (model, args, value) -&gt;
+      <span class="keyword">if</span> model <span class="keyword">instanceof</span> Backbone.Model
+        defaultCallback.call(@, model, model.changed)
+      <span class="keyword">else</span>
+        defaultCallback.call(@, model, args, value)</pre></div>
+        
+      
+        
+        <p>Extend model with existing analysis</p>
+
+        
+          <div class='highlight'><pre>Striker.<span class="function"><span class="title">addAnalysis</span></span> = (Model, methodName, options = {}) -&gt;
+  Model.prototype[methodName] = (args...) -&gt;
+    analysis = app[options.analysis ? methodName]
+    <span class="keyword">if</span> args.length &gt; <span class="number">0</span>
+      analysis.get(<span class="property">@id</span>, args...)
+    <span class="keyword">else</span>
+      analysis.flat(<span class="number">1</span>, [<span class="property">@id</span>])</pre></div>
+        
+      
+        
+        <p>Add observable index to Striker.index
+Useful to improve performance of Striker.where</p>
+<p>Examples:</p>
+<pre><code>Striker.setIndex &#39;financialSummary&#39;, [&#39;period_id&#39;, &#39;customer_id&#39;, &#39;account_id&#39;]</code></pre>
+
+        
+          <div class='highlight'><pre>Striker.<span class="function"><span class="title">setIndex</span></span> = (collectionName, schema) -&gt;
+  index = app[collectionName].groupBy (item) -&gt;
+    _.map schema, (key) -&gt; item.get(key)
+
+  Striker.index[collectionName] = index
+
+Striker.<span class="function"><span class="title">where</span></span> = (collectionName, attrs) -&gt;
+  <span class="keyword">if</span> Striker.index[collectionName]
+    key = _.values(attrs).join()
+    Striker.index[collectionName][key] ? []
+  <span class="keyword">else</span>
+    app[collectionName].where(attrs)
+
+Striker.<span class="function"><span class="title">sum</span></span> = (array, field) -&gt;
+  _.reduce array, (memo, item) -&gt;
+    memo += item.get(field)
+  , <span class="number">0</span></pre></div>
+        
+      
+      <div class="fleur">h</div>
+    </div>
+  </div>
+</body>
+</html>

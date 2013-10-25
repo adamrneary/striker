@@ -1,6 +1,10 @@
-# Striker [![Build Status](https://circleci.com/gh/activecell/striker.png?circle-token=e4e94a5aa232fb270ea22a5f32a34e3db5e75b61)](https://circleci.com/gh/activecell/striker)
+# Striker
 
   Bad-ass, greasy-fast, lazy calculated collections.
+
+[![Code Climate](https://codeclimate.com/repos/526a7cae13d6374878027f8f/badges/e799644e2d2ab167e4b1/gpa.png)](https://codeclimate.com/repos/526a7cae13d6374878027f8f/feed)
+
+[![Build Status](https://circleci.com/gh/activecell/striker.png?circle-token=319f1d18f12f0119963bb30dba6bef93dae8227c)](https://circleci.com/gh/activecell/striker)
 
 ## Installation
 
