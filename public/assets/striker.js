@@ -1,247 +1,281 @@
-(function() {
-  var Striker, schemaMap,
-  __slice = [].slice;
+;(function(_, Backbone) {
+'use strict';
 
-Striker = void 0;
+/**
+ * Define `Striker` constructor
+ */
 
-if (typeof exports !== 'undefined') {
-  Striker = exports;
-} else {
-  Striker = window.Striker = {};
+function Striker(options) {
+  if (!options) options = {};
+  if (options.stat) this._initStat();
+
+  this.Entry = Entry.extend({});
+  this._initCollections();
+  this._reset();
+  this._enableObservers(options);
 }
 
-Striker.VERSION = '0.3.2';
+// Apply EventEmitter pattern and set default values
+_.extend(Striker.prototype, Backbone.Events, {
+  // Array with collection IDs which map with Striker.schemaMap
+  schema: [],
 
-schemaMap = function() {
-  throw new Error('Setup your striker mapping with Striker.setSchemaMap');
-};
+  // Observers and event handling
+  observers: {},
 
-Striker.setSchemaMap = function(cb) {
-  return schemaMap = cb;
-};
+  // optional list of getters, by default striker calculate it automatically,
+  // based on calculate output
+  getters: [],
 
-Striker.index = {};
+  // Raw method to calculate value, it calls on every `update`
+  // Override it with striker's specific calculations
+  calculate: function() { return {} },
+});
 
-Striker.Collection = (function() {
-  _.extend(Collection.prototype, Backbone.Events);
+// Convenient method to get one value based on schema
+Striker.prototype.get = function() {
+  var args   = _.toArray(arguments);
+  var result = this.values;
 
-  Collection.prototype.multiplier = 1;
-
-  Collection.prototype.timeSeriesIdentifier = 'period_id';
-
-  Collection.prototype.schema = [];
-
-  Collection.prototype.observers = {};
-
-  function Collection(options) {
-    if (options == null) {
-      options = {};
-    }
-    this.inputs = options.inputs || [];
-    this.collections = _.map(this.schema, schemaMap);
-    this.values = this._initValues();
-    this._enableObserversAndBuild();
+  for (var i = 0, len = args.length; i < len; i++) {
+    if (!result) break;
+    result = result[args[i]];
   }
 
-  Collection.prototype.calculate = function() {
-    var args;
+  return result;
+};
 
-    args = 1 <= arguments.length ? __slice.call(arguments, 0) : [];
-  };
+Striker.prototype.reverseValues = function() {
+  var result    = {};
+  var schema    = _.clone(this.schema).reverse();
+  var schemaLen = schema.length;
 
-  Collection.prototype.isTimeSeries = function() {
-    return _.last(this.schema) === this.timeSeriesIdentifier;
-  };
-
-  Collection.prototype.get = function() {
-    var args, key, result, _i, _len;
-
-    args = 1 <= arguments.length ? __slice.call(arguments, 0) : [];
-    result = this.values;
-    for (_i = 0, _len = args.length; _i < _len; _i++) {
-      key = args[_i];
-      result = result[key];
+  for (var i = 0, len = this.entries.length, entry, item; i < len; i++) {
+    entry = this.entries[i];
+    item  = result;
+    for (var j = 0, schemaId, value; j < schemaLen; j++) {
+      schemaId = schema[j];
+      value    = entry.attributes[schemaId];
+      if (!item[value]) item[value] = {};
+      j + 1 === schemaLen ? (item[value] = entry) : (item = item[value]);
     }
-    if (_.isNumber(result)) {
-      result = result / this.multiplier;
-    }
-    return result;
-  };
-
-  Collection.prototype.set = function() {
-    var args, key, result, value, _i, _len, _ref;
-
-    value = arguments[0], args = 2 <= arguments.length ? __slice.call(arguments, 1) : [];
-    result = this.values;
-    _ref = args.slice(0, -1);
-    for (_i = 0, _len = _ref.length; _i < _len; _i++) {
-      key = _ref[_i];
-      result = result[key];
-    }
-    result[_.last(args)] = value;
-    return this.trigger('change', this, args, value);
-  };
-
-  Collection.prototype.update = function() {
-    var args;
-
-    args = 1 <= arguments.length ? __slice.call(arguments, 0) : [];
-    return this.set.apply(this, [this.calculate.apply(this, args)].concat(__slice.call(args)));
-  };
-
-  Collection.prototype.flat = function(level, args, result) {
-    var index, item, object, value, _i, _j, _len, _len1, _ref;
-
-    if (level == null) {
-      level = 0;
-    }
-    if (args == null) {
-      args = [];
-    }
-    if (result == null) {
-      result = [];
-    }
-    _ref = this.collections[level];
-    for (_i = 0, _len = _ref.length; _i < _len; _i++) {
-      item = _ref[_i];
-      args[level] = item.id;
-      if (level < this.schema.length - 1) {
-        this.flat(level + 1, args, result);
-      } else {
-        object = {};
-        for (index = _j = 0, _len1 = args.length; _j < _len1; index = ++_j) {
-          value = args[index];
-          object[this.schema[index]] = value;
-        }
-        result.push(_.extend(object, this.get.apply(this, args)));
-      }
-    }
-    return result;
-  };
-
-  Collection.prototype._enableObserversAndBuild = function() {
-    var callback, collection, collectionName, _ref;
-
-    _ref = this.observers;
-    for (collectionName in _ref) {
-      callback = _ref[collectionName];
-      collection = collectionName === 'this' ? this : app[collectionName];
-      collection.on('change', this._wrapCallback(callback), this);
-    }
-    return this._build();
-  };
-
-  Collection.prototype._initValues = function(values, inputs, level) {
-    var item, order, value, _i, _len, _ref, _ref1;
-
-    if (values == null) {
-      values = {};
-    }
-    if (inputs == null) {
-      inputs = this.inputs;
-    }
-    if (level == null) {
-      level = 0;
-    }
-    if (this.collections[level]) {
-      _ref = this.collections[level];
-      for (order = _i = 0, _len = _ref.length; _i < _len; order = ++_i) {
-        item = _ref[order];
-        value = (_ref1 = inputs[order]) != null ? _ref1 : 0;
-        if (this.schema) {
-          if (level === this.schema.length - 1) {
-            values[item.id] = value;
-          } else {
-            values[item.id] = {};
-            this._initValues(values[item.id], value, level + 1);
-          }
-        }
-      }
-    }
-    return values;
-  };
-
-  Collection.prototype._build = function(level, args) {
-    var item, _i, _len, _ref, _results;
-
-    if (level == null) {
-      level = 0;
-    }
-    if (args == null) {
-      args = [];
-    }
-    _ref = this.collections[level];
-    _results = [];
-    for (_i = 0, _len = _ref.length; _i < _len; _i++) {
-      item = _ref[_i];
-      args[level] = item.id;
-      if (level >= this.schema.length - 1) {
-        _results.push(this.update.apply(this, args));
-      } else {
-        _results.push(this._build(level + 1, args));
-      }
-    }
-    return _results;
-  };
-
-  Collection.prototype._wrapCallback = function(defaultCallback) {
-    return function(model, args, value) {
-      if (model instanceof Backbone.Model) {
-        return defaultCallback.call(this, model, model.changed);
-      } else {
-        return defaultCallback.call(this, model, args, value);
-      }
-    };
-  };
-
-  return Collection;
-
-})();
-
-Striker.addAnalysis = function(Model, methodName, options) {
-  if (options == null) {
-    options = {};
   }
-  return Model.prototype[methodName] = function() {
-    var analysis, args, _ref;
 
-    args = 1 <= arguments.length ? __slice.call(arguments, 0) : [];
-    analysis = app[(_ref = options.analysis) != null ? _ref : methodName];
-    if (args.length > 0) {
-      return analysis.get.apply(analysis, [this.id].concat(__slice.call(args)));
+  return result;
+};
+
+// Convenient method to trigger `change` event and force lazy calculations
+Striker.prototype.update = function() {
+  var entry = this.get.apply(this, arguments);
+  if (entry && !entry.isLazy) {
+    this.trigger('change', entry, _.toArray(arguments));
+    entry.isLazy = true;
+  }
+};
+
+Striker.prototype._reset = function() {
+  this.values  = {};
+  this.entries = [];
+  this._initEntries(this.values, {}, 0);
+};
+
+// Enable collections observers for `add`&`remove` events
+Striker.prototype._initCollections = function() {
+  this.collections = this.schema.map(Striker.schemaMap);
+  this.schema.forEach(function(key, index) {
+    var coll = _.first(this.collections[index]).collection;
+
+    // reset is simpler than rebuild this.{values|entries} correctly
+    coll.on('remove', this._reset, this);
+    coll.on('add', this._reset, this);
+  }, this);
+};
+
+// Initialize entries based on schema
+Striker.prototype._initEntries = function(values, item, level) {
+  var key    = this.schema[level];
+  var models = this.collections[level];
+
+  for (var i = 0, len = models.length, modelId; i < len; i++) {
+    modelId   = models[i].id;
+    item[key] = modelId;
+    if (this.collections.length === level + 1) {
+      var entry = new this.Entry(item, this);
+      values[modelId] = entry;
+      this.entries.push(entry);
     } else {
-      return analysis.flat(1, [this.id]);
+      values[modelId] = {};
+      this._initEntries(values[modelId], item, level + 1);
     }
-  };
+  }
 };
 
-Striker.setIndex = function(collectionName, schema) {
-  var index;
+// Setup collection observers based on `this.observers`
+// Name `this` uses for self reference
+//
+// For strikers that trigger themselves
+// we need to enable triggers before any values are calculated.
+Striker.prototype._enableObservers = function(options) {
+  if (options.careful && this.observers.this) options.careful = false;
 
-  index = app[collectionName].groupBy(function(item) {
-    return _.map(schema, function(key) {
-      return item.get(key);
+  var that = this;
+  function enableObservers() {
+    that._defineCustomAttributes();
+    if (_.isEmpty(that.observers)) return;
+
+    _.each(that.observers, function(callback, name) {
+      var collection = name === 'this' ? that : app[name];
+
+      collection.on('change', function(model, attrs) {
+        if (_.isUndefined(model)) return;
+        if (model instanceof Backbone.Model)
+          callback.call(that, model, model.changedAttributes());
+        else
+          callback.call(that, model, attrs);
+        that.trigger('updateCompleted', model);
+      });
+    });
+  }
+
+  options.careful ?
+    Striker.once('enable-observers', enableObservers) :
+    enableObservers();
+};
+
+// An ES5 magic:
+// in order to define nice API and avoid constant `get`,
+// we define CustomEntry for every striker, which contains necessary getters
+// based on first not lazy calculation
+Striker.prototype._defineCustomAttributes = function() {
+  var proto = this.Entry.prototype;
+
+  if (_.isEmpty(this.getters)) {
+    var entry    = _.first(this.entries);
+    this.getters = _.uniq(Object.keys(entry.all()));
+  }
+
+  this.getters.forEach(function(name) {
+    Object.defineProperty(proto, name, {
+      get: function() { return this.get(name) } // proxy to Entry#get()
     });
   });
-  return Striker.index[collectionName] = index;
 };
 
-Striker.where = function(collectionName, attrs) {
-  var key, _ref;
+// Special mode to debug strikers.
+// IMPORTANT: don't use it in production, only for development
+// it works best in google chrome, because it uses performance.now()
+// Main problem for strikers is a slow `calculate` method.
+var statistics = {};
 
-  if (Striker.index[collectionName]) {
-    key = _.values(attrs).join();
-    return (_ref = Striker.index[collectionName][key]) != null ? _ref : [];
-  } else {
-    return app[collectionName].where(attrs);
+function now() {
+  return typeof performance === 'undefined' ? Date.now() : performance.now();
+}
+
+Striker.prototype._initStat = function() {
+  var name      = this.name || this.constructor.name;
+  var calculate = this.calculate;
+  var stat      = statistics[name] || [];
+
+  statistics[name] = stat;
+  this.calculate = function() {
+    var start  = now();
+    var result = calculate.apply(this, arguments);
+    stat.push(now() - start);
+    return result;
+  };
+};
+
+// Apply methods of Backbone.Index - where, query
+Backbone.Index(Striker, { ignoreChange: true });
+
+// Apply relevant underscore's methods
+var methods = ['forEach', 'map', 'reduce', 'reduceRight', 'find', 'filter',
+  'every', 'some', 'include', 'invoke', 'groupBy', 'countBy', 'sortBy',
+  'max', 'min', 'size', 'indexOf', 'isEmpty'];
+
+// Mix in each Underscore method as a proxy to `striker#entries`.
+_.each(methods, function(method) {
+  Striker.prototype[method] = function() {
+    var args = _.toArray(arguments);
+    args.unshift(this.entries);
+    return _[method].apply(_, args);
+  };
+});
+
+/**
+ * Static methods
+ */
+
+// use Striker object to notify existing strikers
+_.extend(Striker, Backbone.Events);
+
+// Add striker(analysis) to Backbone.Model
+Striker.addAnalysis = function(Model, methodName, options) {
+  if (!options) options = {};
+  Model.prototype[methodName] = function() {
+    var striker = Striker.namespace[options.analysis || methodName];
+    var args    = _.toArray(arguments);
+
+    if (args.length > 0) {
+      return striker.get.apply(striker, [this.id].concat(args));
+    } else {
+      var attrs = _.object([[_.first(striker.schema), this.id]]);
+      return striker.where(attrs);
+    }
+  };
+};
+
+// Setup schema mapping, to transform keys to real models
+Striker.schemaMap = function() {
+  throw new Error('CRITICAL: Override this');
+};
+
+// Show statistics
+Striker.stat = function() {
+  _.forEach(statistics, function(values, name) {
+    var total = values.length;
+    var sum   = _.sum(values);
+    var avr   = sum / total;
+    var color = total > 10 && avr > 0.6 ? (avr > 1 ? 'red' : 'purple') : 'black';
+
+    console.log('%c%s: total %d, average %sms, time %sms',
+      'color: ' + color, name, total, avr.toFixed(2), sum.toFixed(2));
+  });
+};
+
+// Define default namespace for observers
+Striker.namespace = window;
+
+/**
+ * Define `Entry`
+ * It uses to perform lazy evaluations
+ */
+
+function Entry(attrs, striker) {
+  this.attributes = _.clone(attrs);
+  this.collection = striker;
+  this.isLazy     = true;
+}
+
+Entry.prototype.all = function() {
+  if (this.isLazy) {
+    var params = _.values(this.attributes);
+    var values = this.collection.calculate.apply(this.collection, params);
+    _.extend(this.attributes, values);
+    this.isLazy = false;
   }
+  return this.attributes;
 };
 
-Striker.sum = function(array, field) {
-  return _.reduce(array, function(memo, item) {
-    return memo += item.get(field);
-  }, 0);
+Entry.prototype.get = function(key) {
+  return this.all()[key];
 };
 
-}).call(this);
+// Copy extend method for inheritance
+Striker.extend = Backbone.Model.extend;
+Entry.extend   = Backbone.Model.extend;
 
+// expose to global namespace
+window.Striker = Striker;
+Striker.Entry  = Entry;
+}).call(this, _, Backbone);
