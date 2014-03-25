@@ -1,3 +1,11 @@
+## 1.0.0 / 2014-03-25
+
+  * entry.changedAttributes()
+  * striker.on('change'), has changed hash as second argument
+  * update deps
+  * remove public dir
+  * remove Striker.namespace
+
 ## 0.8.0 / 2013-09-09 - production ready
 
   * manual getters
