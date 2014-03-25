@@ -249,6 +249,8 @@ Striker.namespace = window;
  */
 
 function Entry(attrs, striker) {
+  this.prevAttributes = {};
+  this.params     = _.values(attrs);
   this.attributes = _.clone(attrs);
   this.collection = striker;
   this.isLazy     = true;
@@ -256,8 +258,8 @@ function Entry(attrs, striker) {
 
 Entry.prototype.all = function() {
   if (this.isLazy) {
-    var params = _.values(this.attributes);
-    var values = this.collection.calculate.apply(this.collection, params);
+    this.prevAttributes = _.clone(this.attributes);
+    var values = this.collection.calculate.apply(this.collection, this.params);
     _.extend(this.attributes, values);
     this.isLazy = false;
   }
@@ -269,12 +271,11 @@ Entry.prototype.get = function(key) {
 };
 
 Entry.prototype.changedAttributes = function() {
-  var prevAttrs = _.clone(this.attributes || {});
-  var currAttrs = this.all();
+  var prev = this.prevAttributes;
   var changed = {};
 
-  _.forEach(currAttrs, function(val, key) {
-    if (prevAttrs[key] != val) changed[key] = val;
+  _.forEach(this.all(), function(val, key) {
+    if (prev[key] != val) changed[key] = val;
   });
 
   return changed;

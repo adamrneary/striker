@@ -77,11 +77,14 @@ describe('Striker', function() {
     fakeValues['channel2-next-month'] = { actual: undefined, plan: 10 };
 
     striker.on('change', function(entry, changed) {
+      expect(++counter).equal(1);
+
       expect(entry instanceof Striker.Entry).true;
       expect(changed).an('object');
       expect(changed.plan).equal(10);
       expect(_.keys(changed)).length(1);
-      expect(++counter).equal(1);
+      expect(entry.prevAttributes).not.eql(entry.attributes);
+      expect(entry.changedAttributes()).eql(changed);
     });
 
     striker.update('channel1', 'this-month'); // lazy
