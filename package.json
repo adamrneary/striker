@@ -6,7 +6,7 @@
     "stat": "cloc index.js --by-file --quiet && cloc test/*.js --by-file --quiet"
   },
   "devDependencies": {
-    "bower": "1.2.x",
-    "testem": "0.4.x"
+    "bower": "^1.3",
+    "testem": "^0.6"
   }
 }

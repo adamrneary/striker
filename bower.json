@@ -4,15 +4,15 @@
   "main": "index.js",
   "private": true,
   "dependencies": {
-    "jquery": "~1.10.x",
-    "underscore": "~1.5.x",
+    "jquery": "~1.11.x",
+    "underscore": "~1.6.x",
     "backbone": "~1.0.0",
-    "backbone-index": "~0.1.0"
+    "backbone-index": "~0.2.0"
   },
   "devDependencies": {
     "backbone-memoize": "~0.1.0",
     "moment": "~2.1.0",
-    "chai": "~1.7.x"
+    "chai": "~1.9.x"
   },
   "ignore": [
     "**/.*",
