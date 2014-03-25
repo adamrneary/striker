@@ -16,7 +16,7 @@
 
 describe('Integration test', function() {
   var expect = chai.expect;
-  var app = {};
+  var app = window.app = {};
   var result, channel;
 
   // Define collections
@@ -95,8 +95,6 @@ describe('Integration test', function() {
   Backbone.Index(ConversionForecast);
 
   before(function() {
-    // Setup Striker
-    Striker.namespace = app;
     Striker.schemaMap = function(key) {
       switch (key) {
         case 'period_id': return app.periods.models;

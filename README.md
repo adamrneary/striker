@@ -41,9 +41,6 @@ Striker.schemaMap = function(key) {
   }
 }
 
-# setup namespace, it will use in where/query and indexes
-Striker.namespace = app;
-
 app.periods  = new Periods([{ id: 1 }, { id: 2 }, { id: 3 }]);
 app.channels = new Channels([{ id: 1 }, { id: 2 }]);
 app.reach    = new Reach(); // initialize our striker
@@ -123,7 +120,7 @@ conversionRates.get(2);
 
   Object with functions which call when object was changed.
 
-  * key - collection name, maped to Striker.namespace
+  * key - collection name, maped to window.app
   * cb  - calls with 2 arguments: entry or model and changed attributes.
 
 ### striker#getters
@@ -159,11 +156,6 @@ conversionRates.get(2);
   `CRITICAL`: Override this once.
   Setup schema mapping in order to work, `this.schema`.
 
-### Striker.namespace
-
-  `CRITICAL`: Override this once.
-  Namespace helps to understand observers property, `window` by default, change it to `window.app` or another object, which contains required collections.
-
 ### Striker.stat()
 
   Display statistic in nice coloured form.
@@ -178,7 +170,7 @@ CustomerCountStriker: total 1, average 0.05ms, time 0.05ms
 
 ### Striker.addAnalysis(Model, methodName, [options])
 
-  Extend model with anaylisis. Use `options.analysis` to set name for Striker.namespace.
+  Extend model with anaylisis. Use `options.analysis` to set name from `window.app`.
 
 ### Striker.extend(options)
 

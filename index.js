@@ -128,7 +128,7 @@ Striker.prototype._enableObservers = function(options) {
     if (_.isEmpty(that.observers)) return;
 
     _.each(that.observers, function(callback, name) {
-      var collection = name === 'this' ? that : Striker.namespace[name];
+      var collection = name === 'this' ? that : window.app[name];
 
       collection.on('change', function(model, attrs) {
         if (_.isUndefined(model)) return;
@@ -217,7 +217,7 @@ _.extend(Striker, Backbone.Events);
 Striker.addAnalysis = function(Model, methodName, options) {
   if (!options) options = {};
   Model.prototype[methodName] = function() {
-    var striker = Striker.namespace[options.analysis || methodName];
+    var striker = window.app[options.analysis || methodName];
     var args    = _.toArray(arguments);
 
     if (args.length > 0) {
@@ -246,9 +246,6 @@ Striker.stat = function() {
       'color: ' + color, name, total, avr.toFixed(2), sum.toFixed(2));
   });
 };
-
-// Define default namespace for observers
-Striker.namespace = window;
 
 /**
  * Define `Entry`

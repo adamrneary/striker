@@ -36,7 +36,6 @@ describe('Striker', function() {
 
   it('exist', function() {
     expect(Striker).exist;
-    expect(Striker.namespace).equal(window);
     expect(Striker.extend).a('function');
     expect(Striker.addAnalysis).a('function');
   });
