@@ -69,7 +69,11 @@ Striker.prototype.update = function() {
   var entry = this.get.apply(this, arguments);
   if (entry && !entry.isLazy) {
     entry.isLazy = true;
-    this.trigger('change', entry, entry.changedAttributes());
+    var changed = this.supportsChangedAttributes
+      ? entry.changedAttributes()
+      : _.toArray(arguments);
+
+    this.trigger('change', entry, changed);
   }
 };
 
@@ -126,10 +130,13 @@ Striker.prototype._enableObservers = function(options) {
     _.each(that.observers, function(callback, name) {
       var collection = name === 'this' ? that : Striker.namespace[name];
 
-      collection.on('change', function(model) {
+      collection.on('change', function(model, attrs) {
         if (_.isUndefined(model)) return;
-        callback.call(that, model, model.changedAttributes());
-        that.trigger('updateCompleted', model, model.changedAttributes());
+        if (model instanceof Backbone.Model)
+          callback.call(that, model, model.changedAttributes());
+        else
+          callback.call(that, model, attrs);
+        that.trigger('updateCompleted', model);
       });
     });
   }

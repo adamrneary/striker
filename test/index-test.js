@@ -14,6 +14,7 @@ describe('Striker', function() {
   };
 
   var Reach = Striker.extend({
+    supportsChangedAttributes: true,
     schema: ['channel_id', 'period_id'],
     calculate: function(channelId, periodId) {
       return fakeValues[channelId + '-' + periodId];
