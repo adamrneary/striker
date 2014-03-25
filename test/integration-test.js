@@ -1,3 +1,4 @@
+/* globals Backbone, _, chai, moment, Striker, _ */
 /**
  * Reach analysis striker
  * Reach (also called "Topline growth") is the conversion number for the topline
@@ -14,9 +15,9 @@
  */
 
 describe('Integration test', function() {
-  var expect  = window.chai.expect, result, channel;
-  var Striker = window.Striker, moment = window.moment;
-  var app     = {};
+  var expect = chai.expect;
+  var app = {};
+  var result, channel;
 
   // Define collections
   var Scenario           = Backbone.Model.extend({});
@@ -81,8 +82,9 @@ describe('Integration test', function() {
     }, 0);
   }
 
-  function observer(model) {
+  function observer(model, changed) {
     if (model.get('stage_id') !== app.stages.topline().id) return;
+    expect(changed).an('object');
     this.update(model.get('channel_id'), model.get('period_id'));
   }
 

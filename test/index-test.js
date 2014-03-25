@@ -1,7 +1,6 @@
+/* globals Backbone, _, chai, Striker, _ */
 describe('Striker', function() {
-  var expect  = window.chai.expect;
-  var Striker = window.Striker;
-
+  var expect = chai.expect;
   var striker, periods, channels;
   var Collection = Backbone.Collection.extend({});
 
@@ -75,14 +74,23 @@ describe('Striker', function() {
   it('#update force lazy `change` event', function(done) {
     var counter = 0;
     striker.get('channel2', 'next-month').all();
-    striker.on('change', function() {
+    fakeValues['channel2-next-month'] = { actual: undefined, plan: 10 };
+
+    striker.on('change', function(entry, changed) {
+      expect(entry instanceof Striker.Entry).true;
+      expect(changed).an('object');
+      expect(changed.plan).equal(10);
+      expect(_.keys(changed)).length(1);
       expect(++counter).equal(1);
     });
 
     striker.update('channel1', 'this-month'); // lazy
     striker.update('channel1', 'next-month'); // lazy
     striker.update('channel2', 'next-month'); // real
-    if (counter > 0) done();
+    if (counter > 0) {
+      fakeValues['channel2-next-month'] = { actual: undefined, plan: 9 }; // reset
+      done();
+    }
   });
 
   it('has underscore\'s methods', function() {

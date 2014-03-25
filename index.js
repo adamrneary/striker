@@ -68,8 +68,8 @@ Striker.prototype.reverseValues = function() {
 Striker.prototype.update = function() {
   var entry = this.get.apply(this, arguments);
   if (entry && !entry.isLazy) {
-    this.trigger('change', entry, _.toArray(arguments));
     entry.isLazy = true;
+    this.trigger('change', entry, entry.changedAttributes());
   }
 };
 
@@ -126,13 +126,10 @@ Striker.prototype._enableObservers = function(options) {
     _.each(that.observers, function(callback, name) {
       var collection = name === 'this' ? that : Striker.namespace[name];
 
-      collection.on('change', function(model, attrs) {
+      collection.on('change', function(model) {
         if (_.isUndefined(model)) return;
-        if (model instanceof Backbone.Model)
-          callback.call(that, model, model.changedAttributes());
-        else
-          callback.call(that, model, attrs);
-        that.trigger('updateCompleted', model);
+        callback.call(that, model, model.changedAttributes());
+        that.trigger('updateCompleted', model, model.changedAttributes());
       });
     });
   }
@@ -271,6 +268,18 @@ Entry.prototype.get = function(key) {
   return this.all()[key];
 };
 
+Entry.prototype.changedAttributes = function() {
+  var prevAttrs = _.clone(this.attributes || {});
+  var currAttrs = this.all();
+  var changed = {};
+
+  _.forEach(currAttrs, function(val, key) {
+    if (prevAttrs[key] != val) changed[key] = val;
+  });
+
+  return changed;
+};
+
 // Copy extend method for inheritance
 Striker.extend = Backbone.Model.extend;
 Entry.extend   = Backbone.Model.extend;
@@ -278,4 +287,5 @@ Entry.extend   = Backbone.Model.extend;
 // expose to global namespace
 window.Striker = Striker;
 Striker.Entry  = Entry;
+
 }).call(this, _, Backbone);
